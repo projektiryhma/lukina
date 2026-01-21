@@ -1,0 +1,19 @@
+.App {
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.App-header {
+  background: white;
+  padding: 3rem 5rem;
+  border-radius: 20px;
+}
+
+.App-header h1 {
+  color: #21294a;
+  font-size: 3em;
+  margin-bottom: 1rem;
+}
