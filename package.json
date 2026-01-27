@@ -4,7 +4,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test"
+    "test": "react-scripts test",
+    "convert-data": "node scripts/convert-xlsx.mjs"
   },
   "dependencies": {
     "react": "^18.2.0",
