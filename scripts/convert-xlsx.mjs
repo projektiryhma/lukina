@@ -1,5 +1,5 @@
 /*
- * convert-xlsx.js
+ * convert-xlsx.mjs
  * Utility to convert an Excel workbook (.xlsx) into a JSON file.
  * Each sheet becomes an array of row objects, keyed by sheet name in the output JSON.
  * CLI usage: node scripts/convert-xlsx.mjs
@@ -7,6 +7,9 @@
  *
  * Github Copilot GPT-5 mini was used to check and suggest code in this file.
  */
+
+// TODO: Think some way to store globals like INPUT and OUTPUT paths in a config file. Also some way to share them with tests.
+// TODO: Also variables to define sheets with something other than 0-based index?
 
 import fs from "fs";
 import path from "path";
