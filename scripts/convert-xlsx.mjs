@@ -24,15 +24,17 @@ const OUTPUT = "public/data/data.json";
 function parseWorkbook(filePath) {
   const workbook = XLSX.readFile(filePath, { cellDates: true });
   const result = {};
-  workbook.SheetNames.forEach((name) => {
+
+  // Iterate over each sheet in the workbook, add 0-based index as key
+  workbook.SheetNames.forEach((name, sheetIndex) => {
     const sheet = workbook.Sheets[name];
     const data = XLSX.utils.sheet_to_json(sheet, { defval: null });
-    // Ensure each row has a unique `id`.
+    // Ensure each row has a numeric `id` (0-based index within the sheet).
     for (let i = 0; i < data.length; i++) {
       const row = data[i];
-      row.id = `${i}`;
+      row.id = i;
     }
-    result[name] = data;
+    result[sheetIndex] = data;
   });
   return result;
 }
