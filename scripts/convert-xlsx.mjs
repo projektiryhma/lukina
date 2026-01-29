@@ -27,6 +27,11 @@ function parseWorkbook(filePath) {
   workbook.SheetNames.forEach((name) => {
     const sheet = workbook.Sheets[name];
     const data = XLSX.utils.sheet_to_json(sheet, { defval: null });
+    // Ensure each row has a unique `id`.
+    for (let i = 0; i < data.length; i++) {
+      const row = data[i];
+      row.id = `${i}`;
+    }
     result[name] = data;
   });
   return result;
