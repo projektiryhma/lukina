@@ -28,16 +28,20 @@ function parseWorkbook(filePath) {
   const workbook = XLSX.readFile(filePath, { cellDates: true });
   const result = {};
 
-  // Iterate over each sheet in the workbook, add 0-based index as key
+  // Iterate over each sheet in the workbook and produce a mapping of id -> row
   workbook.SheetNames.forEach((name, sheetIndex) => {
     const sheet = workbook.Sheets[name];
     const data = XLSX.utils.sheet_to_json(sheet, { defval: null });
-    // Ensure each row has a numeric `id` (0-based index within the sheet).
+    // Build an object keyed by id
+    const mapping = {};
     for (let i = 0; i < data.length; i++) {
-      const row = data[i];
-      row.id = i;
+      const row = { ...data[i] };
+      const id = row.id != null ? row.id : i;
+      // keep the id as the key
+      delete row.id;
+      mapping[String(id)] = row;
     }
-    result[sheetIndex] = data;
+    result[String(sheetIndex)] = mapping;
   });
   return result;
 }
