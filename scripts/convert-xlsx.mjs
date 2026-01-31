@@ -67,6 +67,8 @@ function convert(inputPath, outputPath) {
   if (!fs.existsSync(absInput))
     throw new Error(`Input file not found: ${absInput}`);
   const parsed = parseWorkbook(absInput);
+  // add a top-level version so clients can do a version check
+  parsed.version = new Date().toISOString();
   writeJson(absOutput, parsed);
   return {
     input: absInput,
