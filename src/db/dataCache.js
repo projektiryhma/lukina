@@ -76,11 +76,15 @@ export async function initAndCacheData() {
   if (_initPromise) return _initPromise;
 
   _initPromise = (async () => {
-    const res = await fetch("/data/data.json", { cache: "no-store" });
+    const res = await fetch("/data/data.json");
     if (!res.ok) throw new Error(`Failed to fetch data: ${res.status}`);
     const data = await res.json();
 
     const db = await openDB();
+
+    // Clear existing data
+    await clearStore(db);
+
     // Write each collection as its own record
     const writes = [];
     for (const collectionName of Object.keys(data)) {
@@ -116,4 +120,20 @@ export async function getCollections() {
     }
     return result;
   }
+}
+
+/**
+ * Remove all records from the data object store.
+ *
+ * @param {IDBDatabase} db - open IDB database instance
+ * @returns {Promise<void>} resolves when the clear operation completes
+ */
+function clearStore(db) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(DATA_STORE, "readwrite");
+    const store = tx.objectStore(DATA_STORE);
+    const req = store.clear();
+    req.onsuccess = () => resolve();
+    req.onerror = () => reject(req.error);
+  });
 }
