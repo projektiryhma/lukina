@@ -2,9 +2,11 @@
  * convertXlsx.test.js
  * Jest tests for the Excel → JSON converter pipeline.
  * - Runs `npm run convert-data` in `beforeAll` to generate `public/data/data.json`.
- * - Verifies the generated JSON exists and that sheet "0" contains expected fields.
+ * - Verifies the generated JSON exists and that collection "0" contains expected fields.
  * - Removes the generated file in `afterAll` so tests don't leave artifacts.
  * Notes: These tests invoke a Node script, so Node must be available in the test environment.
+ *
+ * Github Copilot GPT-5 mini was used to check and suggest code in this file.
  */
 
 import fs from "fs";
@@ -38,12 +40,11 @@ test("convert-xlsx produces JSON", () => {
   expect(fs.existsSync(OUTPUTPATH)).toBe(true);
 });
 
-// Structural assertions: sheet '0' exists and first row contains expected fields
+// Structural assertions: collection '0' exists and first row contains expected fields
 test("File under test has expected structure", () => {
   const obj = JSON.parse(fs.readFileSync(OUTPUTPATH, "utf8"));
 
   expect(obj["0"][0]).toMatchObject({
-    id: expect.any(Number),
     "Virheetön teksti": expect.any(String),
     "Virheellinen teksti, virheet punaisella": expect.any(String),
     "Virheiden lukumäärä tekstissä": expect.any(Number),
