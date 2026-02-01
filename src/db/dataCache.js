@@ -3,64 +3,94 @@
  * IndexedDB cache for data
  *
  * Purpose:
- * - Fetches the generated `public/data/data.json` file and caches it into
- *   IndexedDB for client-side reads.
- * - Stores each top-level collection as an
- *   individual record so the app can read/update a single collection.
+ * - Fetch `/data/data.json` and cache it into IndexedDB using one object
+ *   store per sheet (store names are sheet index strings like "0", "1").
  *
  * Exports:
- * - `initAndCacheData()` — fetch and cache data
- * - `getCollections()` — assemble and return all collections from the DB
+ * - `initAndCacheData()` — fetch JSON and (re)populate the DB when needed.
+ *
+ * Notes:
+ * - `_initPromise` prevents duplicate initial fetch/populate runs.
+ * - `_dbPromise` caches the opened `IDBDatabase`.
  *
  * Github Copilot GPT-5 mini was used to check and suggest code in this file.
  * Instructions and code snippets were used from:
- * https://medium.com/@shashika.silva88/indexeddb-a-comprehensive-
- * overview-for-frontend-developers-6b47a9f32e23
+ * https://medium.com/@shashika.silva88/indexeddb-a-comprehensive-overview-for-frontend-developers-6b47a9f32e23
  */
 
-const DB_NAME = "lukina-data";
+const DB_NAME = "lukina";
 const DB_VERSION = 1;
-const DATA_STORE = "lukina-data-store";
+const META_STORE = "meta";
+const META_RECORD_ID = "meta";
+const KEY_ID = "id";
 
 let _dbPromise = null;
 let _initPromise = null;
 
-function openDB() {
+/**
+ * Open the IndexedDB database. If `data` is provided, the function will
+ * populate per-sheet stores inside the `onupgradeneeded` handler using the
+ * provided mapping. Writes use out-of-line keys via `store.put(value, key)`.
+ *
+ * @param {Object|null} data - optional parsed JSON to populate into DB
+ * @returns {Promise<IDBDatabase>} resolves with the opened DB or rejects on error
+ */
+function openDB(data = null) {
   if (_dbPromise) return _dbPromise;
 
   _dbPromise = new Promise((resolve, reject) => {
+    // TODO: on version bump onupgradeneeded will run even without data
     const req = indexedDB.open(DB_NAME, DB_VERSION);
-    // Ensure object store exists when DB is created or upgraded.
-    // This handler runs when the DB is first created or when DB_VERSION increases.
     req.onupgradeneeded = (ev) => {
+      // The DB instance that's being upgraded/created
       const db = ev.target.result;
-      if (!db.objectStoreNames.contains(DATA_STORE)) {
-        // Create a key-value store keyed by the `name` property.
-        db.createObjectStore(DATA_STORE, { keyPath: "name" });
+      if (!db.objectStoreNames.contains(META_STORE)) {
+        db.createObjectStore(META_STORE, { keyPath: KEY_ID });
       }
+
+      if (!data) return;
+      // Use the upgrade transaction to create per-sheet stores and write
+      // all rows.
+      const tx = ev.target.transaction;
+      const sheetNames = Object.keys(data).filter((k) => k !== "version");
+      for (const sheetName of sheetNames) {
+        const storeName = String(sheetName);
+        if (!db.objectStoreNames.contains(storeName)) {
+          db.createObjectStore(storeName);
+        }
+        const store = tx.objectStore(storeName);
+        const mapping = data[sheetName] || {};
+        for (const id of Object.keys(mapping)) {
+          const row = mapping[id];
+          store.put(row, id);
+        }
+      }
+
+      // Write a meta record so we can check the `version` later.
+      const metaStore = tx.objectStore(META_STORE);
+      const rec = { version: data.version };
+      rec[KEY_ID] = META_RECORD_ID;
+      metaStore.put(rec);
     };
-    // Resolve with the IDBDatabase instance when ready, or reject on error.
     req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
+    req.onerror = () => {
+      // Clear cached promise so callers can retry opening the DB.
+      _dbPromise = null;
+      reject(req.error);
+    };
   });
 
   return _dbPromise;
 }
 
 /**
- * Store a collection record in the DB.
+ * Delete the entire IndexedDB database for this app.
  *
- * @param {IDBDatabase} db - Open IDB database instance
- * @param {string} name - Collection name (used as the record key)
- * @param {object|array} rows - Collection payload (mapping or array)
- * @returns {Promise<void>} resolves when the put completes
+ * @returns {Promise<void>} resolves when deletion completes or rejects on error
  */
-function putCollection(db, name, rows) {
+function deleteDatabase() {
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(DATA_STORE, "readwrite");
-    const store = tx.objectStore(DATA_STORE);
-    // Put upserts the record (insert or replace existing)
-    const req = store.put({ name, rows });
+    const req = indexedDB.deleteDatabase(DB_NAME);
     req.onsuccess = () => resolve();
     req.onerror = () => reject(req.error);
   });
@@ -70,6 +100,7 @@ function putCollection(db, name, rows) {
  * Fetch `/data/data.json` from the server and cache its collections into
  * IndexedDB.
  *
+ * The function deletes the existing DB then opens/repopulates it.
  * @returns {Promise<object>} the parsed JSON data
  */
 export async function initAndCacheData() {
@@ -80,60 +111,18 @@ export async function initAndCacheData() {
     if (!res.ok) throw new Error(`Failed to fetch data: ${res.status}`);
     const data = await res.json();
 
-    const db = await openDB();
+    // Recreate database structure: delete existing DB then create per-sheet stores.
+    // TODO: a version-check could be added to avoid deleting/repopulating
+    // when the on-disk data is already up-to-date.
+    await deleteDatabase();
 
-    // Clear existing data
-    await clearStore(db);
-
-    // Write each collection as its own record
-    const writes = [];
-    for (const collectionName of Object.keys(data)) {
-      writes.push(putCollection(db, collectionName, data[collectionName]));
-    }
-    await Promise.all(writes);
+    // Invalidate cached DB promise so openDB creates a new one
+    _dbPromise = null;
+    const db = await openDB(data);
+    // cache the opened DB promise so subsequent calls reuse it
+    _dbPromise = Promise.resolve(db);
     return data;
   })();
 
   return _initPromise;
-}
-
-/**
- * Read all collection records from the DB and assemble a single object
- *
- * @returns {Promise<Object|undefined>} assembled collections or undefined when none
- */
-export async function getCollections() {
-  const db = await openDB();
-
-  const all = await new Promise((resolve, reject) => {
-    const tx = db.transaction(DATA_STORE, "readonly");
-    const store = tx.objectStore(DATA_STORE);
-    const req = store.getAll();
-    req.onsuccess = () => resolve(req.result || []);
-    req.onerror = () => reject(req.error);
-  });
-
-  if (all && all.length) {
-    const result = {};
-    for (const rec of all) {
-      result[rec.name] = rec.rows;
-    }
-    return result;
-  }
-}
-
-/**
- * Remove all records from the data object store.
- *
- * @param {IDBDatabase} db - open IDB database instance
- * @returns {Promise<void>} resolves when the clear operation completes
- */
-function clearStore(db) {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(DATA_STORE, "readwrite");
-    const store = tx.objectStore(DATA_STORE);
-    const req = store.clear();
-    req.onsuccess = () => resolve();
-    req.onerror = () => reject(req.error);
-  });
 }
