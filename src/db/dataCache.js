@@ -7,7 +7,10 @@
  *   store per sheet (store names are sheet index strings like "0", "1").
  *
  * Exports:
- * - `initAndCacheData()` — fetch JSON and (re)populate the DB when needed.
+ * - `initAndCacheData()` — fetch `/data/data.json`. Returns the parsed JSON.
+ * - `getFromStore(storeName, key?)` — read a single record from an object
+ *   store; `storeName` is required, `key` is optional (when omitted a key is
+ *   selected from the store).
  *
  * Notes:
  * - `_initPromise` prevents duplicate initial fetch/populate runs.
@@ -125,4 +128,52 @@ export async function initAndCacheData() {
   })();
 
   return _initPromise;
+}
+
+/**
+ * Read a single record from an object store.
+ * `storeName` is required. If `key` is omitted a random key will be
+ * generated.
+ * The function returns the stored value or `undefined` when missing.
+ *
+ * @param {string} storeName - object store name (required)
+ * @param {any} [key] - optional key; when omitted a random key is generated
+ * @returns {Promise<any>}
+ */
+export async function getFromStore(storeName, key) {
+  if (!storeName) throw new Error("storeName is required");
+
+  const db = await openDB();
+
+  return new Promise((resolve, reject) => {
+    try {
+      const tx = db.transaction(storeName, "readonly");
+      const store = tx.objectStore(storeName);
+
+      // If no key provided, pick a random key from 0..(n-1) where n is the
+      // number of keys in the store.
+      if (key === undefined) {
+        const reqKeys = store.getAllKeys();
+        reqKeys.onsuccess = () => {
+          const keys = reqKeys.result || [];
+          if (keys.length === 0) return resolve(undefined);
+          const idx = Math.floor(Math.random() * keys.length);
+          const picked = keys[idx];
+          const req = store.get(picked);
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => reject(req.error);
+        };
+        reqKeys.onerror = () =>
+          reject(reqKeys.error || new Error("getAllKeys failed"));
+        return;
+      }
+
+      // Key provided: return directly
+      const req = store.get(key);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    } catch (err) {
+      reject(err);
+    }
+  });
 }
