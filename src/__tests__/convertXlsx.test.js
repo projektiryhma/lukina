@@ -43,8 +43,12 @@ test("convert-xlsx produces JSON", () => {
 });
 
 // Structural assertions: collection '0' exists and first row contains expected fields
-test("File under test has expected structure", () => {
+test("JSON datafile has expected structure", () => {
   const obj = JSON.parse(fs.readFileSync(OUTPUTPATH, "utf8"));
+
+  // Ensure sheet '0' exists and is an array with at least one row
+  expect(Array.isArray(obj["0"])).toBe(true);
+  expect(obj["0"].length).toBeGreaterThan(0);
 
   expect(obj["0"][0]).toMatchObject({
     "Virheetön teksti": expect.any(String),
@@ -55,9 +59,18 @@ test("File under test has expected structure", () => {
   });
 });
 
-test('Generated JSON includes version timestamp', () => {
-  const obj = JSON.parse(fs.readFileSync(OUTPUTPATH, 'utf8'));
-  expect(typeof obj.version).toBe('string');
+test("Generated JSON includes version timestamp", () => {
+  const obj = JSON.parse(fs.readFileSync(OUTPUTPATH, "utf8"));
+  expect(typeof obj.version).toBe("string");
   const d = new Date(obj.version);
-  expect(d.toString()).not.toBe('Invalid Date');
+  expect(d.toString()).not.toBe("Invalid Date");
+});
+
+test("convert fails when INPUT is missing", async () => {
+  const env = {
+    ...process.env,
+    INPUT: "imaginary_file.xlsx",
+  };
+  const { stderr } = await execAsync("npm run convert-data", { env });
+  expect(stderr);
 });
