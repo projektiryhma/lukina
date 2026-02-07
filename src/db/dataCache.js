@@ -63,13 +63,15 @@ function openDB(data = null) {
       for (const sheetName of sheetNames) {
         const storeName = String(sheetName);
         if (!db.objectStoreNames.contains(storeName)) {
-          db.createObjectStore(storeName);
+          db.createObjectStore(storeName, {
+            keyPath: KEY_ID,
+            autoIncrement: true,
+          });
         }
         const store = tx.objectStore(storeName);
-        const mapping = data[sheetName] || {};
-        for (const id of Object.keys(mapping)) {
-          const row = mapping[id];
-          store.put(row, id);
+        const rows = data[sheetName] || [];
+        for (const row of rows) {
+          store.put(row);
         }
       }
 
