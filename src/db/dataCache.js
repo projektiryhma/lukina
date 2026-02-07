@@ -164,16 +164,59 @@ export async function initAndCacheData() {
     if (!res.ok) throw new Error(`Failed to fetch data: ${res.status}`);
     const data = await res.json();
 
-    // Recreate database structure: delete existing DB then create per-sheet stores.
-    // TODO: a version-check could be added to avoid deleting/repopulating
-    // when the on-disk data is already up-to-date.
-    await deleteDatabase();
+    // Determine whether we need to populate the DB.
+    // 1) If no DB/stores exist -> populate
+    // 2) If META_STORE missing or meta.version differs -> delete & populate
+    // 3) Else reuse existing DB and do nothing
+    let existingDB = null;
+    let needPopulate = false;
+    try {
+      existingDB = await openDB();
 
-    // Invalidate cached DB promise so openDB creates a new one
-    _dbPromise = null;
-    const db = await openDB(data);
-    // cache the opened DB promise so subsequent calls reuse it
-    _dbPromise = Promise.resolve(db);
+      // If there are no object stores, treat as missing DB
+      if (!existingDB || existingDB.objectStoreNames.length === 0) {
+        needPopulate = true;
+      } else if (!existingDB.objectStoreNames.contains(META_STORE)) {
+        // No meta store present: must populate
+        needPopulate = true;
+      } else {
+        // Read meta record and compare versions
+        const tx = existingDB.transaction(META_STORE, "readonly");
+        const store = tx.objectStore(META_STORE);
+        const req = store.get(META_RECORD_ID);
+        const meta = await new Promise((resolve, reject) => {
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => reject(req.error);
+        });
+        if (!meta || meta.version !== data.version) {
+          needPopulate = true;
+        }
+      }
+    } catch (err) {
+      // Any error while probing the existing DB -> repopulate
+      console.debug("DB probe failed, will (re)populate:", err);
+      needPopulate = true;
+    }
+
+    if (needPopulate) {
+      // Close any open connection so `deleteDatabase` is not blocked.
+      try {
+        if (existingDB && typeof existingDB.close === "function") {
+          existingDB.close();
+        }
+      } catch (err) {
+        console.debug("Failed to close existing DB connection:", err);
+      }
+
+      await deleteDatabase();
+      _dbPromise = null;
+      const db = await openDB(data);
+      _dbPromise = Promise.resolve(db);
+    } else {
+      // Reuse existing DB
+      _dbPromise = Promise.resolve(existingDB);
+    }
+
     return data;
   })();
 
