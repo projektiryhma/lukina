@@ -3,20 +3,25 @@
  * IndexedDB cache for data
  *
  * Purpose:
- * - Fetch `/data/data.json` and cache it into IndexedDB using one object
- *   store per sheet (store names are sheet index strings like "0", "1").
+ * - Fetch the generated JSON (`REACT_APP_OUTPUT`) and cache it
+ *   into IndexedDB using one object store per sheet (store names are sheet
+ *   index strings like "0", "1").
  *
  * Exports:
- * - `initAndCacheData()` — fetch `/data/data.json`. Returns the parsed JSON.
- * - `getFromStore(storeName)` — return a single record from an object store.
- *   When called the function selects a random, not-yet-served key from the
- *   store and returns its value. Randomly-served IDs are tracked in
- *   `_usedDataIDs` to avoid repeats; once all IDs have been served the
- *   tracking set is cleared and serving restarts.
+ * - `initAndCacheData()` — fetch the JSON and ensure IndexedDB is populated.
+ *   The function will avoid unnecessary repopulation by checking a stored
+ *   meta `version` record in the DB and only delete/repopulate when the
+ *   fetched `data.version` differs or the DB is missing.
+ * - `getFromStore(storeName)` — return a single randomly-selected record
+ *   from a given object store. Returned IDs are tracked per-store so the
+ *   same entry isn't served again until all entries have been returned.
  *
- * Notes:
- * - `_initPromise` prevents duplicate initial fetch/populate runs.
- * - `_dbPromise` caches the opened `IDBDatabase`.
+ * Notes / Behavior changes:
+ * - Storage: per-sheet stores are created with `keyPath: KEY_ID` and
+ *   `autoIncrement: true`
+ * - `_initPromise` prevents duplicate initial fetch/populate runs in a
+ *   single browser session
+ * - `_dbPromise` caches the opened `IDBDatabase` instance for reuse.
  * - `_usedDataIDs` (Map<storeName,Set<id>>) tracks IDs that were served via
  *   random selection so the same game data isn't served twice until all
  *   entries have been returned.
@@ -40,7 +45,7 @@ let _usedDataIDs = new Map();
 /**
  * Open the IndexedDB database. If `data` is provided, the function will
  * populate per-sheet stores inside the `onupgradeneeded` handler using the
- * provided mapping. Writes use out-of-line keys via `store.put(value, key)`.
+ * provided mapping. Per-sheet stores use an inline keyPath and autoIncrement
  *
  * @param {Object|null} data - optional parsed JSON to populate into DB
  * @returns {Promise<IDBDatabase>} resolves with the opened DB or rejects on error
@@ -150,10 +155,12 @@ function _pickRandomKeyFromStore(store, storeName) {
 }
 
 /**
- * Fetch `/data/data.json` from the server and cache its collections into
- * IndexedDB.
+ * Fetch the generated JSON (URL configured by `REACT_APP_OUTPUT`) and cache
+ * its collections into IndexedDB.
  *
- * The function deletes the existing DB then opens/repopulates it.
+ * The function will check the on-disk DB meta version and only delete and
+ * repopulate when necessary (missing DB/meta or version mismatch). Returns
+ * the parsed JSON data.
  * @returns {Promise<object>} the parsed JSON data
  */
 export async function initAndCacheData() {
