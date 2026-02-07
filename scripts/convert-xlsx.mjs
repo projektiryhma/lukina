@@ -14,9 +14,11 @@ import fs from "fs";
 import path from "path";
 import XLSX from "xlsx";
 import { fileURLToPath } from "url";
+import dotenv from "dotenv";
+dotenv.config();
 
-const INPUT = "public/data/data.xlsx";
-const OUTPUT = "public/data/data.json";
+const INPUT = process.env.INPUT;
+const OUTPUT = process.env.OUTPUT;
 
 /**
  * Parse an Excel workbook into a plain object.

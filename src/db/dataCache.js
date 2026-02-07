@@ -26,11 +26,11 @@
  * https://medium.com/@shashika.silva88/indexeddb-a-comprehensive-overview-for-frontend-developers-6b47a9f32e23
  */
 
-const DB_NAME = "lukina";
-const DB_VERSION = 1;
-const META_STORE = "meta";
-const META_RECORD_ID = "meta";
-const KEY_ID = "id";
+const DB_NAME = process.env.REACT_APP_DB_NAME;
+const DB_VERSION = Number(process.env.REACT_APP_DB_VERSION);
+const META_STORE = process.env.REACT_APP_META_STORE;
+const META_RECORD_ID = process.env.REACT_APP_META_RECORD_ID;
+const KEY_ID = process.env.REACT_APP_KEY_ID;
 
 let _dbPromise = null;
 let _initPromise = null;
@@ -158,7 +158,7 @@ export async function initAndCacheData() {
   if (_initPromise) return _initPromise;
 
   _initPromise = (async () => {
-    const res = await fetch("/data/data.json");
+    const res = await fetch(process.env.REACT_APP_OUTPUT);
     if (!res.ok) throw new Error(`Failed to fetch data: ${res.status}`);
     const data = await res.json();
 
