@@ -32,13 +32,11 @@ function parseWorkbook(filePath) {
     const sheet = workbook.Sheets[name];
     const data = XLSX.utils.sheet_to_json(sheet, { defval: null });
     // Build an object keyed by id
-    const mapping = {};
+    const mapping = [];
     for (let i = 0; i < data.length; i++) {
       const row = { ...data[i] };
       const id = row.id != null ? row.id : i;
-      // keep the id as the key
-      delete row.id;
-      mapping[String(id)] = row;
+      mapping.push(row);
     }
     result[String(sheetIndex)] = mapping;
   });
