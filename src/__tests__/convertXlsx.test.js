@@ -13,11 +13,13 @@ import fs from "fs";
 import path from "path";
 import { exec } from "child_process";
 import { promisify } from "util";
+import dotenv from "dotenv";
+dotenv.config();
 const execAsync = promisify(exec);
 
-// Path to the generated JSON file that the converter should produce
-const FILEUNDERTEST = "../../public/data/data.json";
-const OUTPUTPATH = path.resolve(__dirname, FILEUNDERTEST);
+// Read output path from project .env (OUTPUT)
+const OUTPUT = process.env.OUTPUT;
+const OUTPUTPATH = path.resolve(process.cwd(), OUTPUT);
 
 // Run the converter once before the test suite so tests assert against
 // the freshly generated `public/data/data.json` file.
