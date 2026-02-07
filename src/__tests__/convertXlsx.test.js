@@ -54,3 +54,10 @@ test("File under test has expected structure", () => {
     "Oikeat sanat": expect.any(String),
   });
 });
+
+test('Generated JSON includes version timestamp', () => {
+  const obj = JSON.parse(fs.readFileSync(OUTPUTPATH, 'utf8'));
+  expect(typeof obj.version).toBe('string');
+  const d = new Date(obj.version);
+  expect(d.toString()).not.toBe('Invalid Date');
+});
