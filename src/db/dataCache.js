@@ -160,7 +160,7 @@ export async function initAndCacheData() {
   if (_initPromise) return _initPromise;
 
   _initPromise = (async () => {
-    const res = await fetch(process.env.REACT_APP_OUTPUT);
+    const res = await fetch(process.env.PUBLIC_URL + '/data/data.json');
     if (!res.ok) throw new Error(`Failed to fetch data: ${res.status}`);
     const data = await res.json();
 
