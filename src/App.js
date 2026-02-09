@@ -7,11 +7,11 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <Routes>
-          <Route path="/" element={
-            <header className="App-header">
-              <h1>Hello World</h1>
-            </header>
-          }/>
+
+          <Route path="/" element={ <p>Aloitus</p> }/>
+          <Route path="/InfoPageGameOne" element={ <p>Info</p> }/>
+          <Route path="/GamePageGameOne" element={ <p>Peli</p> }/>
+           
         </Routes>
       </div>
     </BrowserRouter>
