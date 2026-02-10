@@ -1,14 +1,29 @@
 import React from 'react';
 import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { InfoPageGameOne } from './pages/InfoPageGameOne';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Hello World</h1>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <Routes>
+
+          <Route path="/" element={ <p>Aloitus</p> }/>
+          <Route path="/InfoPageGameOne" element={ <InfoPageGameOne/> }/>
+          <Route path="/GamePageGameOne" element={ <p>Peli</p> }/>
+           
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
 export default App;
+
+
+
+
+
+
+
