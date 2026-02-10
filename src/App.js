@@ -7,9 +7,7 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <Routes>
-           <script>
-        alert("Hello, World!");
-    </script>
+          
           <Route path="/" element={ <p>Aloitus</p> }/>
           <Route path="/InfoPageGameOne" element={ <p>Info</p> }/>
           <Route path="/GamePageGameOne" element={ <p>Peli</p> }/>
