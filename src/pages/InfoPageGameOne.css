@@ -7,9 +7,13 @@
 
 .DifButton{
     padding: 12px 20px;
-    border-radius: 10px;
+    border-radius: 20px;
     margin-top: 20px;
+    border: 2px solid;
 
 
+    border-color: rgb(0, 123, 255);
+    background-color: white;
+    color:rgb(0, 123, 255);
 
 }
