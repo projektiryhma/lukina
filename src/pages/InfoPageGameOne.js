@@ -14,7 +14,9 @@ export function InfoPageGameOne(){
         <>
             <p className="InfoHeader"> Etsi ja korjaa </p>
 
-            <p>Liirun laarum lopun</p>
+            <p className="InfoText">Liirun laarum lopun</p>
+
+            <p className="DifficultyText">Valitse tehtävän vaikeustaso</p>
 
             <button onClick={() => handleButtonClick('0') } className="DifButton">Helppo</button>
             <button onClick={() => handleButtonClick('1') } className="DifButton">Keskivaikea</button>

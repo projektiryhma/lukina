@@ -1,8 +1,13 @@
 
+*{
+    font-family: arial;
+}
+
 .InfoHeader{
     font-size: 40px;
-    margin-top: 100px;
-    font-family: arial;
+    margin-top: 80px;
+    margin-bottom: 50px;
+    
 }
 
 .DifButton{
@@ -16,4 +21,12 @@
     background-color: white;
     color:rgb(0, 123, 255);
 
+}
+
+.InfoText{
+    padding-bottom: 50px;
+}
+
+.DifficultyText{
+    font-size: 25px;
 }

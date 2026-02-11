@@ -8,7 +8,7 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <header className='App-header'>
-          <span className='header-text'>Lukina</span>
+          <span className='header-text'>LUKINA</span>
         </header>
         <Routes>
 
