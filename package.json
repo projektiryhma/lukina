@@ -8,12 +8,14 @@
     "convert-data": "node scripts/convert-xlsx.mjs"
   },
   "dependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "dotenv": "^16.1.4",
+    "jest": "^27.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.13.0",
     "react-scripts": "5.0.1",
-    "xlsx": "^0.18.5",
-    "dotenv": "^16.1.4"
+    "xlsx": "^0.18.5"
   },
   "eslintConfig": {
     "extends": [
@@ -33,5 +35,9 @@
     ]
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "fake-indexeddb": "^6.2.5",
+    "jest-environment-jsdom": "^27.5.1"
+  }
 }

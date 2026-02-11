@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0",
+  "0": [
+    {
+      "Virheetön teksti": "Easy test item",
+      "Virheellinen teksti, virheet punaisella": "Easy test item with error",
+      "Virheiden lukumäärä tekstissä": 1,
+      "Virheelliset sanat": "test",
+      "Oikeat sanat": "test"
+    }
+  ],
+  "1": [
+    {
+      "Virheetön teksti": "Medium test item",
+      "Virheellinen teksti, virheet punaisella": "Medium test item with error",
+      "Virheiden lukumäärä tekstissä": 1,
+      "Virheelliset sanat": "test",
+      "Oikeat sanat": "test"
+    }
+  ],
+  "2": [
+    {
+      "Virheetön teksti": "Hard test item",
+      "Virheellinen teksti, virheet punaisella": "Hard test item with error",
+      "Virheiden lukumäärä tekstissä": 1,
+      "Virheelliset sanat": "test",
+      "Oikeat sanat": "test"
+    }
+  ]
+}
