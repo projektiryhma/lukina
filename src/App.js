@@ -7,6 +7,9 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
+        <header className='App-header'>
+          <span className='header-text'>Lukina</span>
+        </header>
         <Routes>
 
           <Route path="/" element={ <p>Aloitus</p> }/>

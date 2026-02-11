@@ -1,19 +1,26 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .App {
   text-align: center;
   min-height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;
+  flex-direction: column;
 }
 
 .App-header {
   background: white;
-  padding: 3rem 5rem;
-  border-radius: 20px;
+  width: 100%;
+  padding: 10px;
+  border-bottom: 2px solid #919187;
+  font-family: Arial;
+  font-size: 20px; 
+  display: flex;
+  justify-content: center;
 }
 
-.App-header h1 {
-  color: #21294a;
-  font-size: 3em;
-  margin-bottom: 1rem;
-}
+
