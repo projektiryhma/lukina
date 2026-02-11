@@ -5,9 +5,23 @@
 
 .InfoHeader{
     font-size: 40px;
-    margin-top: 80px;
+    margin-top: 40px;
     margin-bottom: 50px;
     
+}
+
+.BackButton{
+
+    margin-right: auto;
+    margin-left: 30px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin-top: 20px;
+    border: 2px solid;
+    border-color: rgb(0, 123, 255);
+    background-color: white;
+    color:rgb(0, 123, 255);
+    cursor: pointer;
 }
 
 .DifButton{
@@ -20,6 +34,7 @@
     border-color: rgb(0, 123, 255);
     background-color: white;
     color:rgb(0, 123, 255);
+    cursor: pointer;
 
 }
 

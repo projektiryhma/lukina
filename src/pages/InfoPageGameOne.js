@@ -12,6 +12,8 @@ export function InfoPageGameOne(){
     return(
 
         <>
+            <button onClick={() => navigate("/") } className="BackButton">Etusivulle</button>
+            
             <p className="InfoHeader"> Etsi ja korjaa </p>
 
             <p className="InfoText">Liirun laarum lopun</p>
@@ -21,6 +23,8 @@ export function InfoPageGameOne(){
             <button onClick={() => handleButtonClick('0') } className="DifButton">Helppo</button>
             <button onClick={() => handleButtonClick('1') } className="DifButton">Keskivaikea</button>
             <button onClick={() => handleButtonClick('2') } className="DifButton">Vaikea</button>
+
+            
 
         </>
 
