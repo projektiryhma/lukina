@@ -3,6 +3,7 @@ import { DifficultyLevels } from "../enums/DifficultyLevels";
 import fs from 'fs';
 import path from 'path';
 
+//needed with fakeIndexedDB to simulate the internal cloning process of objects in IndexedDB
 if (typeof structuredClone === 'undefined') {
   global.structuredClone = (obj) => JSON.parse(JSON.stringify(obj));
 }

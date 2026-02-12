@@ -1,6 +1,7 @@
 {
   "name": "lukina",
   "version": "1.0.0",
+  "homepage": "lukina",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
