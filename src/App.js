@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
+import { initAndCacheData } from './db/dataCache';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
+
+  useEffect(() => {
+    initAndCacheData();
+  }, []);
+
   return (
     <BrowserRouter>
       <div className="App">
