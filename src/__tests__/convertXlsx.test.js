@@ -4,7 +4,6 @@
  * - Runs `npm run convert-data` in `beforeAll` to generate `public/data/data.json`.
  * - Verifies the generated JSON exists and that collection "0" contains expected fields.
  * - Removes the generated file in `afterAll` so tests don't leave artifacts.
- * Notes: These tests invoke a Node script, so Node must be available in the test environment.
  *
  * Github Copilot GPT-5 mini was used to check and suggest code in this file.
  */
@@ -37,12 +36,18 @@ afterAll(async () => {
   }
 });
 
-// Basic existence check: converter created the JSON file
+// TC-CONVERTXLSX-001
+// Description: Basic existence check: converter created the JSON file
+// Preconditions: `npm run convert-data` ran in beforeAll; `OUTPUT` env var points to expected file
+// Expected result: Output JSON file exists at `OUTPUTPATH`
 test("convert-xlsx produces JSON", () => {
   expect(fs.existsSync(OUTPUTPATH)).toBe(true);
 });
 
-// Structural assertions: collection '0' exists and first row contains expected fields
+// TC-CONVERTXLSX-002
+// Description: Structural assertions for sheet '0' and first-row fields
+// Preconditions: Output JSON exists and contains at least one sheet with rows
+// Expected result: `obj["0"]` is a non-empty array and first row matches required keys/types
 test("JSON datafile has expected structure", () => {
   const obj = JSON.parse(fs.readFileSync(OUTPUTPATH, "utf8"));
 
@@ -59,6 +64,10 @@ test("JSON datafile has expected structure", () => {
   });
 });
 
+// TC-CONVERTXLSX-003
+// Description: Ensure output JSON contains a valid `version` timestamp
+// Preconditions: Output JSON file exists and includes a `version` property
+// Expected result: `version` is a string parseable to a valid Date
 test("Generated JSON includes version timestamp", () => {
   const obj = JSON.parse(fs.readFileSync(OUTPUTPATH, "utf8"));
   expect(typeof obj.version).toBe("string");
@@ -66,6 +75,10 @@ test("Generated JSON includes version timestamp", () => {
   expect(d.toString()).not.toBe("Invalid Date");
 });
 
+// TC-CONVERTXLSX-004
+// Description: Running converter with missing INPUT env should report an error
+// Preconditions: `INPUT` environment variable overridden to a non-existent file path
+// Expected result: `npm run convert-data` logs an error to stderr and does not create output file
 test("convert fails when INPUT is missing", async () => {
   const env = {
     ...process.env,
