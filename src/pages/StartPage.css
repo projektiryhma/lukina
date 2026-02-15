@@ -1,15 +1,24 @@
-.start-page {
-  max-width: 720px;
-  margin: 0 auto;
-  text-align: center;
+* {
+  font-family: arial;
 }
 
-.start-page nav a {
-  color: #1a73e8;
-  text-decoration: none;
-  font-weight: 600;
+.InfoHeader {
+  font-size: 40px;
+  margin-top: 40px;
+  margin-bottom: 50px;
 }
 
-.start-page nav a:hover {
-  text-decoration: underline;
+.DifficultyText {
+  font-size: 25px;
+}
+
+.DifButton {
+  padding: 12px 20px;
+  border-radius: 20px;
+  margin-top: 20px;
+  border: 2px solid;
+  border-color: rgb(0, 123, 255);
+  background-color: white;
+  color: rgb(0, 123, 255);
+  cursor: pointer;
 }

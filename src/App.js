@@ -13,6 +13,9 @@ function App() {
   return (
     <BrowserRouter basename="/lukina">
       <div className="App">
+        <header className='App-header'>
+          <span className='header-text'>LUKINA</span>
+        </header>
         <Routes>
           
           <Route path="/" element={ <StartPage /> }/>
