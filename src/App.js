@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import './App.css';
 import { initAndCacheData } from './db/dataCache';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import StartPage from './pages/StartPage';
 
 function App() {
 
@@ -14,7 +15,7 @@ function App() {
       <div className="App">
         <Routes>
           
-          <Route path="/" element={ <p>Aloitus</p> }/>
+          <Route path="/" element={ <StartPage /> }/>
           <Route path="/InfoPageGameOne" element={ <p>Info</p> }/>
           <Route path="/GamePageGameOne" element={ <p>Peli</p> }/>
            

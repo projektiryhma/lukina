@@ -1,0 +1,15 @@
+.start-page {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.start-page nav a {
+  color: #1a73e8;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.start-page nav a:hover {
+  text-decoration: underline;
+}
