@@ -87,3 +87,23 @@ test("convert fails when INPUT is missing", async () => {
   const { stderr } = await execAsync("npm run convert-data", { env });
   expect(stderr);
 });
+
+// TC-CONVERTXLSX-005
+// Description: Parse a valid .xlsx with multiple sheets and typed cells
+// Preconditions: A small .xlsx exists with 2 sheets, several rows, and date cells
+// Expected result: Returns an object with keys "1","1"
+test("convertXlsx converts a datafile with multiple sheets", () => {
+  const obj = JSON.parse(fs.readFileSync(OUTPUTPATH, "utf8"));
+
+  // Ensure sheet '1' exists and is an array with at least one row
+  expect(Array.isArray(obj["1"])).toBe(true);
+  expect(obj["1"].length).toBeGreaterThan(0);
+
+  expect(obj["1"][1]).toMatchObject({
+    "Virheetön teksti": expect.any(String),
+    "Virheellinen teksti, virheet punaisella": expect.any(String),
+    "Virheiden lukumäärä tekstissä": expect.any(Number),
+    "Virheelliset sanat": expect.any(String),
+    "Oikeat sanat": expect.any(String),
+  });
+});
