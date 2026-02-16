@@ -16,7 +16,7 @@ export function InfoPageGameOne(){
             
             <p className="InfoHeader"> Etsi ja korjaa </p>
 
-            <p className="InfoText">Liirun laarum lopun</p>
+            <p className="InfoText">Säännöt</p>
 
             <p className="DifficultyText">Valitse tehtävän vaikeustaso</p>
 

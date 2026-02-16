@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import { InfoPageGameOne } from './pages/InfoPageGameOne';
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <div className="App">
         <header className='App-header'>
           <span className='header-text'>LUKINA</span>
@@ -18,7 +18,7 @@ function App() {
            
         </Routes>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
