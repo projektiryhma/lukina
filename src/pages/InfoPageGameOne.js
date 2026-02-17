@@ -1,32 +1,34 @@
-import "./InfoPageGameOne.css"
-import { useNavigate } from 'react-router-dom';
+import "./InfoPageGameOne.css";
+import { useNavigate } from "react-router-dom";
 
-export function InfoPageGameOne(){
+export function InfoPageGameOne() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const handleButtonClick = (difficulty) => {
+    navigate("/GamePageGameOne", { state: { state: difficulty } });
+  };
 
-    const handleButtonClick = (difficulty) => {
-        navigate("/GamePageGameOne", { state: { state: difficulty } });
-    };
+  return (
+    <>
+      <button onClick={() => navigate("/")} className="BackButton">
+        Etusivulle
+      </button>
 
-    return(
+      <p className="InfoHeader"> Etsi ja korjaa </p>
 
-        <>
-            <button onClick={() => navigate("/") } className="BackButton">Etusivulle</button>
-            
-            <p className="InfoHeader"> Etsi ja korjaa </p>
+      <p className="InfoText">Säännöt</p>
 
-            <p className="InfoText">Säännöt</p>
+      <p className="DifficultyText">Valitse tehtävän vaikeustaso</p>
 
-            <p className="DifficultyText">Valitse tehtävän vaikeustaso</p>
-
-            <button onClick={() => handleButtonClick('0') } className="DifButton">Helppo</button>
-            <button onClick={() => handleButtonClick('1') } className="DifButton">Keskivaikea</button>
-            <button onClick={() => handleButtonClick('2') } className="DifButton">Vaikea</button>
-
-            
-
-        </>
-
-    )
+      <button onClick={() => handleButtonClick("0")} className="DifButton">
+        Helppo
+      </button>
+      <button onClick={() => handleButtonClick("1")} className="DifButton">
+        Keskivaikea
+      </button>
+      <button onClick={() => handleButtonClick("2")} className="DifButton">
+        Vaikea
+      </button>
+    </>
+  );
 }

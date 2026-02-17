@@ -1,12 +1,11 @@
-import React, { useEffect } from 'react';
-import './App.css';
+import { useEffect } from "react";
+import "./App.css";
 
-import { initAndCacheData } from './db/dataCache';
-import { Routes, Route, HashRouter } from 'react-router-dom';
-import { InfoPageGameOne } from './pages/InfoPageGameOne';
+import { initAndCacheData } from "./db/dataCache";
+import { Routes, Route, HashRouter } from "react-router-dom";
+import { InfoPageGameOne } from "./pages/InfoPageGameOne";
 
 function App() {
-
   useEffect(() => {
     initAndCacheData();
   }, []);
@@ -14,14 +13,13 @@ function App() {
   return (
     <HashRouter>
       <div className="App">
-
-        <header className='App-header'>
-          <span className='header-text'>LUKINA</span>
+        <header className="App-header">
+          <span className="header-text">LUKINA</span>
         </header>
         <Routes>
-          <Route path="/" element={ <p>Aloitus</p> }/>
-          <Route path="/InfoPageGameOne" element={ <InfoPageGameOne/> }/>
-          <Route path="/GamePageGameOne" element={ <p>Peli</p> }/>
+          <Route path="/" element={<p>Aloitus</p>} />
+          <Route path="/InfoPageGameOne" element={<InfoPageGameOne />} />
+          <Route path="/GamePageGameOne" element={<p>Peli</p>} />
         </Routes>
       </div>
     </HashRouter>
@@ -29,10 +27,3 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-
-
