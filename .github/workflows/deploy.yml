@@ -1,10 +1,10 @@
 name: Build, Test, and Deploy
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
+  workflow_run:
+    workflows: ["Run ESLint"]
+    types:
+      - completed
     branches:
       - main
 
@@ -16,6 +16,7 @@ permissions:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -39,7 +40,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build-and-test
-    if: github.event_name == 'push'
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' }}
     steps:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
