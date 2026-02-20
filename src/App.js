@@ -17,7 +17,7 @@ function App() {
           <span className="header-text">LUKINA</span>
         </header>
         <Routes>
-          <Route path="/" element={<StartPage />}/>
+          <Route path="/" element={<StartPage />} />
           <Route path="/InfoPageGameOne" element={<InfoPageGameOne />} />
           <Route path="/GamePageGameOne" element={<p>Peli</p>} />
         </Routes>
