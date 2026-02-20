@@ -6,12 +6,15 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "convert-data": "node scripts/convert-xlsx.mjs"
+    "convert-data": "node scripts/convert-xlsx.mjs",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^6.9.1",
     "dotenv": "^16.1.4",
     "jest": "^27.5.1",
+    "jest-ctrf-json-reporter": "^0.0.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.13.0",
@@ -38,7 +41,15 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
     "fake-indexeddb": "^6.2.5",
-    "jest-environment-jsdom": "^27.5.1"
+    "jest-environment-jsdom": "^27.5.1",
+    "jest-junit": "^16.0.0",
+    "prettier": "^3.8.1"
   }
 }
