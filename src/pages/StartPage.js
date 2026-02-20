@@ -14,7 +14,6 @@ function StartPage() {
       <p className="InfoText">Liirum Laarum</p>
       <p className="SelectionText">Valitse seuraava sivu jatkaaksesi:</p>
       <button onClick={() => handleNavigate('/InfoPageGameOne')} className="DifButton">Info</button>
-      <button onClick={() => handleNavigate('/GamePageGameOne')} className="DifButton">Aloita peli</button>
     </>
   );
 }
