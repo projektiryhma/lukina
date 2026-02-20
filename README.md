@@ -15,4 +15,4 @@ npm run convert-data
 
 # app url
 
-https://projektiryhma.github.io/lukina/
+https://projektiryhma.github.io/lukina/#
