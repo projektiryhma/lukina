@@ -4,6 +4,7 @@ import "./App.css";
 import { initAndCacheData } from "./db/dataCache";
 import { Routes, Route, HashRouter } from "react-router-dom";
 import { InfoPageGameOne } from "./pages/InfoPageGameOne";
+import { StartPage } from "./pages/StartPage";
 
 function App() {
   useEffect(() => {
@@ -17,7 +18,7 @@ function App() {
           <span className="header-text">LUKINA</span>
         </header>
         <Routes>
-          <Route path="/" element={ <StartPage />} />
+          <Route path="/" element={<StartPage />} />
           <Route path="/InfoPageGameOne" element={<p>Info</p>} />
           <Route path="/GamePageGameOne" element={<p>Peli</p>} />
         </Routes>

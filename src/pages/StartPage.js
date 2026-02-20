@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import './StartPage.css';
 
-function StartPage() {
+export function StartPage() {
   const navigate = useNavigate();
 
   const handleNavigate = (path) => {
