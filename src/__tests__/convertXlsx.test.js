@@ -1,9 +1,8 @@
 /*
  * convertXlsx.test.js
- * Jest tests for the Excel → JSON converter pipeline.
+ * Jest tests for the Excel → JSON converter.
  * - Runs `npm run convert-data` in `beforeAll` to generate `public/data/data.json`.
- * - Verifies the generated JSON exists and that collection "0" contains expected fields.
- * - Removes the generated file in `afterAll` so tests don't leave artifacts.
+ * - Removes the generated file in `afterAll`.
  *
  * Github Copilot GPT-5 mini was used to check and suggest code in this file.
  */
@@ -12,6 +11,7 @@ import fs from "fs";
 import path from "path";
 import { exec } from "child_process";
 import { promisify } from "util";
+import XLSX from "xlsx";
 import dotenv from "dotenv";
 dotenv.config();
 const execAsync = promisify(exec);
@@ -106,4 +106,33 @@ test("convertXlsx converts a datafile with multiple sheets", () => {
     "Virheelliset sanat": expect.any(String),
     "Oikeat sanat": expect.any(String),
   });
+});
+
+// TC-CONVERTXLSX-006
+// Description: Write JSON to a new nested directory (directories that don't exist)
+// Preconditions: outputPath points into a non-existent nested directory
+// Expected result: Directories are created, file written as JSON, file exists
+test("TC-CONVERTXLSX-006 - nested output directory is created and JSON written", async () => {
+  const fsPromises = fs.promises;
+  const workDir = path.join(process.cwd(), "tmp");
+  const inputPath = path.join(workDir, "in.xlsx");
+  const outputPath = path.join(workDir, "a", "b", "c", "out.json");
+
+  await fsPromises.mkdir(workDir, { recursive: true });
+
+  // Build a workbook with one sheet and one row
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.json_to_sheet([{ Field: "testValue" }]);
+  XLSX.utils.book_append_sheet(wb, ws, "testSheet");
+  XLSX.writeFile(wb, inputPath);
+
+  const env = { ...process.env, INPUT: inputPath, OUTPUT: outputPath };
+  try {
+    await execAsync("node scripts/convert-xlsx.mjs", { env });
+  } catch (err) {
+    throw new Error(`TC-CONVERTXLSX-006 convert script failed: ${err.stderr}`);
+  }
+
+  expect(fs.existsSync(outputPath)).toBe(true);
+  await fsPromises.rm(workDir, { recursive: true, force: true });
 });
