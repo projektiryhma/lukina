@@ -1,18 +1,9 @@
-export function Game(){
+import { useLocation } from "react-router-dom";
 
-    const status = 0;
+export function GamePageGameOne() {
+  const location = useLocation();
 
-    if (status = 0){
+  const difficulty = location.state.state || "0";
 
-        return(
-            <p>peli1</p>
-        )
-
-    }
-
-    
-    return(
-        <p>Peli2</p>
-    )
-
+  return <p>peli {difficulty}</p>;
 }
