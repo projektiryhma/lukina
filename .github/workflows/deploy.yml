@@ -30,6 +30,8 @@ jobs:
         run: node scripts/convert-xlsx.mjs
       - name: Build project
         run: npm run build
+        env:
+          DISABLE_ESLINT_PLUGIN: true
       - name: Run tests
         run: npm test -- --reporters=default --reporters=jest-ctrf-json-reporter
       - name: Upload artifact

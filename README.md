@@ -16,3 +16,7 @@ npm run convert-data
 # app url
 
 https://projektiryhma.github.io/lukina/#
+
+# test coverage
+
+[![Coverage Status](https://coveralls.io/repos/github/projektiryhma/lukina/badge.svg)](https://coveralls.io/github/projektiryhma/lukina)
