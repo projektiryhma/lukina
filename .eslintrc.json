@@ -24,9 +24,11 @@
     "rules": {
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
-      "prettier/prettier": "error",
+      "prettier/prettier": "warn",
       "react/react-in-jsx-scope": "off",
-      "react/jsx-uses-react": "off"
+      "react/jsx-uses-react": "off",
+      "no-console": "warn",
+      "eqeqeq": ["error", "always"] 
     },
     "settings": {
       "react": {
