@@ -15,6 +15,8 @@
  * - `getFromStore(storeName)` — return a single randomly-selected record
  *   from a given object store. Returned IDs are tracked per-store so the
  *   same entry isn't served again until all entries have been returned.
+ * - `deleteDatabase()` — delete the entire IndexedDB database for this app.
+ * - `openDB(data)` — open the IndexedDB database, optionally populating it
  *
  * Notes / Behavior changes:
  * - Storage: per-sheet stores are created with `keyPath: KEY_ID` and
@@ -50,7 +52,7 @@ let _usedDataIDs = new Map();
  * @param {Object|null} data - optional parsed JSON to populate into DB
  * @returns {Promise<IDBDatabase>} resolves with the opened DB or rejects on error
  */
-function openDB(data = null) {
+export function openDB(data = null) {
   if (_dbPromise) return _dbPromise;
 
   _dbPromise = new Promise((resolve, reject) => {
@@ -106,7 +108,7 @@ function openDB(data = null) {
  *
  * @returns {Promise<void>} resolves when deletion completes or rejects on error
  */
-function deleteDatabase() {
+export function deleteDatabase() {
   return new Promise((resolve, reject) => {
     const req = indexedDB.deleteDatabase(DB_NAME);
     req.onsuccess = () => resolve();

@@ -1,4 +1,9 @@
-import { getFromStore, initAndCacheData } from "../db/dataCache";
+import {
+  getFromStore,
+  initAndCacheData,
+  deleteDatabase,
+  openDB,
+} from "../db/dataCache";
 import { DifficultyLevels } from "../enums/DifficultyLevels";
 import fs from "fs";
 import path from "path";
@@ -29,6 +34,13 @@ process.env.REACT_APP_OUTPUT = "/data/testdata.json";
 describe("test fetching from correct store", () => {
   beforeAll(async () => {
     await initAndCacheData();
+  });
+  afterAll(async () => {
+    const existingDB = await openDB();
+    if (existingDB && typeof existingDB.close === "function") {
+      existingDB.close();
+    }
+    await deleteDatabase();
   });
 
   it("getFromStore easy returns data from store 0", async () => {
