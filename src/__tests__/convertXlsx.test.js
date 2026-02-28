@@ -11,7 +11,6 @@ import fs from "fs";
 import path from "path";
 import { exec } from "child_process";
 import { promisify } from "util";
-import XLSX from "xlsx";
 import dotenv from "dotenv";
 dotenv.config();
 const execAsync = promisify(exec);

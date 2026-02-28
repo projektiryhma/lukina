@@ -201,18 +201,13 @@ export async function initAndCacheData() {
       }
     } catch (err) {
       // Any error while probing the existing DB -> repopulate
-      console.debug("DB probe failed, will (re)populate:", err);
       needPopulate = true;
     }
 
     if (needPopulate) {
       // Close any open connection so `deleteDatabase` is not blocked.
-      try {
-        if (existingDB && typeof existingDB.close === "function") {
-          existingDB.close();
-        }
-      } catch (err) {
-        console.debug("Failed to close existing DB connection:", err);
+      if (existingDB && typeof existingDB.close === "function") {
+        existingDB.close();
       }
 
       await deleteDatabase();
