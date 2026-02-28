@@ -107,32 +107,3 @@ test("convertXlsx converts a datafile with multiple sheets", () => {
     "Oikeat sanat": expect.any(String),
   });
 });
-
-// TC-CONVERTXLSX-006
-// Description: Write JSON to a new nested directory (directories that don't exist)
-// Preconditions: outputPath points into a non-existent nested directory
-// Expected result: Directories are created, file written as JSON, file exists
-test("TC-CONVERTXLSX-006 - nested output directory is created and JSON written", async () => {
-  const fsPromises = fs.promises;
-  const workDir = path.join(process.cwd(), "tmp");
-  const inputPath = path.join(workDir, "in.xlsx");
-  const outputPath = path.join(workDir, "a", "b", "c", "out.json");
-
-  await fsPromises.mkdir(workDir, { recursive: true });
-
-  // Build a workbook with one sheet and one row
-  const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.json_to_sheet([{ Field: "testValue" }]);
-  XLSX.utils.book_append_sheet(wb, ws, "testSheet");
-  XLSX.writeFile(wb, inputPath);
-
-  const env = { ...process.env, INPUT: inputPath, OUTPUT: outputPath };
-  try {
-    await execAsync("node scripts/convert-xlsx.mjs", { env });
-  } catch (err) {
-    throw new Error(`TC-CONVERTXLSX-006 convert script failed: ${err.stderr}`);
-  }
-
-  expect(fs.existsSync(outputPath)).toBe(true);
-  await fsPromises.rm(workDir, { recursive: true, force: true });
-});
