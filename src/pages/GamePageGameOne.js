@@ -1,20 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 
 export function GamePageGameOne() {
   const location = useLocation();
-  const difficulty = location.state.state || "0";
+  const difficulty = location.state?.state || "0";
 
   const [game, setGame] = useState(null);
   const [isPhaseOne, setIsPhaseOne] = useState(true);
 
-  const fetchNewTask = async () => {
+  const fetchNewTask = useCallback(async () => {
     const data = "data";
     setGame(data);
-    {
-      game;
-    }
-  };
+    // data fetch
+  }, []);
 
   useEffect(() => {
     fetchNewTask();
