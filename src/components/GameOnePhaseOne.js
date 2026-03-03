@@ -1,6 +1,9 @@
-import PropTypes from "prop-types"; // 1. Muista import!
+import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
+import "./GameOnePhaseOne.css";
 
 export function GameOnePhaseOne({ data }) {
+  const navigate = useNavigate();
   if (!data) return <p>No data</p>;
 
   const teksti = data["Virheellinen teksti, virheet punaisella"];
@@ -8,7 +11,13 @@ export function GameOnePhaseOne({ data }) {
 
   return (
     <div className="phase-one">
-      <h2>Etsi virheet!</h2>
+      <button
+        onClick={() => navigate("/InfoPageGameOne")}
+        className="BackToButton"
+      >
+        &lt; Edellinen
+      </button>
+      <h2 className="PhaseOneHeader">Etsi ja korjaa</h2>
       <p
         style={{
           padding: "20px",
@@ -25,7 +34,6 @@ export function GameOnePhaseOne({ data }) {
   );
 }
 
-// 2. Lisää tämä määrittely funktion alapuolelle:
 GameOnePhaseOne.propTypes = {
   data: PropTypes.shape({
     "Virheellinen teksti, virheet punaisella": PropTypes.string,
