@@ -73,4 +73,18 @@ describe("test fetching from correct store", () => {
     const set = new Set([a.id, b.id, c.id]);
     expect(set.size).toBe(3);
   });
+
+  it("resets the counter after all items have been called times", async () => {
+    const a = await getFromStore(DifficultyLevels.EASY);
+    const b = await getFromStore(DifficultyLevels.EASY);
+    const c = await getFromStore(DifficultyLevels.EASY);
+    const d = await getFromStore(DifficultyLevels.EASY);
+
+    expect(a).toBeDefined();
+    expect(b).toBeDefined();
+    expect(c).toBeDefined();
+    expect(d).toBeDefined();
+    const set = new Set([a.id, b.id, c.id, d.id]);
+    expect(set.size).toBe(3);
+  });
 });
