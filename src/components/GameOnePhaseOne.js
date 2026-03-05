@@ -6,8 +6,8 @@ export function GameOnePhaseOne({ data }) {
   const navigate = useNavigate();
   if (!data) return <p>No data</p>;
 
-  const teksti = data["Virheellinen teksti, virheet punaisella"];
-  const maara = data["Virheiden lukumäärä tekstissä"];
+  const text = data["Virheellinen teksti, virheet punaisella"];
+  const amountoferror = data["Virheiden lukumäärä tekstissä"];
 
   return (
     <div className="phase-one">
@@ -25,10 +25,10 @@ export function GameOnePhaseOne({ data }) {
           background: "#f9f9f9",
         }}
       >
-        {teksti}
+        {text}
       </p>
       <p>
-        Sinun pitäisi löytää <strong>{maara}</strong> virhettä.
+        Virheitä: <strong>{amountoferror}</strong>
       </p>
     </div>
   );

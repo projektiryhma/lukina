@@ -10,14 +10,26 @@ export function StartPage() {
 
   return (
     <>
-      <p className="InfoHeader">Tervetuloa</p>
-      <p className="InfoText">Liirum Laarum</p>
-      <p className="SelectionText">Valitse seuraava sivu jatkaaksesi:</p>
+      <p className="StartHeader">Harjoittele ja kehity</p>
+      <p className="StartText">
+        LUKINA:n avulla voit harjoitella oikein kirjoitusta ja lukemista
+      </p>
+      <p className="h2">Opi pelaamalla</p>
+
       <button
         onClick={() => HandleNavigate("/InfoPageGameOne")}
-        className="DifButton"
+        className="StartButton"
       >
-        Info
+        Aloita pelaaminen &gt;
+      </button>
+
+      <p className="GameInfoText">Pelin ohjeet</p>
+      <button onClick={() => HandleNavigate("/")} className="InfoButton">
+        Lue ohjeet &gt;
+      </button>
+
+      <button onClick={() => HandleNavigate("/")} className="AppInfoButton">
+        Tietoa Sovelluksesta
       </button>
     </>
   );
