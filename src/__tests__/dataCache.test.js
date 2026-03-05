@@ -65,4 +65,17 @@ describe("test fetching from correct store", () => {
     expect(result).toBeDefined();
     expect(["Hard test item"]).toContain(result["Virheetön teksti"]);
   });
+
+  // at this point one item from EASY has been retrieved allready
+  it("returns three distinct items when called three times", async () => {
+    const a = await getFromStore(DifficultyLevels.EASY);
+    const b = await getFromStore(DifficultyLevels.EASY);
+    const c = await getFromStore(DifficultyLevels.EASY);
+
+    expect(a).toBeDefined();
+    expect(b).toBeDefined();
+    expect(c).toBeDefined();
+    const set = new Set([a.id, b.id, c.id]);
+    expect(set.size).toBe(3);
+  });
 });
