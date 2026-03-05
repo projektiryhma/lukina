@@ -21,7 +21,7 @@ export function InfoPageGameOne() {
         etsimistä ja niiden korjaamista.
       </p>
 
-      <p className="InfoText2">Voit valita tehtävän vaikeustason</p>
+      <p className="InfoText2">Voit valita tehtävän vaikeustason.</p>
 
       <p className="DifficultyText">
         Valitse tehtävän vaikeustaso ja aloita tehtävä
