@@ -1,9 +1,3 @@
-import {
-  getFromStore,
-  initAndCacheData,
-  deleteDatabase,
-  openDB,
-} from "../db/dataCache";
 import { DifficultyLevels } from "../enums/DifficultyLevels";
 import fs from "fs";
 import path from "path";
@@ -17,24 +11,26 @@ if (typeof structuredClone === "undefined") {
 const testDataPath = path.join(__dirname, "../../public/data/testdata.json");
 const testData = JSON.parse(fs.readFileSync(testDataPath, "utf-8"));
 
-global.fetch = jest.fn(() =>
-  Promise.resolve({
-    ok: true,
-    json: () => Promise.resolve(testData),
-  }),
-);
-
 process.env.REACT_APP_DB_NAME = "lukina";
 process.env.REACT_APP_DB_VERSION = "1";
 process.env.REACT_APP_META_STORE = "meta";
 process.env.REACT_APP_META_RECORD_ID = "meta-id";
 process.env.REACT_APP_KEY_ID = "id";
 process.env.REACT_APP_OUTPUT = "/data/testdata.json";
+let getFromStore, initAndCacheData, deleteDatabase, openDB;
 
-beforeAll(async () => {
+beforeEach(async () => {
+  jest.resetModules();
+  global.fetch = jest.fn(() =>
+    Promise.resolve({ ok: true, json: () => Promise.resolve(testData) }),
+  );
+  const dataCache = await import("../db/dataCache");
+  ({ getFromStore, initAndCacheData, deleteDatabase, openDB } = dataCache);
+  await deleteDatabase();
   await initAndCacheData();
 });
-afterAll(async () => {
+
+afterEach(async () => {
   const existingDB = await openDB();
   if (existingDB && typeof existingDB.close === "function") {
     existingDB.close();
@@ -66,7 +62,6 @@ describe("test fetching from correct store", () => {
     expect(["Hard test item"]).toContain(result["Virheetön teksti"]);
   });
 
-  // at this point one item from EASY has been retrieved allready
   it("returns three distinct items when called three times", async () => {
     const a = await getFromStore(DifficultyLevels.EASY);
     const b = await getFromStore(DifficultyLevels.EASY);
