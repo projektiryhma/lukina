@@ -31,18 +31,23 @@ process.env.REACT_APP_META_RECORD_ID = "meta-id";
 process.env.REACT_APP_KEY_ID = "id";
 process.env.REACT_APP_OUTPUT = "/data/testdata.json";
 
-describe("test fetching from correct store", () => {
-  beforeAll(async () => {
-    await initAndCacheData();
-  });
-  afterAll(async () => {
-    const existingDB = await openDB();
-    if (existingDB && typeof existingDB.close === "function") {
-      existingDB.close();
-    }
-    await deleteDatabase();
-  });
+beforeAll(async () => {
+  await initAndCacheData();
+});
+afterAll(async () => {
+  const existingDB = await openDB();
+  if (existingDB && typeof existingDB.close === "function") {
+    existingDB.close();
+  }
+  await deleteDatabase();
+});
 
+it("throws when storeName missing", async () => {
+  const resultPromise = getFromStore();
+  await expect(resultPromise).rejects.toThrow("storeName is required");
+});
+
+describe("test fetching from correct store", () => {
   it("getFromStore easy returns data from store 0", async () => {
     const result = await getFromStore(DifficultyLevels.EASY);
     expect(result).toBeDefined();
