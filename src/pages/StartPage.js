@@ -12,7 +12,7 @@ export function StartPage() {
     <>
       <p className="StartHeader">Harjoittele ja kehity</p>
       <p className="StartText">
-        LUKINA:n avulla voit harjoitella oikein kirjoitusta ja lukemista.
+        LUKINA:n avulla voit harjoitella oikeinkirjoitusta ja lukemista.
       </p>
       <p className="h2">Opi pelaamalla</p>
 

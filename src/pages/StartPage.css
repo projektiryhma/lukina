@@ -58,6 +58,7 @@
   background-color: rgba(232, 222, 248);
   color: rgba(103, 80, 164);
   cursor: pointer;
+  text-shadow: 0.2px 0 0 rgba(103, 80, 164);
 }
 
 .GameInfoText{
