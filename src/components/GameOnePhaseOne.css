@@ -1,7 +1,6 @@
 .PhaseOneHeader{
-    padding-top: 100px;
+  padding-top: 100px;
 }
-
 
 
 
@@ -13,5 +12,11 @@
   background-color: white;
   text-shadow: 0.2px 0 0 black;
   cursor: pointer;
-  
+
+}
+
+.GameData{
+  padding: 20px;
+  border: 1px solid gray;
+  background: whitesmoke;
 }
