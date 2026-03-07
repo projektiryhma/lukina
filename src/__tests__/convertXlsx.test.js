@@ -92,9 +92,13 @@ test("convert fails when INPUT is missing", async () => {
   const env = {
     ...process.env,
     INPUT: "imaginary_file.xlsx",
+    OUTPUT: "missing.json",
   };
+
   const { stderr } = await execAsync("npm run convert-data", { env });
-  expect(stderr);
+  expect(stderr).toBeTruthy();
+  expect(stderr).toMatch(/Input file not found:/);
+  expect(fs.existsSync("missing.json")).toBe(false);
 });
 
 // TC-CONVERTXLSX-005
