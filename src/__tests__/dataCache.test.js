@@ -87,4 +87,9 @@ describe("test fetching from correct store", () => {
     const set = new Set([a.id, b.id, c.id, d.id]);
     expect(set.size).toBe(3);
   });
+
+  it("returns undefined for an empty store", async () => {
+    const result = await getFromStore("3");
+    expect(result).toBeUndefined();
+  });
 });
