@@ -38,12 +38,7 @@ afterEach(async () => {
   await deleteDatabase();
 });
 
-it("throws when storeName missing", async () => {
-  const resultPromise = getFromStore();
-  await expect(resultPromise).rejects.toThrow("storeName is required");
-});
-
-describe("test fetching from correct store", () => {
+describe("getFromStore tests:", () => {
   it("getFromStore easy returns data from store 0", async () => {
     const result = await getFromStore(DifficultyLevels.EASY);
     expect(result).toBeDefined();
@@ -60,6 +55,11 @@ describe("test fetching from correct store", () => {
     const result = await getFromStore(DifficultyLevels.HARD);
     expect(result).toBeDefined();
     expect(["Hard test item"]).toContain(result["Virheetön teksti"]);
+  });
+
+  it("throws when storeName missing", async () => {
+    const resultPromise = getFromStore();
+    await expect(resultPromise).rejects.toThrow("storeName is required");
   });
 
   it("returns three distinct items when called three times", async () => {
