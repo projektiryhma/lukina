@@ -116,3 +116,38 @@ describe("getFromStore tests:", () => {
     expect(eSet.size).toBe(3);
   });
 });
+
+describe("initAndCacheData tests:", () => {
+  it("populates when DB exists but has no object stores", async () => {
+    const existingDB = await openDB();
+    if (existingDB && typeof existingDB.close === "function") {
+      existingDB.close();
+    }
+    await deleteDatabase();
+
+    // Create an empty DB
+    await new Promise((resolve, reject) => {
+      const req = indexedDB.open(
+        process.env.REACT_APP_DB_NAME,
+        Number(process.env.REACT_APP_DB_VERSION),
+      );
+      req.onupgradeneeded = () => {};
+      req.onsuccess = () => {
+        req.result.close();
+        resolve();
+      };
+      req.onerror = () => reject(req.error);
+    });
+
+    jest.resetModules();
+    global.fetch = jest.fn(() =>
+      Promise.resolve({ ok: true, json: () => Promise.resolve(testData) }),
+    );
+    const dataCache = await import("../db/dataCache");
+    ({ initAndCacheData, openDB } = dataCache);
+
+    await initAndCacheData();
+    const db = await openDB();
+    expect(db.objectStoreNames.length).toBeGreaterThan(0);
+  });
+});
