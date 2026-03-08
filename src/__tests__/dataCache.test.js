@@ -150,4 +150,66 @@ describe("initAndCacheData tests:", () => {
     const db = await openDB();
     expect(db.objectStoreNames.length).toBeGreaterThan(0);
   });
+
+  it("if META_STORE is missing, re-init populates the database", async () => {
+    const dbBefore = await openDB();
+    const txBefore = dbBefore.transaction(
+      process.env.REACT_APP_META_STORE,
+      "readonly",
+    );
+    const storeBefore = txBefore.objectStore(process.env.REACT_APP_META_STORE);
+    const reqBefore = storeBefore.get(process.env.REACT_APP_META_RECORD_ID);
+    const metaBefore = await new Promise((resolve, reject) => {
+      reqBefore.onsuccess = () => resolve(reqBefore.result);
+      reqBefore.onerror = () => reject(reqBefore.error);
+    });
+    expect(metaBefore).toBeDefined();
+    expect(metaBefore.version).toBe(testData.version);
+
+    // remove META_STORE. onugrade is needed when changing schema
+    const upgradeVersion = Number(process.env.REACT_APP_DB_VERSION) + 1;
+    dbBefore.close();
+    await new Promise((resolve, reject) => {
+      const req = indexedDB.open(process.env.REACT_APP_DB_NAME, upgradeVersion);
+      req.onupgradeneeded = (ev) => {
+        const db = ev.target.result;
+        if (db.objectStoreNames.contains(process.env.REACT_APP_META_STORE)) {
+          db.deleteObjectStore(process.env.REACT_APP_META_STORE);
+        }
+      };
+      req.onsuccess = () => {
+        req.result.close();
+        resolve();
+      };
+      req.onerror = () => reject(req.error);
+    });
+
+    // Re-import the module to reset all
+    const newVersion = new Date().toISOString();
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ ...testData, version: newVersion }),
+      }),
+    );
+    jest.resetModules();
+    const dataCache = await import("../db/dataCache");
+    ({ initAndCacheData, openDB } = dataCache);
+
+    await initAndCacheData();
+    const dbAfter = await openDB();
+    const txAfter = dbAfter.transaction(
+      process.env.REACT_APP_META_STORE,
+      "readonly",
+    );
+    const storeAfter = txAfter.objectStore(process.env.REACT_APP_META_STORE);
+    const reqAfter = storeAfter.get(process.env.REACT_APP_META_RECORD_ID);
+    const metaAfter = await new Promise((res, rej) => {
+      reqAfter.onsuccess = () => res(reqAfter.result);
+      reqAfter.onerror = () => rej(reqAfter.error);
+    });
+    expect(metaAfter).toBeDefined();
+    expect(metaAfter.version).toBe(newVersion);
+    expect(metaAfter.version).not.toBe(metaBefore.version);
+  });
 });
