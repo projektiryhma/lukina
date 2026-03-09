@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { getFromStore } from "../db/dataCache";
 
 import { GameOnePhaseOne } from "../components/GameOnePhaseOne.js";
+import { GameOnePhaseTwo } from "../components/GameOnePhaseTwo.js";
 
 export function GamePageGameOne() {
   const location = useLocation();
@@ -34,30 +35,28 @@ export function GamePageGameOne() {
     fetchNewTask();
   };
 
+  const handlePhaseOneComplete = () => {
+    setIsPhaseOne(false);
+  };
+
+  const handlePhaseComplete = (userInput) => {
+    console.log("User answer:", userInput);
+    handleRestart();
+  };
+
   return (
     <div className="game-page">
       {isPhaseOne ? (
         <>
           <GameOnePhaseOne data={game} />
-          <button
-            onClick={() => {
-              handleRestart();
-            }}
-          >
-            Uusi
-          </button>
+          <button onClick={handlePhaseOneComplete}>Seuraava</button>
+          <button onClick={handleRestart}>Uusi</button>
         </>
       ) : (
-        <div className="phase-two">
-          <h2>Vaihe 2 </h2>
-          <button
-            onClick={() => {
-              handleRestart();
-            }}
-          >
-            Uusi
-          </button>
-        </div>
+        <>
+          <GameOnePhaseTwo data={game} onPhaseComplete={handlePhaseComplete} />
+          <button onClick={handleRestart}>Uusi</button>
+        </>
       )}
     </div>
   );
