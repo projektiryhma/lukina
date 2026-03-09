@@ -74,7 +74,7 @@ describe("getFromStore tests:", () => {
       expect(item).toBeDefined();
       itemSet.add(item.id);
     }
-    expect(itemSet.size).toBe(3);
+    expect(itemSet.size).toBe(storeSize);
   });
 
   it("resets the counter for unique items after all items have been called", async () => {
@@ -89,7 +89,7 @@ describe("getFromStore tests:", () => {
       expect(item).toBeDefined();
       itemSet.add(item.id);
     }
-    expect(itemSet.size).toBe(3);
+    expect(itemSet.size).toBe(storeSize);
   });
 
   it("returns undefined for an empty store", async () => {
@@ -98,26 +98,31 @@ describe("getFromStore tests:", () => {
   });
 
   it("per-store independence: calls to one store don't affect another", async () => {
+    let m = [];
+    let e = [];
+    const eSize = testData[DifficultyLevels.EASY].length;
+    let eSet = new Set();
+
     // Fetch one item from MEDIUM and record its id
-    const m1 = await getFromStore(DifficultyLevels.MEDIUM);
-    expect(m1).toBeDefined();
+    m.push(await getFromStore(DifficultyLevels.MEDIUM));
+    expect(m[0]).toBeDefined();
 
     // Exhaust EASY store by calling it three times
-    const e1 = await getFromStore(DifficultyLevels.EASY);
-    const e2 = await getFromStore(DifficultyLevels.EASY);
-    const e3 = await getFromStore(DifficultyLevels.EASY);
-    const eSet = new Set([e1.id, e2.id, e3.id]);
-    expect(eSet.size).toBe(3);
+    for (let i = 0; i < eSize; i++) {
+      e.push(await getFromStore(DifficultyLevels.EASY));
+      eSet.add(e[i].id);
+    }
+    expect(eSet.size).toBe(eSize);
 
     // Fetch from MEDIUM again; it should return the same item
-    const m2 = await getFromStore(DifficultyLevels.MEDIUM);
-    expect(m2).toBeDefined();
-    expect(m2.id).toBe(m1.id);
+    m.push(await getFromStore(DifficultyLevels.MEDIUM));
+    expect(m[1]).toBeDefined();
+    expect(m[1].id).toBe(m[0].id);
 
     // Fetch from EASY again; it should reset and return one of the three items again
-    const e4 = await getFromStore(DifficultyLevels.EASY);
-    eSet.add(e4.id);
-    expect(eSet.size).toBe(3);
+    e.push(await getFromStore(DifficultyLevels.EASY));
+    eSet.add(e[3].id);
+    expect(eSet.size).toBe(eSize);
   });
 });
 
