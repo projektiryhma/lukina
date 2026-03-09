@@ -193,15 +193,37 @@ describe("initAndCacheData tests:", () => {
       req.onerror = () => reject(req.error);
     });
 
-    // Re-import the module to reset all
+    // ensure META_STORE was removed but other stores still exist
+    await new Promise((resolve, reject) => {
+      const checkReq = indexedDB.open(
+        process.env.REACT_APP_DB_NAME,
+        upgradeVersion,
+      );
+      checkReq.onsuccess = () => {
+        const db = checkReq.result;
+        try {
+          // META_STORE should not exist
+          expect(
+            db.objectStoreNames.contains(process.env.REACT_APP_META_STORE),
+          ).toBe(false);
+          // There should still be other stores (sheets)
+          expect(db.objectStoreNames.length).toBeGreaterThan(0);
+        } finally {
+          db.close();
+          resolve();
+        }
+      };
+      checkReq.onerror = () => reject(checkReq.error);
+    });
+
     const newVersion = new Date().toISOString();
+    jest.resetModules();
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
         json: () => Promise.resolve({ ...testData, version: newVersion }),
       }),
     );
-    jest.resetModules();
     const dataCache = await import("../db/dataCache");
     ({ initAndCacheData, openDB } = dataCache);
 
