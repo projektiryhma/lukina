@@ -62,30 +62,34 @@ describe("getFromStore tests:", () => {
     await expect(resultPromise).rejects.toThrow("storeName is required");
   });
 
-  it("returns three distinct items when called three times", async () => {
-    const a = await getFromStore(DifficultyLevels.EASY);
-    const b = await getFromStore(DifficultyLevels.EASY);
-    const c = await getFromStore(DifficultyLevels.EASY);
+  it("returns all different items from store", async () => {
+    const items = [];
+    const storeSize = testData[DifficultyLevels.EASY].length;
+    let itemSet = new Set();
+    for (let i = 0; i < storeSize; i++) {
+      items.push(await getFromStore(DifficultyLevels.EASY));
+    }
 
-    expect(a).toBeDefined();
-    expect(b).toBeDefined();
-    expect(c).toBeDefined();
-    const set = new Set([a.id, b.id, c.id]);
-    expect(set.size).toBe(3);
+    for (const item of items) {
+      expect(item).toBeDefined();
+      itemSet.add(item.id);
+    }
+    expect(itemSet.size).toBe(3);
   });
 
-  it("resets the counter after all items have been called times", async () => {
-    const a = await getFromStore(DifficultyLevels.EASY);
-    const b = await getFromStore(DifficultyLevels.EASY);
-    const c = await getFromStore(DifficultyLevels.EASY);
-    const d = await getFromStore(DifficultyLevels.EASY);
+  it("resets the counter for unique items after all items have been called", async () => {
+    const items = [];
+    const storeSize = testData[DifficultyLevels.EASY].length;
+    let itemSet = new Set();
+    for (let i = 0; i < storeSize + 1; i++) {
+      items.push(await getFromStore(DifficultyLevels.EASY));
+    }
 
-    expect(a).toBeDefined();
-    expect(b).toBeDefined();
-    expect(c).toBeDefined();
-    expect(d).toBeDefined();
-    const set = new Set([a.id, b.id, c.id, d.id]);
-    expect(set.size).toBe(3);
+    for (const item of items) {
+      expect(item).toBeDefined();
+      itemSet.add(item.id);
+    }
+    expect(itemSet.size).toBe(3);
   });
 
   it("returns undefined for an empty store", async () => {
