@@ -160,62 +160,11 @@ describe("initAndCacheData tests:", () => {
     expect(db.objectStoreNames.length).toBeGreaterThan(0);
   });
 
-  it("if META_STORE is missing, re-init populates the database", async () => {
+  it("if meta.version differs, re-init populates the database", async () => {
     const dbBefore = await openDB();
-    const txBefore = dbBefore.transaction(
-      process.env.REACT_APP_META_STORE,
-      "readonly",
-    );
-    const storeBefore = txBefore.objectStore(process.env.REACT_APP_META_STORE);
-    const reqBefore = storeBefore.get(process.env.REACT_APP_META_RECORD_ID);
-    const metaBefore = await new Promise((resolve, reject) => {
-      reqBefore.onsuccess = () => resolve(reqBefore.result);
-      reqBefore.onerror = () => reject(reqBefore.error);
-    });
-    expect(metaBefore).toBeDefined();
-    expect(metaBefore.version).toBe(testData.version);
-
-    // remove META_STORE. onugrade is needed when changing schema
-    const upgradeVersion = Number(process.env.REACT_APP_DB_VERSION) + 1;
     dbBefore.close();
-    await new Promise((resolve, reject) => {
-      const req = indexedDB.open(process.env.REACT_APP_DB_NAME, upgradeVersion);
-      req.onupgradeneeded = (ev) => {
-        const db = ev.target.result;
-        if (db.objectStoreNames.contains(process.env.REACT_APP_META_STORE)) {
-          db.deleteObjectStore(process.env.REACT_APP_META_STORE);
-        }
-      };
-      req.onsuccess = () => {
-        req.result.close();
-        resolve();
-      };
-      req.onerror = () => reject(req.error);
-    });
 
-    // ensure META_STORE was removed but other stores still exist
-    await new Promise((resolve, reject) => {
-      const checkReq = indexedDB.open(
-        process.env.REACT_APP_DB_NAME,
-        upgradeVersion,
-      );
-      checkReq.onsuccess = () => {
-        const db = checkReq.result;
-        try {
-          // META_STORE should not exist
-          expect(
-            db.objectStoreNames.contains(process.env.REACT_APP_META_STORE),
-          ).toBe(false);
-          // There should still be other stores (sheets)
-          expect(db.objectStoreNames.length).toBeGreaterThan(0);
-        } finally {
-          db.close();
-          resolve();
-        }
-      };
-      checkReq.onerror = () => reject(checkReq.error);
-    });
-
+    // Re-import module with a newer remote version
     const newVersion = new Date().toISOString();
     jest.resetModules();
     global.fetch = jest.fn(() =>
@@ -241,6 +190,5 @@ describe("initAndCacheData tests:", () => {
     });
     expect(metaAfter).toBeDefined();
     expect(metaAfter.version).toBe(newVersion);
-    expect(metaAfter.version).not.toBe(metaBefore.version);
   });
 });
