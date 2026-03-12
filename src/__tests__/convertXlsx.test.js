@@ -1,8 +1,6 @@
 /*
  * convertXlsx.test.js
  * Jest tests for the Excel → JSON converter.
- * - Runs `npm run convert-data` in `beforeAll` to generate `public/data/data.json`.
- * - Removes the generated file in `afterAll`.
  *
  * Github Copilot GPT-5 mini was used to check and suggest code in this file.
  */

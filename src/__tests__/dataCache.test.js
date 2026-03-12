@@ -1,3 +1,10 @@
+/*
+ * dataCache.test.js
+ * Jest tests for the data caching functionality.
+ *
+ * Github Copilot GPT-5 mini was used to check and suggest code in this file.
+ */
+
 import { DifficultyLevels } from "../enums/DifficultyLevels";
 import fs from "fs";
 import path from "path";
@@ -39,29 +46,49 @@ afterEach(async () => {
 });
 
 describe("getFromStore tests:", () => {
+  // TC-DATACACHE-001
+  // Description: Retrieve an item from EASY store
+  // Preconditions: DB initialized and EASY store contains test data
+  // Expected result: Returned item exists and matches known EASY text
   it("getFromStore easy returns data from store 0", async () => {
     const result = await getFromStore(DifficultyLevels.EASY);
     expect(result).toBeDefined();
     expect(["Easy test item"]).toContain(result["Virheetön teksti"]);
   });
 
+  // TC-DATACACHE-002
+  // Description: Retrieve an item from MEDIUM store
+  // Preconditions: DB initialized and MEDIUM store contains test data
+  // Expected result: Returned item exists and matches known MEDIUM text
   it("getFromStore medium returns data from store 1", async () => {
     const result = await getFromStore(DifficultyLevels.MEDIUM);
     expect(result).toBeDefined();
     expect(["Medium test item"]).toContain(result["Virheetön teksti"]);
   });
 
+  // TC-DATACACHE-003
+  // Description: Retrieve an item from HARD store
+  // Preconditions: DB initialized and HARD store contains test data
+  // Expected result: Returned item exists and matches known HARD text
   it("getFromStore hard returns data from store 2", async () => {
     const result = await getFromStore(DifficultyLevels.HARD);
     expect(result).toBeDefined();
     expect(["Hard test item"]).toContain(result["Virheetön teksti"]);
   });
 
+  // TC-DATACACHE-004
+  // Description: Validate required input parameter for getFromStore
+  // Preconditions: getFromStore is called without storeName
+  // Expected result: Function rejects with "storeName is required" error
   it("throws when storeName missing", async () => {
     const resultPromise = getFromStore();
     await expect(resultPromise).rejects.toThrow("storeName is required");
   });
 
+  // TC-DATACACHE-005
+  // Description: Ensure unique-item iteration returns all items once before reset
+  // Preconditions: EASY store has N items and function is called N times
+  // Expected result: Set of returned ids contains exactly N unique values
   it("returns all different items from store", async () => {
     const items = [];
     const storeSize = testData[DifficultyLevels.EASY].length;
@@ -77,6 +104,10 @@ describe("getFromStore tests:", () => {
     expect(itemSet.size).toBe(storeSize);
   });
 
+  // TC-DATACACHE-006
+  // Description: Verify uniqueness counter resets after full store traversal
+  // Preconditions: EASY store has N items and function is called N+1 times
+  // Expected result: Unique id count remains N, showing reset after exhaustion
   it("resets the counter for unique items after all items have been called", async () => {
     const items = [];
     const storeSize = testData[DifficultyLevels.EASY].length;
@@ -92,11 +123,19 @@ describe("getFromStore tests:", () => {
     expect(itemSet.size).toBe(storeSize);
   });
 
+  // TC-DATACACHE-007
+  // Description: Handle reads from a valid but empty store
+  // Preconditions: Store "3" exists and has no records
+  // Expected result: Function resolves to undefined
   it("returns undefined for an empty store", async () => {
     const result = await getFromStore("3");
     expect(result).toBeUndefined();
   });
 
+  // TC-DATACACHE-008
+  // Description: Verify item selection state is tracked independently per store
+  // Preconditions: EASY and MEDIUM stores are populated
+  // Expected result: MEDIUM sequence is unaffected by EASY exhaustion and EASY resets independently
   it("per-store independence: calls to one store don't affect another", async () => {
     let m = [];
     let e = [];
@@ -127,6 +166,10 @@ describe("getFromStore tests:", () => {
 });
 
 describe("initAndCacheData tests:", () => {
+  // TC-DATACACHE-009
+  // Description: Initialize object stores when DB exists but schema is empty
+  // Preconditions: Database exists at configured version without object stores
+  // Expected result: initAndCacheData creates/populates stores
   it("populates when DB exists but has no object stores", async () => {
     const existingDB = await openDB();
     if (existingDB && typeof existingDB.close === "function") {
@@ -160,6 +203,10 @@ describe("initAndCacheData tests:", () => {
     expect(db.objectStoreNames.length).toBeGreaterThan(0);
   });
 
+  // TC-DATACACHE-010
+  // Description: Reinitialize cache when remote version is newer than local meta.version
+  // Preconditions: Existing DB populated; fetched dataset has a newer `version` value
+  // Expected result: Meta record is updated and stored version equals remote version
   it("if meta.version differs, re-init populates the database", async () => {
     const dbBefore = await openDB();
     dbBefore.close();
