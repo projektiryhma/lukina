@@ -7,6 +7,20 @@
       "Virheiden lukumäärä tekstissä": 1,
       "Virheelliset sanat": "test",
       "Oikeat sanat": "test"
+    },
+    {
+      "Virheetön teksti": "Easy test item",
+      "Virheellinen teksti, virheet punaisella": "Easy test item with error 2",
+      "Virheiden lukumäärä tekstissä": 1,
+      "Virheelliset sanat": "test 2",
+      "Oikeat sanat": "test 2"
+    },
+    {
+      "Virheetön teksti": "Easy test item",
+      "Virheellinen teksti, virheet punaisella": "Easy test item with error 3",
+      "Virheiden lukumäärä tekstissä": 1,
+      "Virheelliset sanat": "test 3",
+      "Oikeat sanat": "test 3"
     }
   ],
   "1": [
@@ -27,4 +41,6 @@
       "Oikeat sanat": "test"
     }
   ]
+  ,
+  "3": []
 }
