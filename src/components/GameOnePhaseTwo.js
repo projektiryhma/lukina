@@ -1,17 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "./GameOnePhaseTwo.css";
 
 export function GameOnePhaseTwo({ data, onPhaseComplete }) {
-  const [userInput, setUserInput] = useState("");
+  const wrongWordCount = Number(data?.["Virheiden lukumäärä tekstissä"] ?? 1) || 1;
+  const [userInputs, setUserInputs] = useState(() => Array.from({ length: wrongWordCount }, () => ""));
+
+  useEffect(() => {
+    setUserInputs(Array.from({ length: wrongWordCount }, () => ""));
+  }, [wrongWordCount]);
 
   if (!data) return <p>No data</p>;
 
   const text = data["Virheellinen teksti, virheet punaisella"];
 
+
+  const handleInputChange = (index, value) => {
+    setUserInputs((prevInputs) => {
+      const nextInputs = [...prevInputs];
+      nextInputs[index] = value;
+      return nextInputs;
+    });
+  };
+
   const handleCheckClick = () => {
     if (onPhaseComplete) {
-      onPhaseComplete(userInput);
+      onPhaseComplete(userInputs);
     }
   };
 
@@ -19,13 +33,20 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
     <div className="phase-two">
       <h2>Vaihe 2: Lue ja korjaa</h2>
       <p className="GameData">{text}</p>
-      <textarea
-        value={userInput}
-        onChange={(e) => setUserInput(e.target.value)}
-        placeholder="Kirjoita korjattu teksti tähän..."
-        rows="6"
-        cols="50"
-      />
+      <div className="word-boxes">
+        <p>Kirjoita korjaukset (3 sanaa):</p>
+        {userInputs.map((value, index) => (
+          <input
+            key={index}
+            type="text"
+            className="word-input"
+            value={value}
+            onChange={(e) => handleInputChange(index, e.target.value)}
+            placeholder={`Sana ${index + 1}`}
+            maxLength={30}
+          />
+        ))}
+      </div>
       <button onClick={handleCheckClick}>Tarkista</button>
       <div className="help-section">
         <p className="help-title">Tarvitsetko apua?</p>
