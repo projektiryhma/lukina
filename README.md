@@ -7,9 +7,15 @@ at Tampere University Software Engineering Project course in 2026.
 LUKINA name comes from finnish words
 **LU**kemis- ja **KI**rjoittamisvaikeuksien tukeminen **N**uorilla ja **A**ikuisilla.
 
-_To-be-added: what the app does_
+LUKINA contains one exercise where user reads a sentence and then selects
+words that are misspelled. After correctly identifying the misspelled words,
+the user rewrites each word one by one in its correct form.
 The theory base and data for the app has been created by
 two master's students in logopedics at Tampere University.
+
+In future development, new exercises could be added to the application.
+Implementing user registration would also make it possible to track progress
+and provide customized exercises based on each user’s previous behavior in the app.
 
 ### Link to the application page: https://projektiryhma.github.io/lukina/#
 
