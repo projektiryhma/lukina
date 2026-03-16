@@ -133,7 +133,7 @@ describe("getFromStore tests:", () => {
   });
 
   // TC-DATACACHE-008
-  // Description: Verify item selection state is tracked independently per store
+  // Description: Unique item serving doesn't crash when different stores are accessed
   // Preconditions: EASY and MEDIUM stores are populated
   // Expected result: MEDIUM sequence is unaffected by EASY exhaustion and EASY resets independently
   it("per-store independence: calls to one store don't affect another", async () => {
@@ -146,21 +146,26 @@ describe("getFromStore tests:", () => {
     m.push(await getFromStore(DifficultyLevels.MEDIUM));
     expect(m[0]).toBeDefined();
 
-    // Exhaust EASY store by calling it three times
-    for (let i = 0; i < eSize; i++) {
+    // Exhaust EASY store by calling it size - 1 times
+    for (let i = 0; i < eSize - 1; i++) {
       e.push(await getFromStore(DifficultyLevels.EASY));
       eSet.add(e[i].id);
     }
-    expect(eSet.size).toBe(eSize);
+    expect(eSet.size).toBe(eSize - 1);
 
     // Fetch from MEDIUM again; it should return the same item
     m.push(await getFromStore(DifficultyLevels.MEDIUM));
     expect(m[1]).toBeDefined();
     expect(m[1].id).toBe(m[0].id);
 
-    // Fetch from EASY again; it should reset and return one of the three items again
+    // Fetch from EASY again; it should return another unique item
     e.push(await getFromStore(DifficultyLevels.EASY));
-    eSet.add(e[3].id);
+    eSet.add(e[eSize - 1].id);
+    expect(eSet.size).toBe(eSize);
+
+    // Fetch from EASY again; it should reset and return an allready existing item
+    e.push(await getFromStore(DifficultyLevels.EASY));
+    eSet.add(e[eSize].id);
     expect(eSet.size).toBe(eSize);
   });
 });
