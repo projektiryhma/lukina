@@ -34,18 +34,20 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
       <h2>Vaihe 2: Lue ja korjaa</h2>
       <p className="GameData">{text}</p>
       <div className="word-boxes">
-        <p>Kirjoita korjaukset (3 sanaa):</p>
-        {userInputs.map((value, index) => (
-          <input
-            key={index}
-            type="text"
-            className="word-input"
-            value={value}
-            onChange={(e) => handleInputChange(index, e.target.value)}
-            placeholder={`Sana ${index + 1}`}
-            maxLength={30}
-          />
-        ))}
+        <p>Kirjoita korjaukset:</p>
+        <div className="word-boxes-wrapper">
+          {userInputs.map((value, index) => (
+            <input
+              key={index}
+              type="text"
+              className="word-input"
+              value={value}
+              onChange={(e) => handleInputChange(index, e.target.value)}
+              placeholder="kirjoita sana tähän"
+              maxLength={30}
+            />
+          ))}
+        </div>
       </div>
       <button onClick={handleCheckClick}>Tarkista</button>
       <div className="help-section">

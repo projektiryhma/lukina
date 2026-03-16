@@ -12,25 +12,37 @@
   margin-top: 20px;
   margin-bottom: 4px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .word-boxes p {
   margin: 0;
-  min-width: 100%;
   font-weight: 600;
 }
 
+.word-boxes-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: rgba(247, 242, 250);
+  width: fit-content;
+  max-width: 100%;
+}
+
 .word-input {
-  width: 145px;
-  padding: 10px 10px;
+  width: 250px;
+  max-width: 320px;
+  padding: 10px;
   border-radius: 6px;
   border: 1px solid rgba(130, 130, 130, 0.4);
   font-size: 16px;
   font-family: Arial, sans-serif;
-  max-width: 160px;
+  background-color: white;
+  box-sizing: border-box;
 }
 
 textarea {
