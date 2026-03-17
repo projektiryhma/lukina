@@ -1,46 +1,4 @@
 /* eslint-disable no-undef */
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-
-// Custom command to clear IndexedDB
-Cypress.Commands.add("clearIndexedDB", () => {
-  cy.window().then((win) => {
-    return new Promise((resolve, reject) => {
-      if (!win.indexedDB) {
-        resolve();
-        return;
-      }
-      const deleteReq = win.indexedDB.deleteDatabase("lukina");
-
-      deleteReq.onsuccess = () => resolve();
-      deleteReq.onerror = () => reject(deleteReq.error);
-    });
-  });
-});
-
 // Custom command to check and retrieve IndexedDB data
 Cypress.Commands.add("checkIndexedDB", (storeName = null) => {
   return cy.window().then((win) => {
@@ -78,6 +36,7 @@ Cypress.Commands.add("checkIndexedDB", (storeName = null) => {
         const getAllReq = store.getAll();
 
         getAllReq.onsuccess = () => {
+          db.close();
           resolve({
             exists: true,
             stores: stores,
@@ -87,7 +46,9 @@ Cypress.Commands.add("checkIndexedDB", (storeName = null) => {
           });
         };
 
-        getAllReq.onerror = () => reject(getAllReq.error);
+        getAllReq.onerror = () => {
+          reject(getAllReq.error);
+        };
       };
       onerror = () => {
         resolve({ exists: false, error: openReq.error });

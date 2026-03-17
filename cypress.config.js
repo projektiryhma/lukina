@@ -2,7 +2,7 @@ const { defineConfig } = require("cypress");
 
 process.env.NODE_ENV = "development";
 const webpackConfig = require("react-scripts/config/webpack.config")(
-  "development",
+  "development"
 );
 
 const babelLoaderRule = webpackConfig.module.rules
@@ -31,5 +31,14 @@ module.exports = defineConfig({
       webpackConfig,
     },
     specPattern: "cypress/component/**/*.cy.{js,jsx,ts,tsx}",
+  },
+
+  e2e: {
+    baseUrl: "http://localhost:3000",
+    testIsolation: true,
+    specPattern: "cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
+    setupNodeEvents() {
+      // implement node event listeners here
+    },
   },
 });
