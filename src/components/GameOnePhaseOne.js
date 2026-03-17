@@ -20,7 +20,6 @@ Word.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-// HUOM: Lisätty onKaikkiLoydetty prop!
 export function GameOnePhaseOne({ data, allFound }) {
   const navigate = useNavigate();
   const [selectedIndices, setSelectedIndices] = useState([]);
@@ -50,16 +49,15 @@ export function GameOnePhaseOne({ data, allFound }) {
   };
 
   const handleCheckClick = () => {
-    const oikeinValitut = selectedIndices.filter((index) => {
+    const rightChoices = selectedIndices.filter((index) => {
       const wordWithoutPunctuation = words[index].replace(/[.,!?;:]/g, "");
       return incorrectWordsList.includes(wordWithoutPunctuation);
     });
 
-    setSelectedIndices(oikeinValitut);
+    setSelectedIndices(rightChoices);
 
-    // Kun kaikki on löytynyt, huudetaan "ylöspäin" isäntäkomponentille!
-    if (oikeinValitut.length === amountOfErrors) {
-      allFound(oikeinValitut); // Voidaan samalla lähettää valittujen sanojen indeksit vaiheelle 2
+    if (rightChoices.length === amountOfErrors) {
+      allFound(rightChoices);
     }
   };
 
