@@ -34,11 +34,15 @@ export function GamePageGameOne() {
     fetchNewTask();
   };
 
+  const handlePhaseOneComplete = () => {
+    setIsPhaseOne(false);
+  };
+
   return (
     <div className="game-page">
       {isPhaseOne ? (
         <>
-          <GameOnePhaseOne data={game} />
+          <GameOnePhaseOne data={game} allFound={handlePhaseOneComplete} />
           <button
             onClick={() => {
               handleRestart();
