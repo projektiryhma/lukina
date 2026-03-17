@@ -8,35 +8,26 @@ describe("Test data loading integration", () => {
 
     cy.visit("/#/");
 
-    cy.wait("@fetchData");
-
-    cy.wait(1000);
+    cy.wait("@fetchData").wait(1000);
 
     cy.checkIndexedDB().then((result) => {
       expect(result.exists).to.be.true;
       expect(result.stores).to.have.length.greaterThan(0);
     });
 
-    cy.checkIndexedDB("0").then((result) => {
-      expect(result.storeExists).to.be.true;
-      expect(result.count).to.be.greaterThan(0);
-      expect(result.data[0]).to.have.property("Virheetön teksti");
-      expect(result.data[0]["Virheetön teksti"]).to.equal("Easy test item");
-    });
-
-    cy.checkIndexedDB("1").then((result) => {
-      expect(result.storeExists).to.be.true;
-      expect(result.count).to.be.greaterThan(0);
-      expect(result.data[0]).to.have.property("Virheetön teksti");
-      expect(result.data[0]["Virheetön teksti"]).to.equal("Medium test item");
-    });
-    cy.checkIndexedDB("2").then((result) => {
-      expect(result.storeExists).to.be.true;
-      expect(result.count).to.be.greaterThan(0);
-      expect(result.data[0]).to.have.property("Virheetön teksti");
-      expect(result.data[0]["Virheetön teksti"]).to.equal("Hard test item");
-    });
+    checkStore("0", "Easy test item");
+    checkStore("1", "Medium test item");
+    checkStore("2", "Hard test item");
   });
+
+  const checkStore = (storeName, expectedText) => {
+    cy.checkIndexedDB(storeName).then((result) => {
+      expect(result.storeExists).to.be.true;
+      expect(result.count).to.be.greaterThan(0);
+      expect(result.data[0]).to.have.property("Virheetön teksti");
+      expect(result.data[0]["Virheetön teksti"]).to.equal(expectedText);
+    });
+  };
 
   it("handles empty data", () => {
     cy.intercept("GET", "**/data/data.json", { fixture: "testdata_empty.json" })
@@ -45,9 +36,7 @@ describe("Test data loading integration", () => {
 
     cy.visit("/#/");
 
-    cy.wait("@fetchData");
-
-    cy.wait(1000);
+    cy.wait("@fetchData").wait(1000);
 
     cy.checkIndexedDB().then((result) => {
       expect(result.exists).to.be.true;
