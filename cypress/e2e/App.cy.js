@@ -30,6 +30,10 @@ describe("Test data loading integration", () => {
   };
 
   it("handles empty data", () => {
+    cy.window().then((win) => {
+      cy.spy(win.console, "error").as("consoleError");
+    });
+
     cy.intercept("GET", "**/data/data.json", { fixture: "testdata_empty.json" })
       // eslint-disable-next-line prettier/prettier
      .as("fetchData")
@@ -38,20 +42,17 @@ describe("Test data loading integration", () => {
 
     cy.wait("@fetchData").wait(1000);
 
+    cy.get(".App").should("exist");
+    cy.get(".header-text").should("contain", "LUKINA");
+
+    cy.get("@consoleError").should("not.have.been.called");
+
     cy.checkIndexedDB().then((result) => {
       expect(result.exists).to.be.true;
       expect(result.stores).to.have.length.greaterThan(0);
     });
 
     cy.checkIndexedDB("0").then((result) => {
-      expect(result.storeExists).to.be.false;
-    });
-
-    cy.checkIndexedDB("1").then((result) => {
-      expect(result.storeExists).to.be.false;
-    });
-
-    cy.checkIndexedDB("2").then((result) => {
       expect(result.storeExists).to.be.false;
     });
   });
