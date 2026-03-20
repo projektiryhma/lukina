@@ -1,0 +1,49 @@
+name: OWASP Dependency Check
+
+on:
+  push:
+    branches: ["main", "feature/owasp"]
+  pull_request:
+    branches: ["main", "feature/owasp"]
+
+jobs:
+  depcheck:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Cache Dependency-Check data
+        uses: actions/cache@v4
+        with:
+          path: ~/.dependency-check
+          key: dependency-check-cache
+          restore-keys: |
+            dependency-check-cache
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Ensure report directory exists
+        run: mkdir -p owasp-report
+
+      - name: Run OWASP Dependency-Check
+        run: npm run depcheck
+
+      - name: Upload Dependency-Check report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: owasp-report
