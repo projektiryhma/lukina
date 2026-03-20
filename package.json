@@ -9,7 +9,7 @@
     "convert-data": "node scripts/convert-xlsx.mjs",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
-    "depcheck": "owasp-dependency-check --project lukina --scan package-lock.json -f HTML -f JSON --out ./owasp-report"
+    "depcheck": "owasp-dependency-check --project lukina --scan package-lock.json -f HTML -f JSON --out ./owasp-report --data dependency-check-bin/data"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^6.9.1",
