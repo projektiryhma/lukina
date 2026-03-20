@@ -25,10 +25,13 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Ensure Dependency-Check data directory exists
+        run: mkdir -p dependency-check-bin/data
+
       - name: Cache Dependency-Check data
         uses: actions/cache@v4
         with:
-          path: ~/.dependency-check
+          path: dependency-check-bin/data
           key: dependency-check-cache
           restore-keys: |
             dependency-check-cache
@@ -47,4 +50,3 @@ jobs:
         with:
           name: dependency-check-report
           path: owasp-report
-#test comment for rerunning
