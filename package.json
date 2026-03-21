@@ -8,7 +8,8 @@
     "test": "react-scripts test",
     "convert-data": "node scripts/convert-xlsx.mjs",
     "lint": "eslint src/",
-    "lint:fix": "eslint src/ --fix"
+    "lint:fix": "eslint src/ --fix",
+    "cy:e2e": "start-server-and-test start http://localhost:3000 'cypress run --e2e'"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^6.9.1",
@@ -19,6 +20,8 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.30.3",
     "react-scripts": "5.0.1",
+    "start-server-and-test": "^2.1.5",
+    "webpack-dev-server": "^5.2.3",
     "xlsx": "^0.18.5"
   },
   "eslintConfig": {
@@ -41,7 +44,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@cypress/react": "^9.0.1",
     "@testing-library/react": "^16.3.2",
+    "cypress": "^15.11.0",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-config-standard": "^17.1.0",
