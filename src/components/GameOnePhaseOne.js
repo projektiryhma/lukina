@@ -20,7 +20,7 @@ export function GameOnePhaseOne({ data }) {
       <h2 className="PhaseOneHeader">Etsi ja korjaa</h2>
       <p className="GameData">{text}</p>
       <p>
-        Virheitä: <strong>{amountoferror}</strong>
+        Virheitä: <strong className="ErrorAmount">{amountoferror}</strong>
       </p>
     </div>
   );
