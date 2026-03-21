@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - owasp-fix-attempt
   pull_request:
     branches:
       - main
