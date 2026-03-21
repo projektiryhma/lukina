@@ -2,9 +2,12 @@ name: OWASP Dependency Check
 
 on:
   push:
-    branches: ["main", "feature/owasp"]
+    branches:
+      - main
   pull_request:
-    branches: ["main", "feature/owasp"]
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   depcheck:
@@ -32,9 +35,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .dependency-check-bin/data
-          key: dependency-check-cache
+          key: dependency-check-cache-${{ runner.os }}
           restore-keys: |
-            dependency-check-cache
+            dependency-check-cache-${{ runner.os }}-
 
       - name: Install dependencies
         run: npm install
