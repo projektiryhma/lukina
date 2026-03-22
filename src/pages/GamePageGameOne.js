@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { getFromStore } from "../db/dataCache";
 
 import { GameOnePhaseOne } from "../components/GameOnePhaseOne.js";
+import { GameOnePhaseTwo } from "../components/GameOnePhaseTwo.js";
 
 export function GamePageGameOne() {
   const location = useLocation();
@@ -52,16 +53,10 @@ export function GamePageGameOne() {
           </button>
         </>
       ) : (
-        <div className="phase-two">
-          <h2>Vaihe 2 </h2>
-          <button
-            onClick={() => {
-              handleRestart();
-            }}
-          >
-            Uusi
-          </button>
-        </div>
+        <>
+          <GameOnePhaseTwo data={game} onPhaseComplete={handlePhaseComplete} />
+          <button onClick={handleRestart}>Uusi</button>
+        </>
       )}
     </div>
   );
