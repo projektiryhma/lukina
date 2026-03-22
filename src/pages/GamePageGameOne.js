@@ -39,6 +39,10 @@ export function GamePageGameOne() {
     setIsPhaseOne(false);
   };
 
+  const handlePhaseTwoComplete = () => {
+    handleRestart();
+  };
+
   return (
     <div className="game-page">
       {isPhaseOne ? (
@@ -54,7 +58,7 @@ export function GamePageGameOne() {
         </>
       ) : (
         <>
-          <GameOnePhaseTwo data={game} onPhaseComplete={handlePhaseComplete} />
+          <GameOnePhaseTwo data={game} onPhaseComplete={handlePhaseTwoComplete} />
           <button onClick={handleRestart}>Uusi</button>
         </>
       )}
