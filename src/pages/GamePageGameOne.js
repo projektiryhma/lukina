@@ -39,18 +39,18 @@ export function GamePageGameOne() {
     setIsPhaseOne(false);
   };
 
-  const handlePhaseComplete = (userInput) => {
-    console.log("User answer:", userInput);
-    handleRestart();
-  };
-
   return (
     <div className="game-page">
       {isPhaseOne ? (
         <>
-          <GameOnePhaseOne data={game} />
-          <button onClick={handlePhaseOneComplete}>Seuraava</button>
-          <button onClick={handleRestart}>Uusi</button>
+          <GameOnePhaseOne data={game} allFound={handlePhaseOneComplete} />
+          <button
+            onClick={() => {
+              handleRestart();
+            }}
+          >
+            Uusi
+          </button>
         </>
       ) : (
         <>
