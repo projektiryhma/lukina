@@ -13,6 +13,8 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
   if (!data) return <p>No data</p>;
 
   const text = data["Virheellinen teksti, virheet punaisella"];
+  const faultyWordsString = data["Virheelliset sanat"] || "";
+  const faultyWords = faultyWordsString.split(",").map((word) => word.trim());
 
 
   const handleInputChange = (index, value) => {
@@ -37,15 +39,17 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
         <p>Kirjoita korjaukset:</p>
         <div className="word-boxes-wrapper">
           {userInputs.map((value, index) => (
-            <input
-              key={index}
-              type="text"
-              className="word-input"
-              value={value}
-              onChange={(e) => handleInputChange(index, e.target.value)}
-              placeholder="kirjoita sana tähän"
-              maxLength={30}
-            />
+            <div key={index} className="word-input-group">
+              <p className="faulty-word">{faultyWords[index]}</p>
+              <input
+                type="text"
+                className="word-input"
+                value={value}
+                onChange={(e) => handleInputChange(index, e.target.value)}
+                placeholder="kirjoita sana tähän"
+                maxLength={30}
+              />
+            </div>
           ))}
         </div>
       </div>
@@ -63,6 +67,7 @@ GameOnePhaseTwo.propTypes = {
   data: PropTypes.shape({
     "Virheellinen teksti, virheet punaisella": PropTypes.string,
     "Virheiden lukumäärä tekstissä": PropTypes.number,
+    "Virheelliset sanat": PropTypes.string,
   }).isRequired,
   onPhaseComplete: PropTypes.func,
 };
