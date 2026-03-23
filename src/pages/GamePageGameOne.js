@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { getFromStore } from "../db/dataCache";
 
 import { GameOnePhaseOne } from "../components/GameOnePhaseOne.js";
+import "./GamePageGameOne.css";
 
 export function GamePageGameOne() {
   const location = useLocation();
@@ -44,11 +45,12 @@ export function GamePageGameOne() {
         <>
           <GameOnePhaseOne data={game} allFound={handlePhaseOneComplete} />
           <button
+            className="RestartButton"
             onClick={() => {
               handleRestart();
             }}
           >
-            Uusi
+            Vaihda tekstiä
           </button>
         </>
       ) : (
