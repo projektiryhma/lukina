@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import { Modal } from "./UniversalModal.js";
 import "./GameOnePhaseOne.css";
 
 function Word({ text, isSelected, onClick }) {
@@ -23,6 +24,13 @@ Word.propTypes = {
 export function GameOnePhaseOne({ data, allFound }) {
   const navigate = useNavigate();
   const [selectedIndices, setSelectedIndices] = useState([]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    title: "",
+    content: "",
+    size: "small",
+  });
 
   useEffect(() => {
     setSelectedIndices([]);
@@ -55,10 +63,32 @@ export function GameOnePhaseOne({ data, allFound }) {
     });
 
     setSelectedIndices(rightChoices);
+    const foundCount = rightChoices.length;
 
-    if (rightChoices.length === amountOfErrors) {
-      allFound(rightChoices);
+    if (foundCount === amountOfErrors) {
+      setModalConfig({
+        title: "Vastauksesi on oikein",
+        content: `Löysit kaikki virheelliset sanat. Jatka seuraavaan vaiheeseen.`,
+        size: "small",
+      });
+      setIsModalOpen(true);
+    } else {
+      setModalConfig({
+        title: "Vastauksessasi on virheitä",
+        content: `Löysit ${foundCount} / ${amountOfErrors} virheellistä sanaa. Etsi loput virheelliset sanat`,
+        size: "small",
+      });
+      setIsModalOpen(true);
     }
+  };
+
+  const handleShowHint = () => {
+    setModalConfig({
+      title: "Vihje",
+      content: `Lauseessa on ${amountOfErrors} virheellistä sanaa`,
+      size: "small",
+    });
+    setIsModalOpen(true);
   };
 
   return (
@@ -99,9 +129,24 @@ export function GameOnePhaseOne({ data, allFound }) {
         sanaa tekstissä on. Voit myös pyytää jotakuta lukemaan tekstin sinulle
         ääneen tai vaihtataa tehtävän tekstin toiseen.
       </p>
-      <button onClick={handleCheckClick} className="CheckButton">
+
+      <button onClick={handleShowHint} className="CheckButton">
         Näytä vihje
       </button>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          if (selectedIndices.length === amountOfErrors) {
+            allFound(selectedIndices);
+          }
+        }}
+        title={modalConfig.title}
+        size={modalConfig.size}
+      >
+        <p>{modalConfig.content}</p>
+      </Modal>
     </div>
   );
 }
