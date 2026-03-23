@@ -99,6 +99,9 @@ export function GameOnePhaseOne({ data, allFound }) {
         sanaa tekstissä on. Voit myös pyytää jotakuta lukemaan tekstin sinulle
         ääneen tai vaihtataa tehtävän tekstin toiseen.
       </p>
+      <button onClick={handleCheckClick} className="CheckButton">
+        Näytä vihje
+      </button>
     </div>
   );
 }

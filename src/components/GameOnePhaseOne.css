@@ -19,13 +19,16 @@
 }
 
 .container{
+  max-width: 1000px;
   background-color: rgba(247, 242, 250);
   padding-bottom: 20px;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: auto;
+  margin-right: auto;
   border-radius: 10px;
 
 }
+
+
 
 .word-container {
   display: flex;
@@ -34,18 +37,18 @@
   padding: 20px;
   border-radius: 12px;
   margin: 20px 0;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .interactive-word {
   cursor: pointer;
-  padding: 4px 8px;
+  padding: 8px 12px;
   margin: 5px 8px;
   background-color: white;
   border-radius: 10px;
   border: 2px solid transparent;
   transition: all 0.15s ease;
-  font-size: 1.1rem;
+  font-size: 11;
   user-select: none;
 }
 
@@ -60,8 +63,8 @@
 .interactive-word.is-selected {
   background-color: rgb(79, 55, 138);
   color: white;
-  font-weight: bold;
-  transform: scale(1.05);
+  
+  
 }
 
 .error-info {
@@ -73,6 +76,11 @@
 .phaseoneinfotext{
   margin-top: 25px;
   margin-bottom: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1000px;
+  line-height: 1.5;
+  
 }
 
 .CheckButton{
@@ -85,15 +93,42 @@
   color: rgba(103, 80, 164);
   cursor: pointer;
   text-shadow: 0.2px 0 0 rgba(103, 80, 164);
+  
 }
 
 .phaseoneheader2{
   margin-top: 40px;
   margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1000px;
 
 }
 
 .phaseonehelptext{
-  margin-left: 30px;
-  margin-right: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 500px;
+  line-height: 1.5;
+}
+
+
+
+@media (max-width: 600px) {
+  .container{
+  background-color: rgba(247, 242, 250);
+  padding-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
+  max-width: 350px;
+
+  }
+
+  .phaseonehelptext{
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 350px;
+  line-height: 1.5;
+  }
 }
