@@ -1,10 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { getFromStore } from "../db/dataCache";
-
 import { GameOnePhaseOne } from "../components/GameOnePhaseOne.js";
 import "./GamePageGameOne.css";
-import { GameOnePhaseTwo } from "../components/GameOnePhaseTwo.js";
 
 export function GamePageGameOne() {
   const location = useLocation();
@@ -40,10 +38,6 @@ export function GamePageGameOne() {
     setIsPhaseOne(false);
   };
 
-  const handlePhaseTwoComplete = () => {
-    handleRestart();
-  };
-
   return (
     <div className="game-page">
       {isPhaseOne ? (
@@ -60,10 +54,6 @@ export function GamePageGameOne() {
         </>
       ) : (
         <>
-          <GameOnePhaseTwo
-            data={game}
-            onPhaseComplete={handlePhaseTwoComplete}
-          />
           <button onClick={handleRestart}>Uusi</button>
         </>
       )}
