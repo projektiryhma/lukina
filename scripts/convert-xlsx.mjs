@@ -32,7 +32,10 @@ function parseWorkbook(filePath) {
   // Iterate over each sheet in the workbook and produce a mapping of id -> row
   workbook.SheetNames.forEach((name, sheetIndex) => {
     const sheet = workbook.Sheets[name];
-    const data = XLSX.utils.sheet_to_json(sheet, { defval: null });
+    const data = XLSX.utils.sheet_to_json(sheet, {
+      defval: null,
+      blankrows: false,
+    });
     // Build an object keyed by id
     const mapping = [];
     for (let i = 0; i < data.length; i++) {

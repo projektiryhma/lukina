@@ -4,6 +4,7 @@ import { getFromStore } from "../db/dataCache";
 
 import { GameOnePhaseOne } from "../components/GameOnePhaseOne.js";
 import "./GamePageGameOne.css";
+import { GameOnePhaseTwo } from "../components/GameOnePhaseTwo.js";
 
 export function GamePageGameOne() {
   const location = useLocation();
@@ -39,6 +40,10 @@ export function GamePageGameOne() {
     setIsPhaseOne(false);
   };
 
+  const handlePhaseTwoComplete = () => {
+    handleRestart();
+  };
+
   return (
     <div className="game-page">
       {isPhaseOne ? (
@@ -54,16 +59,13 @@ export function GamePageGameOne() {
           </button>
         </>
       ) : (
-        <div className="phase-two">
-          <h2>Vaihe 2 </h2>
-          <button
-            onClick={() => {
-              handleRestart();
-            }}
-          >
-            Uusi
-          </button>
-        </div>
+        <>
+          <GameOnePhaseTwo
+            data={game}
+            onPhaseComplete={handlePhaseTwoComplete}
+          />
+          <button onClick={handleRestart}>Uusi</button>
+        </>
       )}
     </div>
   );
