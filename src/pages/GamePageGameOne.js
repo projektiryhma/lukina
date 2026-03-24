@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { getFromStore } from "../db/dataCache";
-
 import { GameOnePhaseOne } from "../components/GameOnePhaseOne.js";
+import "./GamePageGameOne.css";
 
 export function GamePageGameOne() {
   const location = useLocation();
@@ -34,30 +34,28 @@ export function GamePageGameOne() {
     fetchNewTask();
   };
 
+  const handlePhaseOneComplete = () => {
+    setIsPhaseOne(false);
+  };
+
   return (
     <div className="game-page">
       {isPhaseOne ? (
         <>
-          <GameOnePhaseOne data={game} />
+          <GameOnePhaseOne data={game} allFound={handlePhaseOneComplete} />
           <button
+            className="RestartButton"
             onClick={() => {
               handleRestart();
             }}
           >
-            Uusi
+            Vaihda tekstiä
           </button>
         </>
       ) : (
-        <div className="phase-two">
-          <h2>Vaihe 2 </h2>
-          <button
-            onClick={() => {
-              handleRestart();
-            }}
-          >
-            Uusi
-          </button>
-        </div>
+        <>
+          <button onClick={handleRestart}>Uusi</button>
+        </>
       )}
     </div>
   );
