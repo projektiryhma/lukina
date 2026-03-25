@@ -9,6 +9,7 @@
     "convert-data": "node scripts/convert-xlsx.mjs",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
+    "depcheck": "owasp-dependency-check --project lukina --scan package-lock.json -f HTML -f JSON --out ./owasp-report --data .dependency-check-bin/data",
     "cy:e2e": "start-server-and-test start http://localhost:3000 'cypress run --e2e'"
   },
   "dependencies": {
@@ -56,6 +57,7 @@
     "fake-indexeddb": "^6.2.5",
     "jest-environment-jsdom": "^27.5.1",
     "jest-junit": "^16.0.0",
+    "owasp-dependency-check": "^1.0.1",
     "prettier": "^3.8.1"
   }
 }

@@ -1,3 +1,5 @@
 node_modules/
 public/data/data.json
 coverage/
+dependency-check-bin/
+owasp-report/
