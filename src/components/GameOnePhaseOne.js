@@ -29,6 +29,7 @@ export function GameOnePhaseOne({ data, allFound }) {
   const [modalConfig, setModalConfig] = useState({
     title: "",
     content: "",
+    button: "",
     size: "small",
   });
 
@@ -42,11 +43,12 @@ export function GameOnePhaseOne({ data, allFound }) {
   const amountOfErrors = data["Virheiden lukumäärä tekstissä"];
   const incorrectWordsString = data["Virheelliset sanat"];
 
+  const cleanText = originalText.replace(/[.,!?;:]/g, "");
+  const words = cleanText.split(/\s+/).filter((word) => word.length > 0);
+
   const incorrectWordsList = incorrectWordsString
     .split(",")
-    .map((word) => word.trim());
-
-  const words = originalText.split(/\s+/).filter((word) => word.length > 0);
+    .map((word) => word.trim().replace(/[.,!?;:]/g, ""));
 
   const handleWordClick = (index) => {
     if (selectedIndices.includes(index)) {
@@ -58,8 +60,8 @@ export function GameOnePhaseOne({ data, allFound }) {
 
   const handleCheckClick = () => {
     const rightChoices = selectedIndices.filter((index) => {
-      const wordWithoutPunctuation = words[index].replace(/[.,!?;:]/g, "");
-      return incorrectWordsList.includes(wordWithoutPunctuation);
+      const word = words[index];
+      return incorrectWordsList.includes(word);
     });
 
     setSelectedIndices(rightChoices);
@@ -68,6 +70,7 @@ export function GameOnePhaseOne({ data, allFound }) {
     if (foundCount === amountOfErrors) {
       setModalConfig({
         title: "Vastauksesi on oikein",
+        button: "Jatka",
         content: `Löysit kaikki virheelliset sanat. Jatka seuraavaan vaiheeseen.`,
         size: "small",
       });
@@ -75,6 +78,7 @@ export function GameOnePhaseOne({ data, allFound }) {
     } else {
       setModalConfig({
         title: "Vastauksessasi on virheitä",
+        button: "Selvä",
         content: `Löysit ${foundCount} / ${amountOfErrors} virheellistä sanaa. Etsi loput virheelliset sanat`,
         size: "small",
       });
@@ -85,6 +89,7 @@ export function GameOnePhaseOne({ data, allFound }) {
   const handleShowHint = () => {
     setModalConfig({
       title: "Vihje",
+      button: "Sulje",
       content: `Lauseessa on ${amountOfErrors} virheellistä sanaa`,
       size: "small",
     });
@@ -143,6 +148,7 @@ export function GameOnePhaseOne({ data, allFound }) {
           }
         }}
         title={modalConfig.title}
+        button={modalConfig.button}
         size={modalConfig.size}
       >
         <p>{modalConfig.content}</p>
