@@ -4,9 +4,16 @@ import "./GameOnePhaseTwo.css";
 
 export function GameOnePhaseTwo({ data, onPhaseComplete }) {
   const wrongWordCount = Number(data?.["Virheiden lukumäärä tekstissä"] ?? 1) || 1;
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentInput, setCurrentInput] = useState("");
   const [userInputs, setUserInputs] = useState(() => Array.from({ length: wrongWordCount }, () => ""));
+  const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
+    setCurrentIndex(0);
+    setCurrentInput("");
+    setIsComplete(false);
     setUserInputs(Array.from({ length: wrongWordCount }, () => ""));
   }, [wrongWordCount]);
 
@@ -14,20 +21,26 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
 
   const text = data["Virheellinen teksti, virheet punaisella"];
   const faultyWordsString = data["Virheelliset sanat"] || "";
-  const faultyWords = faultyWordsString.split(",").map((word) => word.trim());
+  const faultyWords = faultyWordsString
+    .split(",")
+    .map((word) => word.trim())
+    .filter((word) => word.length > 0);
 
-
-  const handleInputChange = (index, value) => {
-    setUserInputs((prevInputs) => {
-      const nextInputs = [...prevInputs];
-      nextInputs[index] = value;
-      return nextInputs;
-    });
-  };
+  const currentWord = faultyWords[currentIndex] || "";
 
   const handleCheckClick = () => {
-    if (onPhaseComplete) {
-      onPhaseComplete(userInputs);
+    const nextInputs = [...userInputs];
+    nextInputs[currentIndex] = currentInput.trim();
+    setUserInputs(nextInputs);
+
+    if (currentIndex + 1 < faultyWords.length) {
+      setCurrentIndex((prev) => prev + 1);
+      setCurrentInput("");
+    } else {
+      setIsComplete(true);
+      if (onPhaseComplete) {
+        onPhaseComplete(nextInputs);
+      }
     }
   };
 
@@ -38,22 +51,30 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
       <div className="word-boxes">
         <p>Kirjoita korjaukset:</p>
         <div className="word-boxes-wrapper">
-          {userInputs.map((value, index) => (
-            <div key={index} className="word-input-group">
-              <p className="faulty-word">{faultyWords[index]}</p>
+          {!isComplete ? (
+            <div className="word-input-group">
+              <p className="progress">{`${currentIndex + 1} / ${faultyWords.length}`}</p>
+              <p className="faulty-word">{currentWord}</p>
               <input
                 type="text"
                 className="word-input"
-                value={value}
-                onChange={(e) => handleInputChange(index, e.target.value)}
+                value={currentInput}
+                onChange={(e) => setCurrentInput(e.target.value)}
                 placeholder="kirjoita sana tähän"
                 maxLength={30}
               />
+              <button className="check-button" onClick={handleCheckClick}>
+                Tarkista
+              </button>
             </div>
-          ))}
+          ) : (
+            <div className="completion-box">
+              <p>Hyvin tehty! Kaikki sanat on läpikäyty.</p>
+              <p className="completion-note">Paina Uusi jatkaaksesi seuraavaan tehtävään.</p>
+            </div>
+          )}
         </div>
       </div>
-      <button onClick={handleCheckClick}>Tarkista</button>
       <div className="help-section">
         <p className="help-title">Tarvitsetko apua?</p>
         <p className="help-text">Voit katsoa sanan oikein kirjoitettuna.</p>
