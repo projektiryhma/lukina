@@ -2,9 +2,9 @@ name: OWASP Dependency Check
 
 on:
   push:
-    branches: ["main", "feature/owasp"]
+    branches: ["main"]
   pull_request:
-    branches: ["main", "feature/owasp"]
+    branches: ["main"]
 
 jobs:
   depcheck:
