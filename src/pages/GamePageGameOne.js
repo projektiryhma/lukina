@@ -10,6 +10,7 @@ export function GamePageGameOne() {
 
   const [game, setGame] = useState(null);
   const [isPhaseOne, setIsPhaseOne] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
   const fetchNewTask = useCallback(async () => {
     try {
@@ -17,11 +18,14 @@ export function GamePageGameOne() {
 
       if (task) {
         setGame(task);
+        setLoadError(false);
       } else {
-        console.warn("Empty", difficulty);
+        setGame(null);
+        setLoadError(true);
       }
-    } catch (error) {
-      console.error("Error", error);
+    } catch {
+      setGame(null);
+      setLoadError(true);
     }
   }, [difficulty]);
 
@@ -40,6 +44,7 @@ export function GamePageGameOne() {
 
   return (
     <div className="game-page">
+      {loadError ? <p>Tehtavaa ei voitu ladata.</p> : null}
       {isPhaseOne ? (
         <>
           <GameOnePhaseOne data={game} allFound={handlePhaseOneComplete} />
