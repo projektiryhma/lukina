@@ -13,7 +13,9 @@ function App() {
   }, []);
 
   return (
-    <HashRouter>
+    <HashRouter
+      future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
+    >
       <div className="App">
         <header className="App-header">
           <p className="header-text">LUKINA</p>
