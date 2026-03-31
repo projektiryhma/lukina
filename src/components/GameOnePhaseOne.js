@@ -90,7 +90,7 @@ export function GameOnePhaseOne({ data, allFound }) {
     setModalConfig({
       title: "Vihje",
       button: "Sulje",
-      content: `Lauseessa on ${amountOfErrors} virheellistä sanaa`,
+      content: `Tekstissä on ${amountOfErrors} virheellistä sanaa`,
       size: "small",
     });
     setIsModalOpen(true);
