@@ -34,7 +34,9 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px 10px;
-  padding: 20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
   border-radius: 12px;
   margin: 20px 0;
   line-height: 1.5;
@@ -43,7 +45,7 @@
 .interactive-word {
   cursor: pointer;
   padding: 8px 12px;
-  margin: 5px 8px;
+  margin: 5px 3px;
   background-color: white;
   border-radius: 10px;
   border: 2px solid transparent;
@@ -112,6 +114,11 @@
   line-height: 1.5;
 }
 
+.originalText{
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 20px;
+}
 
 
 @media (max-width: 600px) {

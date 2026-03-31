@@ -20,13 +20,12 @@
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
-
 .size-small {
-  width: 350px; 
+  width: 500px;
 }
 
 .size-large {
-  width: 800px; 
+  width: 800px;
   max-width: 95%;
 }
 
@@ -38,19 +37,45 @@
 
 .modal-body {
   padding: 1.5rem;
+  padding-bottom: 25px;
   overflow-y: auto;
   line-height: 1.5;
 }
 
-
 .modal-close-btn {
+  align-self: flex-end;
   padding: 8px 16px;
-  margin-left: 250px;
+  margin-right: 20px;
   margin-bottom: 20px;
   background-color: white;
   cursor: pointer;
-  color: rgba(103, 80, 164);
+  color: rgb(103, 80, 164);
   border: none;
   border-radius: 20px;
-  text-shadow: 0.2px 0 0 rgb(103, 80, 164);
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+
+  .modal-overlay {
+    align-items: flex-start; 
+    padding-top: 100px;       
+  }
+
+
+  .size-small, .size-large {
+    width: 100%;
+    height: auto;
+  }
+
+  .modal-header {
+    padding-top: 20px;
+    margin-left: 10px;
+    font-size: 16px;
+  }
+
+  .modal-close-btn {
+    margin-right: 15px;
+    margin-bottom: 15px;
+  }
 }

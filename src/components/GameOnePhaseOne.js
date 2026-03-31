@@ -113,6 +113,9 @@ export function GameOnePhaseOne({ data, allFound }) {
       </p>
 
       <div className="container">
+        <div className="originalText">
+          <p>{originalText}</p>
+        </div>
         <div className="word-container">
           {words.map((word, index) => (
             <Word
