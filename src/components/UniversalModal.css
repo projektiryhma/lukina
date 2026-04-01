@@ -78,4 +78,37 @@
     margin-right: 15px;
     margin-bottom: 15px;
   }
+
+  .modal-footer {
+    padding: 0 15px 15px 0;
+  }
 }
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end; 
+  padding: 0 20px 20px 0;    
+}
+
+.modal-close-btn {
+  padding: 8px 16px;
+  background-color: white;
+  cursor: pointer;
+  color: rgb(103, 80, 164);
+  border: 1px solid rgba(103, 80, 164, 0.2); 
+  border-radius: 20px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+
+.modal-close-btn:focus-visible {
+  outline: 3px solid rgb(103, 80, 164);
+  outline-offset: 2px;
+  background-color: rgba(103, 80, 164, 0.1);
+}
+
+.modal-close-btn:hover {
+  background-color: rgba(103, 80, 164, 0.05);
+}
+

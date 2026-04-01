@@ -6,12 +6,15 @@ import "./GameOnePhaseOne.css";
 
 function Word({ text, isSelected, onClick }) {
   return (
-    <span
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked={isSelected}
       onClick={onClick}
       className={`interactive-word ${isSelected ? "is-selected" : ""}`}
     >
       {text}
-    </span>
+    </button>
   );
 }
 
