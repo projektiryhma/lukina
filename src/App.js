@@ -6,6 +6,7 @@ import { Routes, Route, HashRouter } from "react-router-dom";
 import { InfoPageGameOne } from "./pages/InfoPageGameOne";
 import { StartPage } from "./pages/StartPage";
 import { GamePageGameOne } from "./pages/GamePageGameOne";
+import { NotFoundPage } from "./pages/NotFoundPage";
 
 function App() {
   useEffect(() => {
@@ -24,6 +25,7 @@ function App() {
           <Route path="/" element={<StartPage />} />
           <Route path="/InfoPageGameOne" element={<InfoPageGameOne />} />
           <Route path="/GamePageGameOne" element={<GamePageGameOne />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
     </HashRouter>

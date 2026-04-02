@@ -16,6 +16,10 @@ jest.mock("../pages/InfoPageGameOne", () => ({
   InfoPageGameOne: () => <div>InfoPageGameOne Mock</div>,
 }));
 
+jest.mock("../pages/NotFoundPage", () => ({
+  NotFoundPage: () => <div>NotFoundPage Mock</div>,
+}));
+
 // Clean mocks before each test to ensure test isolation
 describe("App", () => {
   beforeEach(() => {
@@ -43,6 +47,12 @@ describe("App", () => {
     window.location.hash = "#/InfoPageGameOne";
     render(<App />);
     expect(screen.getByText("InfoPageGameOne Mock")).toBeInTheDocument();
+  });
+
+  test("Renders NotFoundPage at unknown path", () => {
+    window.location.hash = "#/unknown";
+    render(<App />);
+    expect(screen.getByText("NotFoundPage Mock")).toBeInTheDocument();
   });
 
   /*
