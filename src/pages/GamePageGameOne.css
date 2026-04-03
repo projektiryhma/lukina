@@ -1,3 +1,50 @@
+.BackToButton {
+  position: absolute;
+  left: 20px;
+  top: 60px;
+  border-style: hidden;
+  background-color: white;
+  text-shadow: 0.2px 0 0 black;
+  cursor: pointer;
+}
+
+.game-page {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.feedback-area {
+  min-height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.loading-spinner {
+  color: rgba(103, 80, 164) !important;
+}
+
+@media (max-width: 600px) {
+  .game-page {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .feedback-area {
+    min-height: 64px;
+  }
+
+  .RestartButton {
+    width: 100%;
+  }
+}
+
 .RestartButton{
   padding: 12px 20px;
   border-radius: 20px;

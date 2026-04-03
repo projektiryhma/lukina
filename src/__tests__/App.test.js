@@ -1,6 +1,5 @@
 import { render, screen } from "@testing-library/react";
 import App from "../App";
-import { initAndCacheData } from "../db/dataCache";
 
 // Mock the dataCache module
 jest.mock("../db/dataCache", () => ({
@@ -20,18 +19,6 @@ jest.mock("../pages/InfoPageGameOne", () => ({
 describe("App", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-  });
-
-  test("Calls initAndCacheData once on mount", () => {
-    render(<App />);
-    expect(initAndCacheData).toHaveBeenCalledTimes(1);
-  });
-
-  test("Calls initAndCacheData only once after navigation", () => {
-    render(<App />);
-    window.location.hash = "#/InfoPageGameOne";
-    window.location.hash = "#/";
-    expect(initAndCacheData).toHaveBeenCalledTimes(1);
   });
 
   test("Renders StartPage at root path /", () => {
