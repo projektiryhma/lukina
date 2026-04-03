@@ -19,7 +19,7 @@ function App() {
     >
       <div className="App">
         <header className="App-header">
-          <span className="header-text">LUKINA</span>
+          <p className="header-text">LUKINA</p>
         </header>
         <Routes>
           <Route path="/" element={<StartPage />} />
