@@ -53,65 +53,6 @@
   font-weight: 600;
 }
 
-.input-label {
-  margin: 0;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: rgba(30, 30, 30);
-  align-self: flex-start;
-}
-
-.input-hint {
-  margin: 4px 0 0;
-  font-size: 0.85rem;
-  color: rgba(80, 80, 80, 0.88);
-}
-
-.input-error {
-  margin: 4px 0 0;
-  font-size: 0.85rem;
-  color: rgba(183, 28, 28, 1);
-  font-weight: 700;
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  width: min(90%, 420px);
-  padding: 16px 20px;
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 3px 16px rgba(0, 0, 0, 0.2);
-  text-align: center;
-}
-
-.modal-message {
-  margin: 12px 0;
-  color: rgba(40, 40, 40, 0.95);
-  font-size: 1rem;
-}
-
-.modal-button {
-  padding: 10px 20px;
-  border-radius: 10px;
-  border: 2px solid rgba(103, 80, 164, 0.9);
-  background-color: rgba(170, 150, 220, 0.18);
-  color: rgba(103, 80, 164);
-  cursor: pointer;
-  font-weight: 600;
-}
-
 .completion-box {
   text-align: center;
   padding: 16px;
