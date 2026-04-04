@@ -10,7 +10,6 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
   const [userInputs, setUserInputs] = useState(() => Array.from({ length: wrongWordCount }, () => ""));
   const [isComplete, setIsComplete] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [modalMode, setModalMode] = useState(""); // 'check' or 'hint'
   const [modalMessage, setModalMessage] = useState("");
   const [modalContinueAction, setModalContinueAction] = useState(() => () => {});
   const [inputError, setInputError] = useState("");
@@ -54,7 +53,6 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
     const normalizedCorrect = currentCorrectWord.toLowerCase();
     const isCorrect = normalizedUser === normalizedCorrect;
 
-    setModalMode("check");
     setModalMessage(
       isCorrect
         ? "Sana oikein. Jatka seuraavaan sanaan."
@@ -67,32 +65,17 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
 
     setModalContinueAction(() => () => {
       setShowModal(false);
-
-      if (isCorrect) {
-        if (currentIndex + 1 < faultyWords.length) {
-          setCurrentIndex((prev) => prev + 1);
-          setCurrentInput("");
-        } else {
-          setIsComplete(true);
-          if (onPhaseComplete) {
-            onPhaseComplete(nextInputs);
-          }
-        }
-      } else {
+      if (currentIndex + 1 < faultyWords.length) {
+        setCurrentIndex((prev) => prev + 1);
         setCurrentInput("");
+      } else {
+        setIsComplete(true);
+        if (onPhaseComplete) {
+          onPhaseComplete(nextInputs);
+        }
       }
     });
 
-    setShowModal(true);
-  };
-
-  const handleHintClick = () => {
-    setInputError("");
-    setModalMode("hint");
-    setModalMessage(`Oikea sana: ${currentCorrectWord}`);
-    setModalContinueAction(() => () => {
-      setShowModal(false);
-    });
     setShowModal(true);
   };
 
@@ -118,12 +101,6 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
                 className="word-input"
                 value={currentInput}
                 onChange={(e) => setCurrentInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    handleCheckClick();
-                  }
-                }}
                 placeholder="Kirjoita sana tähän"
                 maxLength={30}
                 aria-label="Korjaa sana"
@@ -152,7 +129,7 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
       {showModal && (
         <div className="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
           <div className="modal-content">
-            <h3 id="modal-title">{modalMode === "hint" ? "Vihje" : "Tarkistus"}</h3>
+            <h3 id="modal-title">Tarkistus</h3>
             <p className="modal-message">{modalMessage}</p>
             <button className="modal-button" onClick={modalContinueAction}>
               Jatka
@@ -162,10 +139,8 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
       )}
       <div className="help-section">
         <p className="help-title">Tarvitsetko apua?</p>
-        <p className="help-text">Voit pyytää vihjeen saadaksesi oikean sanan.</p>
-        <button className="help-button" onClick={handleHintClick}>
-          Näytä vihje.
-        </button>
+        <p className="help-text">Voit katsoa sanan oikein kirjoitettuna.</p>
+        <button className="help-button">Katso sana</button>
       </div>
     </div>
   );
