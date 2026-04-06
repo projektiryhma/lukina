@@ -1,9 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { getFromStore } from "../db/dataCache";
-
 import { GameOnePhaseOne } from "../components/GameOnePhaseOne.js";
-import { GameOnePhaseTwo } from "../components/GameOnePhaseTwo.js";
+import "./GamePageGameOne.css";
 
 export function GamePageGameOne() {
   const location = useLocation();
@@ -11,6 +10,7 @@ export function GamePageGameOne() {
 
   const [game, setGame] = useState(null);
   const [isPhaseOne, setIsPhaseOne] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
   const fetchNewTask = useCallback(async () => {
     try {
@@ -18,11 +18,14 @@ export function GamePageGameOne() {
 
       if (task) {
         setGame(task);
+        setLoadError(false);
       } else {
-        console.warn("Empty", difficulty);
+        setGame(null);
+        setLoadError(true);
       }
-    } catch (error) {
-      console.error("Error", error);
+    } catch {
+      setGame(null);
+      setLoadError(true);
     }
   }, [difficulty]);
 
@@ -39,26 +42,23 @@ export function GamePageGameOne() {
     setIsPhaseOne(false);
   };
 
-  const handlePhaseTwoComplete = () => {
-    handleRestart();
-  };
-
   return (
     <div className="game-page">
+      {loadError ? <p>Tehtavaa ei voitu ladata.</p> : null}
       {isPhaseOne ? (
         <>
           <GameOnePhaseOne data={game} allFound={handlePhaseOneComplete} />
           <button
+            className="RestartButton"
             onClick={() => {
               handleRestart();
             }}
           >
-            Uusi
+            Vaihda tekstiä
           </button>
         </>
       ) : (
         <>
-          <GameOnePhaseTwo data={game} onPhaseComplete={handlePhaseTwoComplete} />
           <button onClick={handleRestart}>Uusi</button>
         </>
       )}
