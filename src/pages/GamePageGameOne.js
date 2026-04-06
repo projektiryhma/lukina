@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { getFromStore } from "../db/dataCache";
 import { GameOnePhaseOne } from "../components/GameOnePhaseOne.js";
+import { GameOnePhaseTwo } from "../components/GameOnePhaseTwo.js";
 import "./GamePageGameOne.css";
 
 export function GamePageGameOne() {
@@ -10,6 +11,7 @@ export function GamePageGameOne() {
 
   const [game, setGame] = useState(null);
   const [isPhaseOne, setIsPhaseOne] = useState(true);
+  const [isPhaseTwoComplete, setIsPhaseTwoComplete] = useState(false);
   const [loadError, setLoadError] = useState(false);
 
   const fetchNewTask = useCallback(async () => {
@@ -35,11 +37,16 @@ export function GamePageGameOne() {
 
   const handleRestart = () => {
     setIsPhaseOne(true);
+    setIsPhaseTwoComplete(false);
     fetchNewTask();
   };
 
   const handlePhaseOneComplete = () => {
     setIsPhaseOne(false);
+  };
+
+  const handlePhaseTwoComplete = () => {
+    setIsPhaseTwoComplete(true);
   };
 
   return (
@@ -57,10 +64,10 @@ export function GamePageGameOne() {
             Vaihda tekstiä
           </button>
         </>
+      ) : !isPhaseTwoComplete ? (
+        <GameOnePhaseTwo data={game} onPhaseComplete={handlePhaseTwoComplete} />
       ) : (
-        <>
-          <button onClick={handleRestart}>Uusi</button>
-        </>
+        <button onClick={handleRestart}>Uusi</button>
       )}
     </div>
   );
