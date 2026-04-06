@@ -60,18 +60,20 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
 
   const handleModalClose = () => {
     setIsModalOpen(false);
-    const nextInputs = [...userInputs];
-    nextInputs[currentIndex] = currentInput.trim();
-    setUserInputs(nextInputs);
+    if (isCorrect) {
+      const nextInputs = [...userInputs];
+      nextInputs[currentIndex] = currentInput.trim();
+      setUserInputs(nextInputs);
 
-    if (currentIndex + 1 < faultyWords.length) {
-      setCurrentIndex((prev) => prev + 1);
-      setCurrentInput("");
-      setIsCorrect(null);
-    } else {
-      setIsComplete(true);
-      if (onPhaseComplete) {
-        onPhaseComplete(nextInputs);
+      if (currentIndex + 1 < faultyWords.length) {
+        setCurrentIndex((prev) => prev + 1);
+        setCurrentInput("");
+        setIsCorrect(null);
+      } else {
+        setIsComplete(true);
+        if (onPhaseComplete) {
+          onPhaseComplete(nextInputs);
+        }
       }
     }
   };
@@ -91,7 +93,10 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
                 type="text"
                 className="word-input"
                 value={currentInput}
-                onChange={(e) => setCurrentInput(e.target.value)}
+                onChange={(e) => {
+                  setCurrentInput(e.target.value);
+                  if (isCorrect === false) setIsCorrect(null);
+                }}
                 placeholder="kirjoita sana tähän"
                 maxLength={30}
               />
