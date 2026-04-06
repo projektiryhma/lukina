@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Modal } from "./UniversalModal.js";
 import "./GameOnePhaseTwo.css";
 
-export function GameOnePhaseTwo({ data, onPhaseComplete }) {
+export function GameOnePhaseTwo({ data, onPhaseComplete, onRestart }) {
   const wrongWordCount = Number(data?.["Virheiden lukumäärä tekstissä"] ?? 1) || 1;
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -92,7 +92,7 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
 
   return (
     <div className="phase-two">
-      <h2>Vaihe 2: Lue ja korjaa</h2>
+      <h1>Vaihe 2: Lue ja korjaa</h1>
       <p className="GameData">{text}</p>
       <div className="word-boxes">
         <p>Kirjoita korjaukset:</p>
@@ -126,9 +126,10 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
         </div>
       </div>
       <div className="help-section">
-        <p className="help-title">Tarvitsetko apua?</p>
+        <h2>Tarvitsetko apua?</h2>
         <p className="help-text" id="hint-description">Voit katsoa sanan oikein kirjoitettuna.</p>
         <button className="help-button" aria-describedby="hint-description" onClick={handleHintClick}>Näytä vihje</button>
+        {onRestart && <button className="RestartButton" onClick={onRestart}>Vaihda tekstiä</button>}
       </div>
       <Modal
         isOpen={isModalOpen}
@@ -151,4 +152,5 @@ GameOnePhaseTwo.propTypes = {
     "Oikeat sanat": PropTypes.string,
   }).isRequired,
   onPhaseComplete: PropTypes.func,
+  onRestart: PropTypes.func,
 };
