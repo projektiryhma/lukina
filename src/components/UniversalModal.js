@@ -16,7 +16,10 @@ export const Modal = ({
 
   return ReactDOM.createPortal(
     <div className="modal-overlay" onClick={onClose}>
-      <div className={`modal-container ${modalSizeClass}`}>
+      <div
+        className={`modal-container ${modalSizeClass}`}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="modal-header">
           <h2>{title}</h2>
         </div>
