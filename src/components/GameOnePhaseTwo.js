@@ -12,7 +12,7 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
   const [isComplete, setIsComplete] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
-  const [modalMessage, setModalMessage] = useState("");
+  const [modalContent, setModalContent] = useState("");
   const [modalButton, setModalButton] = useState("");
   const [isCorrect, setIsCorrect] = useState(null); // null initially, true/false after check
 
@@ -41,6 +41,18 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
   const currentWord = faultyWords[currentIndex] || "";
   const currentCorrectWord = correctWords[currentIndex] || "";
 
+  const handleHintClick = () => {
+    setModalTitle("Vihje");
+    setModalContent(
+      <>
+        <p>Näin kirjoitat sanan oikein:</p>
+        <p><strong>{currentCorrectWord}</strong></p>
+      </>
+    );
+    setModalButton("Sulje");
+    setIsModalOpen(true);
+  };
+
   const handleCheckClick = () => {
     const userInput = currentInput.trim();
     const correct = currentCorrectWord.toLowerCase() === userInput.toLowerCase();
@@ -48,11 +60,11 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
 
     if (correct) {
       setModalTitle("Oikein!");
-      setModalMessage("Sana oikein. Jatka seuraavaan sanaan.");
+      setModalContent(<p>Sana oikein. Jatka seuraavaan sanaan.</p>);
       setModalButton("Jatka");
     } else {
       setModalTitle("Väärin!");
-      setModalMessage("Sana on väärin. Voit tarvittaessa pyytää vihjeen.");
+      setModalContent(<p>Sana on väärin. Voit tarvittaessa pyytää vihjeen.</p>);
       setModalButton("Jatka");
     }
     setIsModalOpen(true);
@@ -60,7 +72,7 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
 
   const handleModalClose = () => {
     setIsModalOpen(false);
-    if (isCorrect) {
+    if (modalButton === "Jatka" && isCorrect) {
       const nextInputs = [...userInputs];
       nextInputs[currentIndex] = currentInput.trim();
       setUserInputs(nextInputs);
@@ -115,8 +127,8 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
       </div>
       <div className="help-section">
         <p className="help-title">Tarvitsetko apua?</p>
-        <p className="help-text">Voit katsoa sanan oikein kirjoitettuna.</p>
-        <button className="help-button">Katso sana</button>
+        <p className="help-text" id="hint-description">Voit katsoa sanan oikein kirjoitettuna.</p>
+        <button className="help-button" aria-describedby="hint-description" onClick={handleHintClick}>Näytä vihje</button>
       </div>
       <Modal
         isOpen={isModalOpen}
@@ -125,7 +137,7 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
         button={modalButton}
         size="small"
       >
-        <p>{modalMessage}</p>
+        {modalContent}
       </Modal>
     </div>
   );
