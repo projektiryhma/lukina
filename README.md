@@ -51,3 +51,17 @@ Then you can start the application.
 ```bash
 npm start
 ```
+
+## How to run the app (container)
+
+Before running with docker, make sure you have docker and docker compose installed.
+
+For running the app:
+
+```bash
+docker compose up
+```
+
+The app starts at http://localhost/lukina (port 80 due to the NGINX server).
+The final image uses nginx as the runtime image, so vulnerabilities related to node images are discarded.
+
