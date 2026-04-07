@@ -19,6 +19,13 @@ dotenv.config();
 
 const INPUT = process.env.INPUT;
 const OUTPUT = process.env.OUTPUT;
+const REQUIRED_FIELDS = [
+  "Virheetön teksti",
+  "Virheellinen teksti, virheet punaisella",
+  "Virheiden lukumäärä tekstissä",
+  "Virheelliset sanat",
+  "Oikeat sanat",
+];
 
 /**
  * Parse an Excel workbook into a plain object.
@@ -29,21 +36,30 @@ function parseWorkbook(filePath) {
   const workbook = XLSX.readFile(filePath, { cellDates: true });
   const result = {};
 
-  // Iterate over each sheet in the workbook and produce a mapping of id -> row
+  function cleanRow(row) {
+    return Object.fromEntries(
+      Object.entries(row).filter(
+        ([, value]) => value !== null && value !== undefined,
+      ),
+    );
+  }
+
+  function hasExactShape(row) {
+    const keys = Object.keys(row);
+    return (
+      keys.length === REQUIRED_FIELDS.length &&
+      REQUIRED_FIELDS.every((field) => Object.hasOwn(row, field))
+    );
+  }
+
+  // Iterate over each sheet in the workbook and produce a mapping of rows.
   workbook.SheetNames.forEach((name, sheetIndex) => {
     const sheet = workbook.Sheets[name];
     const data = XLSX.utils.sheet_to_json(sheet, {
       defval: null,
       blankrows: false,
     });
-    // Build an object keyed by id
-    const mapping = [];
-    for (let i = 0; i < data.length; i++) {
-      const row = { ...data[i] };
-      const id = row.id != null ? row.id : i;
-      mapping.push(row);
-    }
-    result[String(sheetIndex)] = mapping;
+    result[String(sheetIndex)] = data.map(cleanRow).filter(hasExactShape);
   });
   return result;
 }
