@@ -1,14 +1,14 @@
 /* eslint-disable no-undef */
 describe("Press button to move to game page", () => {
-  it("short sentences", () => {
+  beforeEach(() => {
     cy.intercept("GET", "**/data/data.json", { fixture: "testdata.json" }).as(
       "fetchData",
     );
 
     cy.visit("/#/InfoPageGameOne");
-
     cy.wait("@fetchData").wait(1000);
-
+  });
+  it("short sentences", () => {
     cy.get(".DifButton").should("contain", "Lyhyt");
 
     cy.get(".DifButton").first().click();
@@ -26,14 +26,6 @@ describe("Press button to move to game page", () => {
       .should("have.class", "is-selected", "true");
   });
   it("medium sentences", () => {
-    cy.intercept("GET", "**/data/data.json", { fixture: "testdata.json" }).as(
-      "fetchData",
-    );
-
-    cy.visit("/#/InfoPageGameOne");
-
-    cy.wait("@fetchData").wait(1000);
-
     cy.get(".DifButton").should("contain", "Keskipitkä");
 
     cy.get(".DifButton").eq(1).click();
@@ -51,14 +43,6 @@ describe("Press button to move to game page", () => {
       .should("have.class", "is-selected", "true");
   });
   it("long sentences", () => {
-    cy.intercept("GET", "**/data/data.json", { fixture: "testdata.json" }).as(
-      "fetchData",
-    );
-
-    cy.visit("/#/InfoPageGameOne");
-
-    cy.wait("@fetchData").wait(1000);
-
     cy.get(".DifButton").should("contain", "Pitkä");
 
     cy.get(".DifButton").eq(2).click();
