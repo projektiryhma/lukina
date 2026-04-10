@@ -11,6 +11,7 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [hintModalOpen, setHintModalOpen] = useState(false);
 
   const text = data?.["Virheellinen teksti, virheet punaisella"] || "";
   const faultyWordsString = data?.["Virheelliset sanat"] || "";
@@ -85,8 +86,25 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
     setModalOpen(false);
   };
 
+  const handleHintClick = () => {
+    setHintModalOpen(true);
+  };
+
   return (
     <div className="phase-two">
+      <Modal
+        isOpen={hintModalOpen}
+        onClose={() => setHintModalOpen(false)}
+        title="Vihje"
+        button="Sulje"
+      >
+        <div>
+          <p id="hint-description">Näin kirjoitat sanan oikein</p>
+          <p style={{ fontWeight: "600", fontSize: "18px", marginTop: "12px" }} aria-describedby="hint-description">
+            {currentCorrectWord}
+          </p>
+        </div>
+      </Modal>
       <Modal
         isOpen={modalOpen}
         onClose={handleModalClose}
@@ -138,7 +156,7 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
       <div className="help-section">
         <p className="help-title">Tarvitsetko apua?</p>
         <p className="help-text">Voit katsoa sanan oikein kirjoitettuna.</p>
-        <button className="help-button">Katso sana</button>
+        <button className="help-button" onClick={handleHintClick}>Näytä vihje</button>
       </div>
     </div>
   );
