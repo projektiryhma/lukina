@@ -65,7 +65,7 @@ export function GamePageGameOne() {
           </button>
         </>
       ) : !isPhaseTwoComplete ? (
-        <GameOnePhaseTwo data={game} onPhaseComplete={handlePhaseTwoComplete} onRestart={handleRestart} />
+        <GameOnePhaseTwo data={game} onPhaseComplete={handlePhaseTwoComplete} />
       ) : (
         <button onClick={handleRestart}>Uusi</button>
       )}
