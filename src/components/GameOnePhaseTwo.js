@@ -42,6 +42,12 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
 
   const handleCheckClick = () => {
     const trimmedInput = currentInput.trim();
+    
+    if (trimmedInput === "") {
+      setErrorMessage("Kirjoita sana oikein.");
+      return;
+    }
+
     const isCorrect = trimmedInput.toLowerCase() === currentCorrectWord.toLowerCase();
 
     if (isCorrect) {
@@ -49,9 +55,15 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
       setErrorMessage("");
     } else {
       setIsAnswerCorrect(false);
-      setErrorMessage("Kirjoita sana oikein.");
+      setErrorMessage("");
     }
     setModalOpen(true);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleCheckClick();
+    }
   };
 
   const handleModalClose = () => {
@@ -85,10 +97,7 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
           {isAnswerCorrect ? (
             <p>Sana oikein. Jatka seuraavaan sanaan.</p>
           ) : (
-            <>
-              <p>Sana on väärin. Voit tarvittaessa pyytää vihjeen.</p>
-              {errorMessage && <p style={{ color: "red", fontWeight: "600" }}>{errorMessage}</p>}
-            </>
+            <p>Sana on väärin. Voit tarvittaessa pyytää vihjeen.</p>
           )}
         </div>
       </Modal>
@@ -105,10 +114,15 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
                 type="text"
                 className="word-input"
                 value={currentInput}
-                onChange={(e) => setCurrentInput(e.target.value)}
+                onChange={(e) => {
+                  setCurrentInput(e.target.value);
+                  if (errorMessage) setErrorMessage("");
+                }}
+                onKeyPress={handleKeyPress}
                 placeholder="kirjoita sana tähän"
                 maxLength={30}
               />
+              {errorMessage && <p style={{ color: "red", fontWeight: "600", marginTop: "8px" }}>{errorMessage}</p>}
               <button className="check-button" onClick={handleCheckClick}>
                 Tarkista
               </button>
