@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Modal } from "./UniversalModal.js";
 import "./GameOnePhaseTwo.css";
 
 export function GameOnePhaseTwo({ data, onPhaseComplete }) {
@@ -10,18 +9,12 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
   const [currentInput, setCurrentInput] = useState("");
   const [userInputs, setUserInputs] = useState(() => Array.from({ length: wrongWordCount }, () => ""));
   const [isComplete, setIsComplete] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState("");
-  const [modalMessage, setModalMessage] = useState("");
-  const [modalButton, setModalButton] = useState("");
-  const [isCorrect, setIsCorrect] = useState(null); // null initially, true/false after check
 
   useEffect(() => {
     setCurrentIndex(0);
     setCurrentInput("");
     setIsComplete(false);
     setUserInputs(Array.from({ length: wrongWordCount }, () => ""));
-    setIsCorrect(null);
   }, [wrongWordCount]);
 
   if (!data) return <p>No data</p>;
@@ -32,34 +25,10 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
     .split(",")
     .map((word) => word.trim())
     .filter((word) => word.length > 0);
-  const correctWordsString = data["Oikeat sanat"] || "";
-  const correctWords = correctWordsString
-    .split(",")
-    .map((word) => word.trim())
-    .filter((word) => word.length > 0);
 
   const currentWord = faultyWords[currentIndex] || "";
-  const currentCorrectWord = correctWords[currentIndex] || "";
 
   const handleCheckClick = () => {
-    const userInput = currentInput.trim();
-    const correct = currentCorrectWord.toLowerCase() === userInput.toLowerCase();
-    setIsCorrect(correct);
-
-    if (correct) {
-      setModalTitle("Oikein!");
-      setModalMessage("Sana oikein. Jatka seuraavaan sanaan.");
-      setModalButton("Jatka");
-    } else {
-      setModalTitle("Väärin!");
-      setModalMessage("Sana on väärin. Voit tarvittaessa pyytää vihjeen.");
-      setModalButton("Jatka");
-    }
-    setIsModalOpen(true);
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
     const nextInputs = [...userInputs];
     nextInputs[currentIndex] = currentInput.trim();
     setUserInputs(nextInputs);
@@ -67,7 +36,6 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
     if (currentIndex + 1 < faultyWords.length) {
       setCurrentIndex((prev) => prev + 1);
       setCurrentInput("");
-      setIsCorrect(null);
     } else {
       setIsComplete(true);
       if (onPhaseComplete) {
@@ -95,7 +63,6 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
                 placeholder="kirjoita sana tähän"
                 maxLength={30}
               />
-              {isCorrect === false && <p className="error-label">Kirjoita sana oikein.</p>}
               <button className="check-button" onClick={handleCheckClick}>
                 Tarkista
               </button>
@@ -113,15 +80,6 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
         <p className="help-text">Voit katsoa sanan oikein kirjoitettuna.</p>
         <button className="help-button">Katso sana</button>
       </div>
-      <Modal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        title={modalTitle}
-        button={modalButton}
-        size="small"
-      >
-        <p>{modalMessage}</p>
-      </Modal>
     </div>
   );
 }
@@ -131,7 +89,6 @@ GameOnePhaseTwo.propTypes = {
     "Virheellinen teksti, virheet punaisella": PropTypes.string,
     "Virheiden lukumäärä tekstissä": PropTypes.number,
     "Virheelliset sanat": PropTypes.string,
-    "Oikeat sanat": PropTypes.string,
   }).isRequired,
   onPhaseComplete: PropTypes.func,
 };

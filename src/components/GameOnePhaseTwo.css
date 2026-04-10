@@ -96,13 +96,6 @@
   color: rgba(40, 40, 40);
 }
 
-.error-label {
-  color: red;
-  font-size: 14px;
-  margin: 4px 0 0 0;
-  font-weight: 600;
-}
-
 textarea {
   padding: 20px;
   border: 1px solid gray;
