@@ -6,11 +6,8 @@ import { Routes, Route, HashRouter } from "react-router-dom";
 import { InfoPageGameOne } from "./pages/InfoPageGameOne";
 import { StartPage } from "./pages/StartPage";
 import { GamePageGameOne } from "./pages/GamePageGameOne";
-<<<<<<< HEAD
 import { useGlobalArrowNavigation } from "./components/GlobalArrowNavigation";
-=======
 import { NotFoundPage } from "./pages/NotFoundPage";
->>>>>>> main
 
 function App() {
   useGlobalArrowNavigation();

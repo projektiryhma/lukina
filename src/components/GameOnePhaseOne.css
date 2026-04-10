@@ -50,7 +50,7 @@
   border-radius: 10px;
   border: 2px solid transparent;
   transition: all 0.15s ease;
-  font-size: 11;
+  font-size: 1rem;
   user-select: none;
 }
 
@@ -120,12 +120,6 @@
   padding-top: 20px;
 }
 
-:focus-visible {
-  outline: 3px solid #6750a4; 
-  outline-offset: 3px;
-  box-shadow: 0 0 10px rgba(103, 80, 164, 0.5);
-}
-
 
 @media (max-width: 600px) {
   .container{
@@ -144,4 +138,11 @@
   max-width: 350px;
   line-height: 1.5;
   }
+}
+
+
+:focus-visible {
+  outline: 3px solid #6750a4; 
+  outline-offset: 3px;
+  box-shadow: 0 0 10px rgba(103, 80, 164, 0.5);
 }

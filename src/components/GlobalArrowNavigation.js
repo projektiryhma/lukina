@@ -3,13 +3,15 @@ import { useEffect } from "react";
 export function useGlobalArrowNavigation() {
   useEffect(() => {
     const handleKeyDown = (e) => {
+      const arrowKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
+      if (!arrowKeys.includes(e.key)) return;
+
       const isTyping =
         e.target.tagName === "INPUT" ||
         e.target.tagName === "TEXTAREA" ||
         e.target.isContentEditable;
 
       if (isTyping) return;
-
       if (document.querySelector(".modal-overlay")) return;
 
       const focusableSelectors =
@@ -18,6 +20,14 @@ export function useGlobalArrowNavigation() {
       const elements = Array.from(
         document.querySelectorAll(focusableSelectors),
       ).filter((el) => !el.disabled && el.offsetParent !== null);
+
+      if (elements.length === 0) return;
+
+      if (document.activeElement === document.body || !document.activeElement) {
+        e.preventDefault();
+        elements[0].focus();
+        return;
+      }
 
       const currentIndex = elements.indexOf(document.activeElement);
       const currentElement = elements[currentIndex];
@@ -80,14 +90,12 @@ export function useGlobalArrowNavigation() {
       } else if (e.key === "ArrowDown") {
         e.preventDefault();
         const next = findNearestInDirection("down");
-
         next
           ? next.focus()
           : elements[(currentIndex + 1) % elements.length]?.focus();
       } else if (e.key === "ArrowUp") {
         e.preventDefault();
         const prev = findNearestInDirection("up");
-
         prev
           ? prev.focus()
           : elements[
