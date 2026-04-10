@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 import Modal from "./UniversalModal";
 import "./GameOnePhaseTwo.css";
 
 export function GameOnePhaseTwo({ data, onPhaseComplete, onChangeText }) {
+  const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentInput, setCurrentInput] = useState("");
   const [userInputs, setUserInputs] = useState([]);
@@ -16,7 +18,7 @@ export function GameOnePhaseTwo({ data, onPhaseComplete, onChangeText }) {
   const text = data?.["Virheellinen teksti, virheet punaisella"] || "";
   const faultyWordsString = data?.["Virheelliset sanat"] || "";
   const correctWordsString = data?.["Oikeat sanat"] || "";
-  
+
   const faultyWords = faultyWordsString
     .split(",")
     .map((word) => word.trim())
@@ -43,13 +45,14 @@ export function GameOnePhaseTwo({ data, onPhaseComplete, onChangeText }) {
 
   const handleCheckClick = () => {
     const trimmedInput = currentInput.trim();
-    
+
     if (trimmedInput === "") {
       setErrorMessage("Kirjoita sana oikein.");
       return;
     }
 
-    const isCorrect = trimmedInput.toLowerCase() === currentCorrectWord.toLowerCase();
+    const isCorrect =
+      trimmedInput.toLowerCase() === currentCorrectWord.toLowerCase();
 
     if (isCorrect) {
       setIsAnswerCorrect(true);
@@ -92,19 +95,27 @@ export function GameOnePhaseTwo({ data, onPhaseComplete, onChangeText }) {
 
   const renderTextWithBoldWord = () => {
     if (!currentWord) return text;
-    
-    const regex = new RegExp(`(${currentWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+
+    const regex = new RegExp(
+      `(${currentWord.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
+      "gi",
+    );
     const parts = text.split(regex);
-    
-    return parts.map((part, index) => 
-      part.toLowerCase() === currentWord.toLowerCase() ? 
-        <strong key={index}>{part}</strong> : 
+
+    return parts.map((part, index) =>
+      part.toLowerCase() === currentWord.toLowerCase() ? (
+        <strong key={index}>{part}</strong>
+      ) : (
         part
+      ),
     );
   };
 
   return (
     <div className="phase-two">
+      <button onClick={() => navigate("/")} className="BackToButton">
+        &lt; Etusivulle
+      </button>
       <Modal
         isOpen={hintModalOpen}
         onClose={() => setHintModalOpen(false)}
@@ -113,7 +124,10 @@ export function GameOnePhaseTwo({ data, onPhaseComplete, onChangeText }) {
       >
         <div>
           <p id="hint-description">Näin kirjoitat sanan oikein</p>
-          <p style={{ fontWeight: "600", fontSize: "18px", marginTop: "12px" }} aria-describedby="hint-description">
+          <p
+            style={{ fontWeight: "600", fontSize: "18px", marginTop: "12px" }}
+            aria-describedby="hint-description"
+          >
             {currentCorrectWord}
           </p>
         </div>
@@ -133,14 +147,18 @@ export function GameOnePhaseTwo({ data, onPhaseComplete, onChangeText }) {
         </div>
       </Modal>
       <h1>Vaihe 2: Lue ja korjaa</h1>
-      <p className="GameData">{renderTextWithBoldWord()}</p>
+      <p className="phase-two-description">
+        Lue teksti uudelleen ja korjaa virheellisesti kirjoitetut sanat
+        yksitellen.
+      </p>
       <div className="word-boxes">
-        <p>Kirjoita korjaukset:</p>
         <div className="word-boxes-wrapper">
           {!isComplete ? (
-            <div className="word-input-group">
-              <p className="progress">{`${currentIndex + 1} / ${faultyWords.length}`}</p>
-              <p className="faulty-word">{currentWord}</p>
+            <div className="correction-container">
+              <p className="progress">
+                Korjattava sana {`${currentIndex + 1}/${faultyWords.length}`}
+              </p>
+              <p className="GameData">{renderTextWithBoldWord()}</p>
               <input
                 type="text"
                 className="word-input"
@@ -150,10 +168,16 @@ export function GameOnePhaseTwo({ data, onPhaseComplete, onChangeText }) {
                   if (errorMessage) setErrorMessage("");
                 }}
                 onKeyPress={handleKeyPress}
-                placeholder="kirjoita sana tähän"
+                placeholder="Kirjoita sana"
                 maxLength={30}
               />
-              {errorMessage && <p style={{ color: "red", fontWeight: "600", marginTop: "8px" }}>{errorMessage}</p>}
+              {errorMessage && (
+                <p
+                  style={{ color: "red", fontWeight: "600", marginTop: "8px" }}
+                >
+                  {errorMessage}
+                </p>
+              )}
               <button className="check-button" onClick={handleCheckClick}>
                 Tarkista
               </button>
@@ -161,7 +185,9 @@ export function GameOnePhaseTwo({ data, onPhaseComplete, onChangeText }) {
           ) : (
             <div className="completion-box">
               <p>Hyvin tehty! Kaikki sanat on läpikäyty.</p>
-              <p className="completion-note">Paina Uusi jatkaaksesi seuraavaan tehtävään.</p>
+              <p className="completion-note">
+                Paina Uusi jatkaaksesi seuraavaan tehtävään.
+              </p>
             </div>
           )}
         </div>
@@ -169,8 +195,14 @@ export function GameOnePhaseTwo({ data, onPhaseComplete, onChangeText }) {
       <div className="help-section">
         <h2 className="help-title">Tarvitsetko apua?</h2>
         <p className="help-text">Voit katsoa sanan oikein kirjoitettuna.</p>
-        <button className="help-button" onClick={handleHintClick}>Näytä vihje</button>
-        {onChangeText && <button className="help-button" onClick={onChangeText}>Vaihda tekstiä</button>}
+        <button className="help-button" onClick={handleHintClick}>
+          Näytä vihje
+        </button>
+        {onChangeText && (
+          <button className="help-button" onClick={onChangeText}>
+            Vaihda tekstiä
+          </button>
+        )}
       </div>
     </div>
   );
