@@ -1,14 +1,32 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import Modal from "./UniversalModal";
 import "./GameOnePhaseTwo.css";
 
 export function GameOnePhaseTwo({ data, onPhaseComplete }) {
-  const wrongWordCount = Number(data?.["Virheiden lukumäärä tekstissä"] ?? 1) || 1;
-
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentInput, setCurrentInput] = useState("");
-  const [userInputs, setUserInputs] = useState(() => Array.from({ length: wrongWordCount }, () => ""));
+  const [userInputs, setUserInputs] = useState([]);
   const [isComplete, setIsComplete] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const text = data?.["Virheellinen teksti, virheet punaisella"] || "";
+  const faultyWordsString = data?.["Virheelliset sanat"] || "";
+  const correctWordsString = data?.["Oikeat sanat"] || "";
+  
+  const faultyWords = faultyWordsString
+    .split(",")
+    .map((word) => word.trim())
+    .filter((word) => word.length > 0);
+
+  const correctWords = correctWordsString
+    .split(",")
+    .map((word) => word.trim())
+    .filter((word) => word.length > 0);
+
+  const wrongWordCount = Math.max(faultyWords.length, 1);
 
   useEffect(() => {
     setCurrentIndex(0);
@@ -19,33 +37,61 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
 
   if (!data) return <p>No data</p>;
 
-  const text = data["Virheellinen teksti, virheet punaisella"];
-  const faultyWordsString = data["Virheelliset sanat"] || "";
-  const faultyWords = faultyWordsString
-    .split(",")
-    .map((word) => word.trim())
-    .filter((word) => word.length > 0);
-
   const currentWord = faultyWords[currentIndex] || "";
+  const currentCorrectWord = correctWords[currentIndex] || "";
 
   const handleCheckClick = () => {
-    const nextInputs = [...userInputs];
-    nextInputs[currentIndex] = currentInput.trim();
-    setUserInputs(nextInputs);
+    const trimmedInput = currentInput.trim();
+    const isCorrect = trimmedInput.toLowerCase() === currentCorrectWord.toLowerCase();
 
-    if (currentIndex + 1 < faultyWords.length) {
-      setCurrentIndex((prev) => prev + 1);
-      setCurrentInput("");
+    if (isCorrect) {
+      setIsAnswerCorrect(true);
+      setErrorMessage("");
     } else {
-      setIsComplete(true);
-      if (onPhaseComplete) {
-        onPhaseComplete(nextInputs);
+      setIsAnswerCorrect(false);
+      setErrorMessage("Kirjoita sana oikein.");
+    }
+    setModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    if (isAnswerCorrect) {
+      const nextInputs = [...userInputs];
+      nextInputs[currentIndex] = currentInput.trim();
+      setUserInputs(nextInputs);
+
+      if (currentIndex + 1 < faultyWords.length) {
+        setCurrentIndex((prev) => prev + 1);
+        setCurrentInput("");
+      } else {
+        setIsComplete(true);
+        if (onPhaseComplete) {
+          onPhaseComplete(nextInputs);
+        }
       }
     }
+    setModalOpen(false);
   };
 
   return (
     <div className="phase-two">
+      <Modal
+        isOpen={modalOpen}
+        onClose={handleModalClose}
+        title={isAnswerCorrect ? "Oikea vastaus!" : "Väärä vastaus"}
+        button="Jatka"
+      >
+        <div>
+          {isAnswerCorrect ? (
+            <p>Sana oikein. Jatka seuraavaan sanaan.</p>
+          ) : (
+            <>
+              <p>Sana on väärin. Voit tarvittaessa pyytää vihjeen.</p>
+              {errorMessage && <p style={{ color: "red", fontWeight: "600" }}>{errorMessage}</p>}
+            </>
+          )}
+        </div>
+      </Modal>
       <h2>Vaihe 2: Lue ja korjaa</h2>
       <p className="GameData">{text}</p>
       <div className="word-boxes">
@@ -89,6 +135,7 @@ GameOnePhaseTwo.propTypes = {
     "Virheellinen teksti, virheet punaisella": PropTypes.string,
     "Virheiden lukumäärä tekstissä": PropTypes.number,
     "Virheelliset sanat": PropTypes.string,
+    "Oikeat sanat": PropTypes.string,
   }).isRequired,
   onPhaseComplete: PropTypes.func,
 };
