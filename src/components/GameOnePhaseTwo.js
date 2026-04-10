@@ -4,11 +4,14 @@ import { Modal } from "./UniversalModal.js";
 import "./GameOnePhaseTwo.css";
 
 export function GameOnePhaseTwo({ data, onPhaseComplete, onRestart }) {
-  const wrongWordCount = Number(data?.["Virheiden lukumäärä tekstissä"] ?? 1) || 1;
+  const wrongWordCount =
+    Number(data?.["Virheiden lukumäärä tekstissä"] ?? 1) || 1;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentInput, setCurrentInput] = useState("");
-  const [userInputs, setUserInputs] = useState(() => Array.from({ length: wrongWordCount }, () => ""));
+  const [userInputs, setUserInputs] = useState(() =>
+    Array.from({ length: wrongWordCount }, () => ""),
+  );
   const [isComplete, setIsComplete] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
@@ -46,8 +49,10 @@ export function GameOnePhaseTwo({ data, onPhaseComplete, onRestart }) {
     setModalContent(
       <>
         <p>Näin kirjoitat sanan oikein:</p>
-        <p><strong>{currentCorrectWord}</strong></p>
-      </>
+        <p>
+          <strong>{currentCorrectWord}</strong>
+        </p>
+      </>,
     );
     setModalButton("Sulje");
     setIsModalOpen(true);
@@ -55,7 +60,8 @@ export function GameOnePhaseTwo({ data, onPhaseComplete, onRestart }) {
 
   const handleCheckClick = () => {
     const userInput = currentInput.trim();
-    const correct = currentCorrectWord.toLowerCase() === userInput.toLowerCase();
+    const correct =
+      currentCorrectWord.toLowerCase() === userInput.toLowerCase();
     setIsCorrect(correct);
 
     if (correct) {
@@ -109,10 +115,17 @@ export function GameOnePhaseTwo({ data, onPhaseComplete, onRestart }) {
                   setCurrentInput(e.target.value);
                   if (isCorrect === false) setIsCorrect(null);
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleCheckClick();
+                  }
+                }}
                 placeholder="kirjoita sana tähän"
                 maxLength={30}
               />
-              {isCorrect === false && <p className="error-label">Kirjoita sana oikein.</p>}
+              {isCorrect === false && (
+                <p className="error-label">Kirjoita sana oikein.</p>
+              )}
               <button className="check-button" onClick={handleCheckClick}>
                 Tarkista
               </button>
@@ -120,16 +133,30 @@ export function GameOnePhaseTwo({ data, onPhaseComplete, onRestart }) {
           ) : (
             <div className="completion-box">
               <p>Hyvin tehty! Kaikki sanat on läpikäyty.</p>
-              <p className="completion-note">Paina Uusi jatkaaksesi seuraavaan tehtävään.</p>
+              <p className="completion-note">
+                Paina Uusi jatkaaksesi seuraavaan tehtävään.
+              </p>
             </div>
           )}
         </div>
       </div>
       <div className="help-section">
         <h2>Tarvitsetko apua?</h2>
-        <p className="help-text" id="hint-description">Voit katsoa sanan oikein kirjoitettuna.</p>
-        <button className="help-button" aria-describedby="hint-description" onClick={handleHintClick}>Näytä vihje</button>
-        {onRestart && <button className="RestartButton" onClick={onRestart}>Vaihda tekstiä</button>}
+        <p className="help-text" id="hint-description">
+          Voit katsoa sanan oikein kirjoitettuna.
+        </p>
+        <button
+          className="help-button"
+          aria-describedby="hint-description"
+          onClick={handleHintClick}
+        >
+          Näytä vihje
+        </button>
+        {onRestart && (
+          <button className="RestartButton" onClick={onRestart}>
+            Vaihda tekstiä
+          </button>
+        )}
       </div>
       <Modal
         isOpen={isModalOpen}
