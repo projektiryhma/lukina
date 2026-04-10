@@ -63,15 +63,17 @@ export const Modal = ({
 
         <div className="modal-body">{children}</div>
 
-        {/* Nappi ilman footer-diviä, jotta se palautuu alkuperäiselle paikalleen */}
-        <button
-          ref={closeBtnRef}
-          className="modal-close-btn"
-          onClick={onClose}
-          type="button"
-        >
-          {button}
-        </button>
+        {/* TÄSSÄ ON MUUTOS: Nappi on nyt kääritty modal-footerin sisään */}
+        <div className="modal-footer">
+          <button
+            ref={closeBtnRef}
+            className="modal-close-btn"
+            onClick={onClose}
+            type="button"
+          >
+            {button}
+          </button>
+        </div>
       </div>
     </div>,
     document.body,
