@@ -47,12 +47,16 @@ export const Modal = ({
   const modalSizeClass = size === "large" ? "size-large" : "size-small";
 
   return ReactDOM.createPortal(
+<<<<<<< HEAD
     <div
       className="modal-overlay"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
     >
+=======
+    <div className="modal-overlay" onClick={onClose}>
+>>>>>>> main
       <div
         className={`modal-container ${modalSizeClass}`}
         onClick={(e) => e.stopPropagation()}
