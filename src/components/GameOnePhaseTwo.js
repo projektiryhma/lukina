@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Modal from "./UniversalModal";
 import "./GameOnePhaseTwo.css";
 
-export function GameOnePhaseTwo({ data, onPhaseComplete }) {
+export function GameOnePhaseTwo({ data, onPhaseComplete, onChangeText }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentInput, setCurrentInput] = useState("");
   const [userInputs, setUserInputs] = useState([]);
@@ -90,6 +90,19 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
     setHintModalOpen(true);
   };
 
+  const renderTextWithBoldWord = () => {
+    if (!currentWord) return text;
+    
+    const regex = new RegExp(`(${currentWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    const parts = text.split(regex);
+    
+    return parts.map((part, index) => 
+      part.toLowerCase() === currentWord.toLowerCase() ? 
+        <strong key={index}>{part}</strong> : 
+        part
+    );
+  };
+
   return (
     <div className="phase-two">
       <Modal
@@ -119,8 +132,8 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
           )}
         </div>
       </Modal>
-      <h2>Vaihe 2: Lue ja korjaa</h2>
-      <p className="GameData">{text}</p>
+      <h1>Vaihe 2: Lue ja korjaa</h1>
+      <p className="GameData">{renderTextWithBoldWord()}</p>
       <div className="word-boxes">
         <p>Kirjoita korjaukset:</p>
         <div className="word-boxes-wrapper">
@@ -154,9 +167,10 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
         </div>
       </div>
       <div className="help-section">
-        <p className="help-title">Tarvitsetko apua?</p>
+        <h2 className="help-title">Tarvitsetko apua?</h2>
         <p className="help-text">Voit katsoa sanan oikein kirjoitettuna.</p>
         <button className="help-button" onClick={handleHintClick}>Näytä vihje</button>
+        {onChangeText && <button className="help-button" onClick={onChangeText}>Vaihda tekstiä</button>}
       </div>
     </div>
   );
@@ -170,4 +184,5 @@ GameOnePhaseTwo.propTypes = {
     "Oikeat sanat": PropTypes.string,
   }).isRequired,
   onPhaseComplete: PropTypes.func,
+  onChangeText: PropTypes.func,
 };

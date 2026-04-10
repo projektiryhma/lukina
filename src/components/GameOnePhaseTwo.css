@@ -8,6 +8,10 @@
   border-radius: 12px;
 }
 
+.GameData strong {
+  font-weight: 700;
+}
+
 .word-boxes {
   margin-top: 20px;
   margin-bottom: 4px;
