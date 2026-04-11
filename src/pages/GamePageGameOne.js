@@ -52,10 +52,6 @@ export function GamePageGameOne() {
     setIsPhaseTwoComplete(true);
   };
 
-  const handlePhaseThreeComplete = () => {
-    setIsPhaseThreeComplete(true);
-  };
-
   return (
     <div className="game-page">
       {loadError ? <p>Tehtavaa ei voitu ladata.</p> : null}
@@ -82,11 +78,7 @@ export function GamePageGameOne() {
         </>
       ) : !isPhaseThreeComplete ? (
         <>
-          <GameOnePhaseThree
-            data={game}
-            onPhaseComplete={handlePhaseThreeComplete}
-            onChangeText={handleRestart}
-          />
+          <GameOnePhaseThree data={game} />
         </>
       ) : (
         <button onClick={handleRestart}>Uusi</button>
