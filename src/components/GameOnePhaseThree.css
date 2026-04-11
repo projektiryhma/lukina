@@ -1,5 +1,9 @@
 .p3div{
-    max-width: 500px;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;    
+    gap: 15px;              
+    margin-top: 20px;
 }
 
 .p3h1{
