@@ -34,6 +34,8 @@ jobs:
           DISABLE_ESLINT_PLUGIN: true
       - name: Run tests
         run: npm test -- --reporters=default --reporters=jest-ctrf-json-reporter
+      - name: Run Cypress E2E tests
+        run: npm run cy:ci
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

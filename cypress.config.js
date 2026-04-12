@@ -37,8 +37,12 @@ module.exports = defineConfig({
     baseUrl: "http://localhost:3000",
     testIsolation: true,
     specPattern: "cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
-    setupNodeEvents() {
-      // implement node event listeners here
+    setupNodeEvents(on) {
+      const { setupCtrfPlugin } = require("cypress-ctrf-json-reporter/plugin");
+      setupCtrfPlugin(on, { outputDir: "ctrf", outputFile: "cypress-ctrf-report.json" });
+      if (process.env.CYPRESS_COVERAGE === "true") {
+        require("@cypress/code-coverage/task")(on, {});
+      }
     },
   },
 });

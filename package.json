@@ -10,7 +10,10 @@
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
     "depcheck": "owasp-dependency-check --project lukina --scan package-lock.json -f HTML -f JSON --out ./owasp-report --data .dependency-check-bin/data",
-    "cy:e2e": "start-server-and-test start http://localhost:3000 'cypress run --e2e'"
+    "cy:e2e": "start-server-and-test start http://localhost:3000 'cypress run --e2e'",
+    "cy:ci": "start-server-and-test 'serve -s build -p 3000' http://localhost:3000 'cypress run --e2e'",
+    "start:coverage": "CYPRESS_COVERAGE=true react-app-rewired start",
+    "cy:coverage": "start-server-and-test start:coverage http://localhost:3000 'cypress run --e2e'"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^6.9.1",
@@ -45,9 +48,12 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@cypress/code-coverage": "^4.0.3",
     "@cypress/react": "^9.0.1",
     "@testing-library/react": "^16.3.2",
+    "babel-plugin-istanbul": "^7.0.1",
     "cypress": "^15.11.0",
+    "cypress-ctrf-json-reporter": "^0.0.14",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-config-standard": "^17.1.0",
@@ -58,6 +64,8 @@
     "jest-environment-jsdom": "^27.5.1",
     "jest-junit": "^16.0.0",
     "owasp-dependency-check": "^1.0.1",
-    "prettier": "^3.8.1"
+    "prettier": "^3.8.1",
+    "react-app-rewired": "^2.2.1",
+    "serve": "^14.2.6"
   }
 }
