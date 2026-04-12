@@ -2,6 +2,7 @@ import "./StartPage.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Modal } from "../components/UniversalModal.js";
+import { GameInstructionsModal } from "../components/GameInstructionsModal.js";
 
 export function StartPage() {
   const navigate = useNavigate();
@@ -42,27 +43,7 @@ export function StartPage() {
         button="Sulje"
         size="large"
       >
-        <div className="instructions-modal-content">
-          <h2>Pelin pikaohjeet</h2>
-          <h4>Vaihe 1 - Lue ja etsi</h4>
-          <p>----- </p>
-          <p>----- </p>
-          <h3>Pelin tarkemman ohjeet</h3>
-          <p>1. Lue annettu teksti huolellisesti.</p>
-          <p>2. Klikkaa sanoja, jotka on kirjoitettu väärin.</p>
-          <p>3. Paina Tarkista nähdäksesi tulokset.</p>
-          <div
-            style={{
-              marginTop: "15px",
-              padding: "10px",
-              backgroundColor: "#f0f0f0",
-              borderRadius: "8px",
-            }}
-          >
-            <strong>Vinkki:</strong> Voit pyytää vihjeen, jos et löydä kaikkia
-            virheitä!
-          </div>
-        </div>
+        <GameInstructionsModal />
       </Modal>
     </>
   );

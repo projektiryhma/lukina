@@ -16,7 +16,23 @@
 .App-header {
   background: rgb(234, 221, 255);
   width: 100%;
-  padding: 10px;
+  padding-bottom: 10px;
+  padding-top: 20px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+  font-family: Arial;
+  font-size: 30px; 
+  display: flex;
+  justify-content: center;
+  text-shadow: 0.2px 0 0 black
+  
+}
+
+@media (max-width: 600px) {
+  .App-header {
+  background: rgb(234, 221, 255);
+  width: 100%;
+  padding-bottom: 10px;
+  padding-top: 20px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   font-family: Arial;
   font-size: 20px; 
@@ -24,4 +40,5 @@
   justify-content: center;
   text-shadow: 0.2px 0 0 black
   
+}
 }
