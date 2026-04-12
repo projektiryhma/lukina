@@ -11,7 +11,7 @@ export const Modal = ({
   children,
   size = "small",
 }) => {
-  const closeBtnRef = useRef(null);
+  const modalBodyRef = useRef(null);
   const previousFocusRef = useRef(null);
 
   useEffect(() => {
@@ -19,15 +19,11 @@ export const Modal = ({
       previousFocusRef.current = document.activeElement;
 
       const focusTimer = setTimeout(() => {
-        closeBtnRef.current?.focus();
+        modalBodyRef.current?.focus();
       }, 50);
 
       const handleKeyDown = (e) => {
         if (e.key === "Escape") onClose();
-        if (e.key === "Tab") {
-          e.preventDefault();
-          closeBtnRef.current?.focus();
-        }
       };
 
       window.addEventListener("keydown", handleKeyDown);
@@ -61,16 +57,21 @@ export const Modal = ({
           <h2>{title}</h2>
         </div>
 
-        <div className="modal-body">{children}</div>
+        <div
+          className="modal-body"
+          ref={modalBodyRef}
+          tabIndex="0"
+          style={{
+            outline: "none",
+            overflowY: "auto",
+            maxHeight: "60vh",
+          }}
+        >
+          {children}
+        </div>
 
-        {/* TÄSSÄ ON MUUTOS: Nappi on nyt kääritty modal-footerin sisään */}
         <div className="modal-footer">
-          <button
-            ref={closeBtnRef}
-            className="modal-close-btn"
-            onClick={onClose}
-            type="button"
-          >
+          <button className="modal-close-btn" onClick={onClose} type="button">
             {button}
           </button>
         </div>
