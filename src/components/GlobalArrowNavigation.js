@@ -1,10 +1,13 @@
 import { useEffect } from "react";
 
+const ARROW_KEYS = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
+const FOCUSABLE_SELECTORS =
+  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
 export function useGlobalArrowNavigation() {
   useEffect(() => {
     const handleKeyDown = (e) => {
-      const arrowKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
-      if (!arrowKeys.includes(e.key)) return;
+      if (!ARROW_KEYS.includes(e.key)) return;
 
       const isTyping =
         e.target.tagName === "INPUT" ||
@@ -14,11 +17,8 @@ export function useGlobalArrowNavigation() {
       if (isTyping) return;
       if (document.querySelector(".modal-overlay")) return;
 
-      const focusableSelectors =
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-
       const elements = Array.from(
-        document.querySelectorAll(focusableSelectors),
+        document.querySelectorAll(FOCUSABLE_SELECTORS),
       ).filter((el) => !el.disabled && el.offsetParent !== null);
 
       if (elements.length === 0) return;
