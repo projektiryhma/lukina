@@ -3,13 +3,14 @@
 }
 
 .BackToButton{
-  position: absolute; 
-  left: 20px;         
+  position: relative; 
+  left: 5vw; 
   top: 60px;
   border-style: hidden;
   background-color: white;
   text-shadow: 0.2px 0 0 black;
   cursor: pointer;
+  color: black;
 
 }
 
@@ -50,8 +51,10 @@
   border-radius: 10px;
   border: 2px solid transparent;
   transition: all 0.15s ease;
-  font-size: 11;
+  font-size: 1rem;
   user-select: none;
+  color: black;
+  text-shadow: none;
 }
 
 
@@ -65,8 +68,6 @@
 .interactive-word.is-selected {
   background-color: rgb(79, 55, 138);
   color: white;
-  
-  
 }
 
 .error-info {
@@ -138,4 +139,11 @@
   max-width: 350px;
   line-height: 1.5;
   }
+}
+
+
+:focus-visible {
+  outline: 3px solid #6750a4; 
+  outline-offset: 3px;
+  box-shadow: 0 0 10px rgba(103, 80, 164, 0.5);
 }

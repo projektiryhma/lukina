@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import "./UniversalModal.css";
 import PropTypes from "prop-types";
@@ -10,12 +11,48 @@ export const Modal = ({
   children,
   size = "small",
 }) => {
+  const closeBtnRef = useRef(null);
+  const previousFocusRef = useRef(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      previousFocusRef.current = document.activeElement;
+
+      const focusTimer = setTimeout(() => {
+        closeBtnRef.current?.focus();
+      }, 50);
+
+      const handleKeyDown = (e) => {
+        if (e.key === "Escape") onClose();
+        if (e.key === "Tab") {
+          e.preventDefault();
+          closeBtnRef.current?.focus();
+        }
+      };
+
+      window.addEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "hidden";
+
+      return () => {
+        clearTimeout(focusTimer);
+        window.removeEventListener("keydown", handleKeyDown);
+        document.body.style.overflow = "unset";
+        setTimeout(() => previousFocusRef.current?.focus(), 50);
+      };
+    }
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const modalSizeClass = size === "large" ? "size-large" : "size-small";
 
   return ReactDOM.createPortal(
-    <div className="modal-overlay" onClick={onClose}>
+    <div
+      className="modal-overlay"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+    >
       <div
         className={`modal-container ${modalSizeClass}`}
         onClick={(e) => e.stopPropagation()}
@@ -26,16 +63,22 @@ export const Modal = ({
 
         <div className="modal-body">{children}</div>
 
-        <button className="modal-close-btn" onClick={onClose}>
-          {button}
-        </button>
+        {/* TÄSSÄ ON MUUTOS: Nappi on nyt kääritty modal-footerin sisään */}
+        <div className="modal-footer">
+          <button
+            ref={closeBtnRef}
+            className="modal-close-btn"
+            onClick={onClose}
+            type="button"
+          >
+            {button}
+          </button>
+        </div>
       </div>
     </div>,
     document.body,
   );
 };
-
-export default Modal;
 
 Modal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
@@ -45,3 +88,5 @@ Modal.propTypes = {
   children: PropTypes.node.isRequired,
   size: PropTypes.oneOf(["small", "large"]),
 };
+
+export default Modal;

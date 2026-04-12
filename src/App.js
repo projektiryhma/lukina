@@ -6,9 +6,11 @@ import { Routes, Route, HashRouter } from "react-router-dom";
 import { InfoPageGameOne } from "./pages/InfoPageGameOne";
 import { StartPage } from "./pages/StartPage";
 import { GamePageGameOne } from "./pages/GamePageGameOne";
+import { useGlobalArrowNavigation } from "./components/GlobalArrowNavigation";
 import { NotFoundPage } from "./pages/NotFoundPage";
 
 function App() {
+  useGlobalArrowNavigation();
   useEffect(() => {
     initAndCacheData();
   }, []);
