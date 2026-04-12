@@ -2,10 +2,13 @@ import "./StartPage.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Modal } from "../components/UniversalModal.js";
+import { GameInstructionsModal } from "../components/GameInstructionsModal.js";
+import { AppInfoModal } from "../components/AppInfoModal.js";
 
 export function StartPage() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
 
   const HandleNavigate = (path) => {
     navigate(path);
@@ -27,42 +30,45 @@ export function StartPage() {
       </button>
 
       <p className="GameInfoText">Pelin ohjeet</p>
-      <button onClick={() => setIsModalOpen(true)} className="InfoButton">
+      <button
+        onClick={() => {
+          setModalContent("instructions");
+          setIsModalOpen(true);
+        }}
+        className="InfoButton"
+      >
         Lue ohjeet &gt;
       </button>
 
-      <button onClick={() => HandleNavigate("/")} className="AppInfoButton">
+      <button
+        onClick={() => {
+          setModalContent("info");
+          setIsModalOpen(true);
+        }}
+        className="AppInfoButton"
+      >
         Tietoa sovelluksesta
       </button>
 
       <Modal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="Pelin ohjeet"
+        onClose={() => {
+          setIsModalOpen(false);
+          setModalContent(null);
+        }}
+        title={
+          modalContent === "instructions"
+            ? "Pelin ohjeet"
+            : "Tietoa sovelluksesta"
+        }
         button="Sulje"
         size="large"
       >
-        <div className="instructions-modal-content">
-          <h2>Pelin pikaohjeet</h2>
-          <h4>Vaihe 1 - Lue ja etsi</h4>
-          <p>----- </p>
-          <p>----- </p>
-          <h3>Pelin tarkemman ohjeet</h3>
-          <p>1. Lue annettu teksti huolellisesti.</p>
-          <p>2. Klikkaa sanoja, jotka on kirjoitettu väärin.</p>
-          <p>3. Paina Tarkista nähdäksesi tulokset.</p>
-          <div
-            style={{
-              marginTop: "15px",
-              padding: "10px",
-              backgroundColor: "#f0f0f0",
-              borderRadius: "8px",
-            }}
-          >
-            <strong>Vinkki:</strong> Voit pyytää vihjeen, jos et löydä kaikkia
-            virheitä!
-          </div>
-        </div>
+        {modalContent === "instructions" ? (
+          <GameInstructionsModal />
+        ) : (
+          <AppInfoModal />
+        )}
       </Modal>
     </>
   );

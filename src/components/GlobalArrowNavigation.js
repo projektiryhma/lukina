@@ -15,27 +15,32 @@ export function useGlobalArrowNavigation() {
         e.target.isContentEditable;
 
       if (isTyping) return;
-      if (document.querySelector(".modal-overlay")) return;
+
+      const modalContainer = document.querySelector(".modal-container");
+      const root = modalContainer || document;
+
+      const isScrollable = (el) => el.scrollHeight > el.clientHeight;
+      const isAtBottom = (el) =>
+        Math.abs(el.scrollHeight - el.clientHeight - el.scrollTop) < 1;
+      const isAtTop = (el) => el.scrollTop === 0;
 
       const elements = Array.from(
-        document.querySelectorAll(FOCUSABLE_SELECTORS),
+        root.querySelectorAll(FOCUSABLE_SELECTORS),
       ).filter((el) => !el.disabled && el.offsetParent !== null);
 
       if (elements.length === 0) return;
 
-      if (document.activeElement === document.body || !document.activeElement) {
-        e.preventDefault();
-        elements[0].focus();
-        return;
-      }
-
       const currentIndex = elements.indexOf(document.activeElement);
       const currentElement = elements[currentIndex];
 
-      if (!currentElement) return;
+      if (isScrollable(e.target)) {
+        if (e.key === "ArrowDown" && !isAtBottom(e.target)) return;
+        if (e.key === "ArrowUp" && !isAtTop(e.target)) return;
+      }
 
       const findNearestInDirection = (direction) => {
-        const currentRect = currentElement.getBoundingClientRect();
+        const currentRect = currentElement?.getBoundingClientRect();
+        if (!currentRect) return null;
         const currentCenter = currentRect.left + currentRect.width / 2;
 
         return elements.reduce((closest, el) => {
@@ -52,8 +57,6 @@ export function useGlobalArrowNavigation() {
           if (!closest) return el;
 
           const closestRect = closest.getBoundingClientRect();
-          const closestCenter = closestRect.left + closestRect.width / 2;
-
           const distVertical = Math.abs(
             direction === "up"
               ? currentRect.top - elRect.bottom
@@ -66,7 +69,9 @@ export function useGlobalArrowNavigation() {
           );
 
           const distHorizontal = Math.abs(currentCenter - elCenter);
-          const closestDistHorizontal = Math.abs(currentCenter - closestCenter);
+          const closestDistHorizontal = Math.abs(
+            currentCenter - (closestRect.left + closestRect.width / 2),
+          );
 
           if (
             distVertical < closestDistVertical ||
@@ -88,23 +93,22 @@ export function useGlobalArrowNavigation() {
           (currentIndex - 1 + elements.length) % elements.length
         ]?.focus();
       } else if (e.key === "ArrowDown") {
-        e.preventDefault();
         const next = findNearestInDirection("down");
-        next
-          ? next.focus()
-          : elements[(currentIndex + 1) % elements.length]?.focus();
-      } else if (e.key === "ArrowUp") {
         e.preventDefault();
+        if (next) next.focus();
+        else elements[(currentIndex + 1) % elements.length]?.focus();
+      } else if (e.key === "ArrowUp") {
         const prev = findNearestInDirection("up");
-        prev
-          ? prev.focus()
-          : elements[
-              (currentIndex - 1 + elements.length) % elements.length
-            ]?.focus();
+        e.preventDefault();
+        if (prev) prev.focus();
+        else
+          elements[
+            (currentIndex - 1 + elements.length) % elements.length
+          ]?.focus();
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown, true);
+    return () => window.removeEventListener("keydown", handleKeyDown, true);
   }, []);
 }

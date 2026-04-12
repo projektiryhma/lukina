@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { getFromStore } from "../db/dataCache";
 import { GameOnePhaseOne } from "../components/GameOnePhaseOne.js";
 import { GameOnePhaseTwo } from "../components/GameOnePhaseTwo.js";
+import { GameOnePhaseThree } from "../components/GameOnePhaseThree.js";
 import "./GamePageGameOne.css";
 
 export function GamePageGameOne() {
@@ -12,6 +13,7 @@ export function GamePageGameOne() {
   const [game, setGame] = useState(null);
   const [isPhaseOne, setIsPhaseOne] = useState(true);
   const [isPhaseTwoComplete, setIsPhaseTwoComplete] = useState(false);
+  const [isPhaseThreeComplete, setIsPhaseThreeComplete] = useState(false);
   const [loadError, setLoadError] = useState(false);
 
   const fetchNewTask = useCallback(async () => {
@@ -38,6 +40,7 @@ export function GamePageGameOne() {
   const handleRestart = () => {
     setIsPhaseOne(true);
     setIsPhaseTwoComplete(false);
+    setIsPhaseThreeComplete(false);
     fetchNewTask();
   };
 
@@ -52,6 +55,7 @@ export function GamePageGameOne() {
   return (
     <div className="game-page">
       {loadError ? <p>Tehtavaa ei voitu ladata.</p> : null}
+
       {isPhaseOne ? (
         <>
           <GameOnePhaseOne data={game} allFound={handlePhaseOneComplete} />
@@ -71,6 +75,10 @@ export function GamePageGameOne() {
             onPhaseComplete={handlePhaseTwoComplete}
             onChangeText={handleRestart}
           />
+        </>
+      ) : !isPhaseThreeComplete ? (
+        <>
+          <GameOnePhaseThree data={game} />
         </>
       ) : (
         <button onClick={handleRestart}>Uusi</button>

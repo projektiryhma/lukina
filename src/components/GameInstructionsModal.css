@@ -1,0 +1,30 @@
+.gameinstructionstext{
+  margin-bottom: 20px;
+}
+
+.LukinaGamePictures{
+  width: 100%;       
+  max-width: 100%;   
+  height: auto;      
+  display: block;    
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.instruction-main {
+  padding-left: 1.5rem; 
+  text-indent: -1rem; 
+  text-align: left;
+  margin-bottom: 0.8rem;
+}
+
+.instruction-sub {
+  padding-left: 3.5rem; 
+  text-indent: -1rem; 
+  text-align: left;
+  margin-bottom: 0.4rem;
+}
+
+.phase3{
+    margin-top: 20px;
+}
