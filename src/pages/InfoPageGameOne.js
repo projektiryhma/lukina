@@ -5,7 +5,8 @@ export function InfoPageGameOne() {
   const navigate = useNavigate();
 
   const handleButtonClick = (difficulty) => {
-    navigate("/GamePageGameOne", { state: { state: difficulty } });
+    sessionStorage.setItem("difficulty", difficulty);
+    navigate("/GamePageGameOne");
   };
 
   return (

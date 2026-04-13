@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from "react";
-import { useLocation } from "react-router-dom";
 import { getFromStore } from "../db/dataCache";
 import { GameOnePhaseOne } from "../components/GameOnePhaseOne.js";
 import { GameOnePhaseTwo } from "../components/GameOnePhaseTwo.js";
@@ -7,8 +6,7 @@ import { GameOnePhaseThree } from "../components/GameOnePhaseThree.js";
 import "./GamePageGameOne.css";
 
 export function GamePageGameOne() {
-  const location = useLocation();
-  const difficulty = String(location.state?.state || "0");
+  const difficulty = String(sessionStorage.getItem("difficulty") ?? "0");
 
   const [game, setGame] = useState(null);
   const [isPhaseOne, setIsPhaseOne] = useState(true);
