@@ -10,11 +10,25 @@ import path from "path";
 import { exec } from "child_process";
 import { promisify } from "util";
 import XLSX from "xlsx";
+import dotenv from "dotenv";
+
+dotenv.config();
+
 const execAsync = promisify(exec);
 
 const TMP_DIR = path.resolve(process.cwd(), "tmp/testdata");
 const TMP_XLSX = path.join(TMP_DIR, "tmp.xlsx");
 const TMP_JSON = path.join(TMP_DIR, "out.json");
+
+const REQUIRED_FIELDS = JSON.parse(process.env.REQUIRED_FIELDS_JSON || "[]");
+
+function isCleanRow(row) {
+  return (
+    Object.keys(row).length === REQUIRED_FIELDS.length &&
+    REQUIRED_FIELDS.every((field) => Object.hasOwn(row, field)) &&
+    Object.values(row).every((value) => value !== null && value !== undefined)
+  );
+}
 
 // create a temporary XLSX and run the converter
 beforeAll(async () => {
@@ -28,6 +42,21 @@ beforeAll(async () => {
       "Virheelliset sanat": "x",
       "Oikeat sanat": "y",
     },
+    {
+      "Virheetön teksti": "null row",
+      "Virheellinen teksti, virheet punaisella": null,
+      "Virheiden lukumäärä tekstissä": 2,
+      "Virheelliset sanat": "z",
+      "Oikeat sanat": "w",
+    },
+    {
+      "Virheetön teksti": "junk row",
+      "Virheellinen teksti, virheet punaisella": "bad",
+      "Virheiden lukumäärä tekstissä": 3,
+      "Virheelliset sanat": "x",
+      "Oikeat sanat": "y",
+      __EMPTY: "junk",
+    },
   ];
   const ws = XLSX.utils.json_to_sheet(data);
   XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
@@ -36,7 +65,11 @@ beforeAll(async () => {
   XLSX.writeFile(wb, TMP_XLSX);
 
   await execAsync("node scripts/convert-xlsx.mjs", {
-    env: { ...process.env, INPUT: TMP_XLSX, OUTPUT: TMP_JSON },
+    env: {
+      ...process.env,
+      INPUT: TMP_XLSX,
+      OUTPUT: TMP_JSON,
+    },
   });
 });
 
@@ -119,4 +152,23 @@ test("convertXlsx converts a datafile with multiple sheets", () => {
     "Virheelliset sanat": expect.any(String),
     "Oikeat sanat": expect.any(String),
   });
+});
+
+// TC-CONVERTXLSX-006
+// Description: Rows with null values or junk keys should be removed from output
+// Preconditions: the temporary workbook includes valid, null, and junk rows
+// Expected result: only clean rows remain in both sheets
+test("convert-xlsx filters out junk and null rows", () => {
+  const obj = JSON.parse(fs.readFileSync(TMP_JSON, "utf8"));
+
+  expect(Array.isArray(obj["0"])).toBe(true);
+  expect(Array.isArray(obj["1"])).toBe(true);
+  expect(obj["0"]).toHaveLength(1);
+  expect(obj["1"]).toHaveLength(1);
+
+  for (const sheetName of ["0", "1"]) {
+    for (const row of obj[sheetName]) {
+      expect(isCleanRow(row)).toBe(true);
+    }
+  }
 });
