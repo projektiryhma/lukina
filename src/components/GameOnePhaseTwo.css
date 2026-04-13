@@ -90,10 +90,12 @@ h1 {
 
 .progress {
   margin: 0;
-  font-size: 0.9rem;
-  color: rgba(90, 90, 90, 1);
-  font-weight: 600;
+  font-size: var(--typography-body2);
+  color: #000000DE;
+  font-weight: normal;
+  letter-spacing: 0.17px;
   width: 100%;
+  line-height: 143%;
 }
 
 .completion-box {
