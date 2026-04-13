@@ -3,7 +3,7 @@
  * IndexedDB cache for data
  *
  * Purpose:
- * - Fetch the generated JSON (`REACT_APP_OUTPUT`) and cache it
+ * - Fetch the generated JSON from `PUBLIC_URL + "/data/data.json"` and cache it
  *   into IndexedDB using one object store per sheet (store names are sheet
  *   index strings like "0", "1").
  *
@@ -83,7 +83,6 @@ export function openDB(data = null) {
       }
 
       // Write a meta record so we can check the `version` later.
-      // TODO: use this to avoid re-fetching/repopulating when up-to-date
       if (!db.objectStoreNames.contains(META_STORE)) {
         db.createObjectStore(META_STORE, { keyPath: KEY_ID });
       }
@@ -157,7 +156,7 @@ function _pickRandomKeyFromStore(store, storeName) {
 }
 
 /**
- * Fetch the generated JSON (URL configured by `REACT_APP_OUTPUT`) and cache
+ * Fetch the generated JSON from `PUBLIC_URL + "/data/data.json"` and cache
  * its collections into IndexedDB.
  *
  * The function will check the on-disk DB meta version and only delete and

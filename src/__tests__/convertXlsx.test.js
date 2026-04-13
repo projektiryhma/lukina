@@ -81,8 +81,8 @@ afterAll(async () => {
 
 // TC-CONVERTXLSX-001
 // Description: Basic existence check: converter created the JSON file
-// Preconditions: `npm run convert-data` ran in beforeAll; `OUTPUT` env var points to expected file
-// Expected result: Output JSON file exists at `OUTPUTPATH`
+// Preconditions: `node scripts/convert-xlsx.mjs` ran in beforeAll with test env vars set
+// Expected result: Output JSON file exists at `TMP_JSON`
 test("convert-xlsx produces JSON", () => {
   expect(fs.existsSync(TMP_JSON)).toBe(true);
 });
@@ -108,9 +108,9 @@ test("JSON datafile has expected structure", () => {
 });
 
 // TC-CONVERTXLSX-003
-// Description: Structural assertions for sheet '0' and first-row fields
+// Description: Structural assertions for the EASY sheet and first-row fields
 // Preconditions: `TMP_JSON` exists and contains at least one sheet with rows
-// Expected result: `obj["0"]` is a non-empty array and first row matches required keys/types
+// Expected result: `obj[DifficultyLevels.EASY]` is a non-empty array and first row matches required keys/types
 test("Generated JSON includes version timestamp", () => {
   const obj = JSON.parse(fs.readFileSync(TMP_JSON, "utf8"));
   expect(typeof obj.version).toBe("string");

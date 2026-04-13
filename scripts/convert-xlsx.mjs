@@ -1,9 +1,10 @@
 /*
  * convert-xlsx.mjs
  * Utility to convert an Excel workbook (.xlsx) into a JSON file.
- * Each sheet becomes an array of row objects, keyed by 0-based index in the output JSON.
+ * Each sheet becomes an array of cleaned row objects, keyed by 0-based sheet index
+ * strings in the output JSON.
  * CLI usage: node scripts/convert-xlsx.mjs
- * Should be ran once when program is set up to generate initial data.json file.
+ * Should be run once when the program is set up to generate the initial data.json file.
  *
  * Github Copilot GPT-5 mini was used to check and suggest code in this file.
  */
@@ -24,9 +25,9 @@ if (REQUIRED_FIELDS.length === 0) {
 }
 
 /**
- * Parse an Excel workbook into a plain object.
+ * Parse an Excel workbook into a plain object keyed by sheet index strings.
  * @param {string} filePath - Path to the .xlsx file to read.
- * @returns {Object} Mapping of sheet name -> array of row objects.
+ * @returns {Object} Mapping of sheet index -> array of cleaned row objects.
  */
 function parseWorkbook(filePath) {
   const workbook = XLSX.readFile(filePath, { cellDates: true });
@@ -71,7 +72,7 @@ function writeJson(outputPath, obj) {
 }
 
 /**
- * Convert an Excel file to JSON and write it out.
+ * Convert an Excel file to JSON and write it out with a version stamp.
  * @param {string} inputPath - Path to the input .xlsx file (relative or absolute).
  * @param {string} outputPath - Path to the output .json file (relative or absolute).
  * @returns {{input: string, output: string, sheets: number}} metadata about the conversion.
