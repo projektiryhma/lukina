@@ -8,8 +8,6 @@
  * Github Copilot GPT-5 mini was used to check and suggest code in this file.
  */
 
-// TODO: Think some way to store globals like INPUT and OUTPUT paths in a config file. Also some way to share them with tests.
-
 import fs from "fs";
 import path from "path";
 import XLSX from "xlsx";
@@ -19,13 +17,11 @@ dotenv.config();
 
 const INPUT = process.env.INPUT;
 const OUTPUT = process.env.OUTPUT;
-const REQUIRED_FIELDS = [
-  "Virheetön teksti",
-  "Virheellinen teksti, virheet punaisella",
-  "Virheiden lukumäärä tekstissä",
-  "Virheelliset sanat",
-  "Oikeat sanat",
-];
+const REQUIRED_FIELDS = JSON.parse(process.env.REQUIRED_FIELDS_JSON || "[]");
+
+if (REQUIRED_FIELDS.length === 0) {
+  throw new Error("REQUIRED_FIELDS_JSON must be a non-empty JSON array.");
+}
 
 /**
  * Parse an Excel workbook into a plain object.
