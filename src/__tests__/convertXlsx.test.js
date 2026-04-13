@@ -11,6 +11,7 @@ import { exec } from "child_process";
 import { promisify } from "util";
 import XLSX from "xlsx";
 import dotenv from "dotenv";
+import { DifficultyLevels } from "../enums/DifficultyLevels";
 
 dotenv.config();
 
@@ -94,10 +95,10 @@ test("JSON datafile has expected structure", () => {
   const obj = JSON.parse(fs.readFileSync(TMP_JSON, "utf8"));
 
   // Ensure sheet '0' exists and is an array with at least one row
-  expect(Array.isArray(obj["0"])).toBe(true);
-  expect(obj["0"].length).toBeGreaterThan(0);
+  expect(Array.isArray(obj[DifficultyLevels.EASY])).toBe(true);
+  expect(obj[DifficultyLevels.EASY].length).toBeGreaterThan(0);
 
-  expect(obj["0"][0]).toMatchObject({
+  expect(obj[DifficultyLevels.EASY][0]).toMatchObject({
     "Virheetön teksti": expect.any(String),
     "Virheellinen teksti, virheet punaisella": expect.any(String),
     "Virheiden lukumäärä tekstissä": expect.any(Number),
@@ -142,10 +143,10 @@ test("convertXlsx converts a datafile with multiple sheets", () => {
   const obj = JSON.parse(fs.readFileSync(TMP_JSON, "utf8"));
 
   // Ensure sheet '1' exists and is an array with at least one row
-  expect(Array.isArray(obj["1"])).toBe(true);
-  expect(obj["1"].length).toBeGreaterThan(0);
+  expect(Array.isArray(obj[DifficultyLevels.MEDIUM])).toBe(true);
+  expect(obj[DifficultyLevels.MEDIUM].length).toBeGreaterThan(0);
 
-  expect(obj["1"][0]).toMatchObject({
+  expect(obj[DifficultyLevels.MEDIUM][0]).toMatchObject({
     "Virheetön teksti": expect.any(String),
     "Virheellinen teksti, virheet punaisella": expect.any(String),
     "Virheiden lukumäärä tekstissä": expect.any(Number),
@@ -161,12 +162,12 @@ test("convertXlsx converts a datafile with multiple sheets", () => {
 test("convert-xlsx filters out junk and null rows", () => {
   const obj = JSON.parse(fs.readFileSync(TMP_JSON, "utf8"));
 
-  expect(Array.isArray(obj["0"])).toBe(true);
-  expect(Array.isArray(obj["1"])).toBe(true);
-  expect(obj["0"]).toHaveLength(1);
-  expect(obj["1"]).toHaveLength(1);
+  expect(Array.isArray(obj[DifficultyLevels.EASY])).toBe(true);
+  expect(Array.isArray(obj[DifficultyLevels.MEDIUM])).toBe(true);
+  expect(obj[DifficultyLevels.EASY]).toHaveLength(1);
+  expect(obj[DifficultyLevels.MEDIUM]).toHaveLength(1);
 
-  for (const sheetName of ["0", "1"]) {
+  for (const sheetName of [DifficultyLevels.EASY, DifficultyLevels.MEDIUM]) {
     for (const row of obj[sheetName]) {
       expect(isCleanRow(row)).toBe(true);
     }
