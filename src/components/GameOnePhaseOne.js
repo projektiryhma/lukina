@@ -149,7 +149,7 @@ export function GameOnePhaseOne({ data, allFound }) {
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
-          if (selectedIndices.length === amountOfErrors) {
+          if (modalConfig.title === "Vastauksesi on oikein") {
             allFound(selectedIndices);
           }
         }}
