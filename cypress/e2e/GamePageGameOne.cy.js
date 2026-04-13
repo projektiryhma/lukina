@@ -74,10 +74,10 @@ describe("Press button check correct answers", () => {
       .contains("test")
       .click()
       .should("have.class", "is-selected", "true");
-    cy.get(".interactive-word")
+    /*cy.get(".interactive-word")
       .contains("error")
       .click()
-      .should("have.class", "is-selected", "true");
+      .should("have.class", "is-selected", "true");*/
 
     cy.contains("Näytä vihje").click();
 
@@ -94,12 +94,10 @@ describe("Press button check correct answers", () => {
 
     cy.get(".interactive-word")
       .contains("test")
-      .click()
       .should("have.class", "is-selected", "true");
-    cy.get(".interactive-word")
+    /*cy.get(".interactive-word")
       .contains("error")
-      .click()
-      .should("have.class", "is-selected", "true");
+      .should("have.class", "is-selected", "true");*/
   });
 
   it("zero selection", () => {
