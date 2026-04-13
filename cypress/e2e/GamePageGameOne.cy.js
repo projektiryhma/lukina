@@ -109,4 +109,15 @@ describe("Press button check correct answers", () => {
       "Löysit 0 / 2 virheellistä sanaa. Etsi loput virheelliset sanat",
     );
   });
+  it("selecting word and deselecting it", () => {
+    cy.get(".interactive-word")
+      .contains("test")
+      .click()
+      .should("have.class", "is-selected", "true");
+
+    cy.get(".interactive-word")
+      .contains("test")
+      .click()
+      .should("not.have.class", "is-selected");
+  });
 });
