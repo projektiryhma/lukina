@@ -4,8 +4,8 @@
     {
       "Virheetön teksti": "Easy test item",
       "Virheellinen teksti, virheet punaisella": "Easy test item with error",
-      "Virheiden lukumäärä tekstissä": 1,
-      "Virheelliset sanat": "test",
+      "Virheiden lukumäärä tekstissä": 2,
+      "Virheelliset sanat": "test, error",
       "Oikeat sanat": "test"
     }
   ],
