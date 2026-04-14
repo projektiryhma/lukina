@@ -122,6 +122,7 @@ export function GameOnePhaseOne({ data, allFound }) {
         <div className="word-container">
           {words.map((word, index) => (
             <Word
+              className="interactive-word"
               key={index}
               text={word}
               isSelected={selectedIndices.includes(index)}
