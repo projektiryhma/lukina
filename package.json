@@ -13,7 +13,7 @@
     "cy:e2e": "start-server-and-test start http://localhost:3000 'cypress run --e2e'",
     "cy:ci": "start-server-and-test start http://localhost:3000 'cypress run --e2e'",
     "start:coverage": "CYPRESS_COVERAGE=true react-app-rewired start",
-    "cy:coverage": "start-server-and-test start:coverage http://localhost:3000 'cypress run --e2e'"
+    "cy:coverage": "CYPRESS_COVERAGE=true start-server-and-test start:coverage http://localhost:3000 'cypress run --e2e'"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^6.9.1",
