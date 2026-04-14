@@ -1,9 +1,9 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable no-undef */
 
 describe("Test data loading integration", () => {
   it("loads data", () => {
     cy.intercept("GET", "**/data/data.json", { fixture: "testdata.json" })
-      // eslint-disable-next-line prettier/prettier
       .as("fetchData");
 
     cy.visit("/#/");

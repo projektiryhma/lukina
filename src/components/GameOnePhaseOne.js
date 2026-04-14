@@ -6,12 +6,15 @@ import "./GameOnePhaseOne.css";
 
 function Word({ text, isSelected, onClick }) {
   return (
-    <span
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked={isSelected}
       onClick={onClick}
       className={`interactive-word ${isSelected ? "is-selected" : ""}`}
     >
       {text}
-    </span>
+    </button>
   );
 }
 
@@ -79,7 +82,7 @@ export function GameOnePhaseOne({ data, allFound }) {
       setModalConfig({
         title: "Vastauksessasi on virheitä",
         button: "Selvä",
-        content: `Löysit ${foundCount} / ${amountOfErrors} virheellistä sanaa. Etsi loput virheelliset sanat`,
+        content: `Löysit ${foundCount} / ${amountOfErrors} virheellistä sanaa. Etsi loput virheelliset sanat.`,
         size: "small",
       });
       setIsModalOpen(true);
@@ -90,7 +93,7 @@ export function GameOnePhaseOne({ data, allFound }) {
     setModalConfig({
       title: "Vihje",
       button: "Sulje",
-      content: `Tekstissä on ${amountOfErrors} virheellistä sanaa`,
+      content: `Tekstissä on ${amountOfErrors} virheellistä sanaa.`,
       size: "small",
     });
     setIsModalOpen(true);
@@ -119,6 +122,7 @@ export function GameOnePhaseOne({ data, allFound }) {
         <div className="word-container">
           {words.map((word, index) => (
             <Word
+              className="interactive-word"
               key={index}
               text={word}
               isSelected={selectedIndices.includes(index)}
@@ -146,7 +150,7 @@ export function GameOnePhaseOne({ data, allFound }) {
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
-          if (selectedIndices.length === amountOfErrors) {
+          if (modalConfig.title === "Vastauksesi on oikein") {
             allFound(selectedIndices);
           }
         }}

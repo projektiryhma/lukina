@@ -10,11 +10,26 @@ import path from "path";
 import { exec } from "child_process";
 import { promisify } from "util";
 import XLSX from "xlsx";
+import dotenv from "dotenv";
+import { DifficultyLevels } from "../enums/DifficultyLevels";
+
+dotenv.config();
+
 const execAsync = promisify(exec);
 
 const TMP_DIR = path.resolve(process.cwd(), "tmp/testdata");
 const TMP_XLSX = path.join(TMP_DIR, "tmp.xlsx");
 const TMP_JSON = path.join(TMP_DIR, "out.json");
+
+const REQUIRED_FIELDS = JSON.parse(process.env.REQUIRED_FIELDS_JSON || "[]");
+
+function isCleanRow(row) {
+  return (
+    Object.keys(row).length === REQUIRED_FIELDS.length &&
+    REQUIRED_FIELDS.every((field) => Object.hasOwn(row, field)) &&
+    Object.values(row).every((value) => value !== null && value !== undefined)
+  );
+}
 
 // create a temporary XLSX and run the converter
 beforeAll(async () => {
@@ -28,6 +43,21 @@ beforeAll(async () => {
       "Virheelliset sanat": "x",
       "Oikeat sanat": "y",
     },
+    {
+      "Virheetön teksti": "null row",
+      "Virheellinen teksti, virheet punaisella": null,
+      "Virheiden lukumäärä tekstissä": 2,
+      "Virheelliset sanat": "z",
+      "Oikeat sanat": "w",
+    },
+    {
+      "Virheetön teksti": "junk row",
+      "Virheellinen teksti, virheet punaisella": "bad",
+      "Virheiden lukumäärä tekstissä": 3,
+      "Virheelliset sanat": "x",
+      "Oikeat sanat": "y",
+      __EMPTY: "junk",
+    },
   ];
   const ws = XLSX.utils.json_to_sheet(data);
   XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
@@ -36,7 +66,11 @@ beforeAll(async () => {
   XLSX.writeFile(wb, TMP_XLSX);
 
   await execAsync("node scripts/convert-xlsx.mjs", {
-    env: { ...process.env, INPUT: TMP_XLSX, OUTPUT: TMP_JSON },
+    env: {
+      ...process.env,
+      INPUT: TMP_XLSX,
+      OUTPUT: TMP_JSON,
+    },
   });
 });
 
@@ -47,8 +81,8 @@ afterAll(async () => {
 
 // TC-CONVERTXLSX-001
 // Description: Basic existence check: converter created the JSON file
-// Preconditions: `npm run convert-data` ran in beforeAll; `OUTPUT` env var points to expected file
-// Expected result: Output JSON file exists at `OUTPUTPATH`
+// Preconditions: `node scripts/convert-xlsx.mjs` ran in beforeAll with test env vars set
+// Expected result: Output JSON file exists at `TMP_JSON`
 test("convert-xlsx produces JSON", () => {
   expect(fs.existsSync(TMP_JSON)).toBe(true);
 });
@@ -61,10 +95,10 @@ test("JSON datafile has expected structure", () => {
   const obj = JSON.parse(fs.readFileSync(TMP_JSON, "utf8"));
 
   // Ensure sheet '0' exists and is an array with at least one row
-  expect(Array.isArray(obj["0"])).toBe(true);
-  expect(obj["0"].length).toBeGreaterThan(0);
+  expect(Array.isArray(obj[DifficultyLevels.EASY])).toBe(true);
+  expect(obj[DifficultyLevels.EASY].length).toBeGreaterThan(0);
 
-  expect(obj["0"][0]).toMatchObject({
+  expect(obj[DifficultyLevels.EASY][0]).toMatchObject({
     "Virheetön teksti": expect.any(String),
     "Virheellinen teksti, virheet punaisella": expect.any(String),
     "Virheiden lukumäärä tekstissä": expect.any(Number),
@@ -74,9 +108,9 @@ test("JSON datafile has expected structure", () => {
 });
 
 // TC-CONVERTXLSX-003
-// Description: Structural assertions for sheet '0' and first-row fields
+// Description: Structural assertions for the EASY sheet and first-row fields
 // Preconditions: `TMP_JSON` exists and contains at least one sheet with rows
-// Expected result: `obj["0"]` is a non-empty array and first row matches required keys/types
+// Expected result: `obj[DifficultyLevels.EASY]` is a non-empty array and first row matches required keys/types
 test("Generated JSON includes version timestamp", () => {
   const obj = JSON.parse(fs.readFileSync(TMP_JSON, "utf8"));
   expect(typeof obj.version).toBe("string");
@@ -109,14 +143,33 @@ test("convertXlsx converts a datafile with multiple sheets", () => {
   const obj = JSON.parse(fs.readFileSync(TMP_JSON, "utf8"));
 
   // Ensure sheet '1' exists and is an array with at least one row
-  expect(Array.isArray(obj["1"])).toBe(true);
-  expect(obj["1"].length).toBeGreaterThan(0);
+  expect(Array.isArray(obj[DifficultyLevels.MEDIUM])).toBe(true);
+  expect(obj[DifficultyLevels.MEDIUM].length).toBeGreaterThan(0);
 
-  expect(obj["1"][0]).toMatchObject({
+  expect(obj[DifficultyLevels.MEDIUM][0]).toMatchObject({
     "Virheetön teksti": expect.any(String),
     "Virheellinen teksti, virheet punaisella": expect.any(String),
     "Virheiden lukumäärä tekstissä": expect.any(Number),
     "Virheelliset sanat": expect.any(String),
     "Oikeat sanat": expect.any(String),
   });
+});
+
+// TC-CONVERTXLSX-006
+// Description: Rows with null values or junk keys should be removed from output
+// Preconditions: the temporary workbook includes valid, null, and junk rows
+// Expected result: only clean rows remain in both sheets
+test("convert-xlsx filters out junk and null rows", () => {
+  const obj = JSON.parse(fs.readFileSync(TMP_JSON, "utf8"));
+
+  expect(Array.isArray(obj[DifficultyLevels.EASY])).toBe(true);
+  expect(Array.isArray(obj[DifficultyLevels.MEDIUM])).toBe(true);
+  expect(obj[DifficultyLevels.EASY]).toHaveLength(1);
+  expect(obj[DifficultyLevels.MEDIUM]).toHaveLength(1);
+
+  for (const sheetName of [DifficultyLevels.EASY, DifficultyLevels.MEDIUM]) {
+    for (const row of obj[sheetName]) {
+      expect(isCleanRow(row)).toBe(true);
+    }
+  }
 });

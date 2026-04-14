@@ -1,0 +1,23 @@
+.info-main {
+  text-align: left;
+  margin-bottom: 0.8rem;
+}
+
+.info-sub {
+  padding-left: 3.5rem;
+  text-indent: -1rem; 
+  text-align: left;
+  margin-bottom: 0.4rem;
+}
+
+
+.info-link {
+  word-break: break-all; 
+  color: #0066cc;
+  text-decoration: underline;
+  display: inline; 
+}
+
+.info-link:hover {
+  color: #004499;
+}

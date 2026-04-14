@@ -14,11 +14,12 @@
 .BackButton{
   position: absolute; 
   left: 20px;         
-  top: 60px;
+  top: 70px;
   border-style: hidden;
   background-color: white;
   text-shadow: 0.2px 0 0 black;
   cursor: pointer;
+  color: black;
 }
 
 .DifButton{
