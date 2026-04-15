@@ -1,4 +1,5 @@
 const { defineConfig } = require("cypress");
+const { GenerateCtrfReport } = require('cypress-ctrf-json-reporter')
 
 process.env.NODE_ENV = "development";
 const webpackConfig = require("react-scripts/config/webpack.config")(
@@ -38,8 +39,9 @@ module.exports = defineConfig({
     testIsolation: true,
     specPattern: "cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
     setupNodeEvents(on, config) {
-      const { setupCtrfPlugin } = require("cypress-ctrf-json-reporter/plugin");
-      setupCtrfPlugin(on, { outputDir: "ctrf", outputFile: "cypress-ctrf-report.json" });
+      new GenerateCtrfReport({
+        on,
+      });
       if (process.env.CYPRESS_COVERAGE === "true") {
         require("@cypress/code-coverage/task")(on, config);
       }

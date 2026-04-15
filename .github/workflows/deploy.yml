@@ -45,12 +45,16 @@ jobs:
         with:
           report-path: './ctrf/ctrf-report.json'
           github-report: true
+          parallel: true
+          flag-name: jest
         if: always()
       - name: Publish Cypress Test Report
         uses: ctrf-io/github-test-reporter@v1
         with:
-          report-path: './ctrf/cypress-ctrf-report.json'
+          report-path: './ctrf/ctrf-report.json'
           github-report: true
+          parallel: true
+          flag-name: cypress
         if: always()
 
   deploy:
