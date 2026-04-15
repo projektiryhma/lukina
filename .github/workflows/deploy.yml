@@ -41,7 +41,7 @@ jobs:
         run: npm test -- --reporters=default --reporters=jest-ctrf-json-reporter
       
       - name: Run Cypress E2E tests
-        run: npm run cy:ci
+        run: npm run cy:e2e
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -54,7 +54,7 @@ jobs:
           report-path: './ctrf/ctrf-report.json'
           github-report: true
         if: always()
-        
+
       - name: Publish Cypress Test Report
         uses: ctrf-io/github-test-reporter@v1
         with:
