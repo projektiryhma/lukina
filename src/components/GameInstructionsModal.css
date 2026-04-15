@@ -2,11 +2,10 @@
   margin-bottom: 20px;
 }
 
-.LukinaGamePictures{
-  width: 100%;       
-  max-width: 100%;   
+.LukinaGamePictures{    
+  max-width: 40%;   
   height: auto;      
-  display: block;    
+  display: block;  
   border-radius: 8px;
   margin-bottom: 20px;
 }
@@ -27,4 +26,12 @@
 
 .phase3{
     margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+  .LukinaGamePictures {
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }

@@ -14,11 +14,18 @@
 .p3infotext{
     max-width: 90%;
     margin-top: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 24px;
 }
 
 .p3datatext{
-    margin-bottom: 40px;
+    background-color: #F7F2FA;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    padding: 12px 20px;
+    max-width: 90%;
 }
 
 
@@ -27,6 +34,4 @@
   .p3h1{
     font-size: 1.5 rem;
 }
-
-  
 }
