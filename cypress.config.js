@@ -41,6 +41,7 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       new GenerateCtrfReport({
         on,
+        outputFile: "ctrf-report-cypress.json",
       });
       if (process.env.CYPRESS_COVERAGE === "true") {
         require("@cypress/code-coverage/task")(on, config);
