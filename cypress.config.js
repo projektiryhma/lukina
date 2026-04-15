@@ -12,6 +12,9 @@ module.exports = defineConfig({
         on,
         outputFile: "ctrf-report-cypress.json",
       });
+      if (process.env.CYPRESS_COVERAGE === "true") {
+        require("@cypress/code-coverage/task")(on, config);
+      }
       return config;
     },
   },
