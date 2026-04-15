@@ -20,28 +20,45 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Use Node.js 22
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+
       - name: Install dependencies
         run: npm ci
+
       - name: Convert XLSX data
         run: node scripts/convert-xlsx.mjs
+
       - name: Build project
         run: npm run build
         env:
           DISABLE_ESLINT_PLUGIN: true
+
       - name: Run tests
         run: npm test -- --reporters=default --reporters=jest-ctrf-json-reporter
+      
+      - name: Run Cypress E2E tests
+        run: npm run cy:e2e
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./build
-      - name: Publish Test Report
+
+      - name: Publish Jest Test Report
         uses: ctrf-io/github-test-reporter@v1
         with:
-          report-path: './ctrf/*.json'
+          report-path: './ctrf/ctrf-report.json'
+          github-report: true
+        if: always()
+
+      - name: Publish Cypress Test Report
+        uses: ctrf-io/github-test-reporter@v1
+        with:
+          report-path: './ctrf/ctrf-report-cypress.json'
           github-report: true
         if: always()
 
