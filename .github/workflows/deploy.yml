@@ -40,10 +40,16 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./build
-      - name: Publish Test Report
+      - name: Publish Jest Test Report
         uses: ctrf-io/github-test-reporter@v1
         with:
-          report-path: './ctrf/*.json'
+          report-path: './ctrf/ctrf-report.json'
+          github-report: true
+        if: always()
+      - name: Publish Cypress Test Report
+        uses: ctrf-io/github-test-reporter@v1
+        with:
+          report-path: './ctrf/cypress-ctrf-report.json'
           github-report: true
         if: always()
 
