@@ -3,6 +3,10 @@ import ReactDOM from "react-dom";
 import "./UniversalModal.css";
 import PropTypes from "prop-types";
 
+// Valitsimet kaikille fokusoitaville elementeille
+const FOCUSABLE_SELECTORS =
+  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
 export const Modal = ({
   isOpen,
   onClose,
@@ -12,22 +16,57 @@ export const Modal = ({
   size = "small",
 }) => {
   const modalBodyRef = useRef(null);
+  const modalContainerRef = useRef(null);
   const previousFocusRef = useRef(null);
 
   useEffect(() => {
     if (isOpen) {
       previousFocusRef.current = document.activeElement;
 
+      // Fokusoidaan joko ensimmäinen input tai modaalin runko
       const focusTimer = setTimeout(() => {
-        modalBodyRef.current?.focus();
+        const firstInput = modalContainerRef.current?.querySelector(
+          "input, button:not(.modal-close-btn)",
+        );
+        if (firstInput) {
+          firstInput.focus();
+        } else {
+          modalBodyRef.current?.focus();
+        }
       }, 50);
 
       const handleKeyDown = (e) => {
+        // Sulkemislogiikka
         if (e.key === "Escape" || e.key === "Enter") {
-          if (e.key === "Enter") {
-            e.preventDefault();
-          }
+          if (e.target.tagName === "TEXTAREA") return; // Sallitaan Enter tekstialueissa
+          if (e.key === "Enter") e.preventDefault();
           onClose();
+        }
+
+        // TAB-LUKKO (Focus Trap)
+        if (e.key === "Tab") {
+          const focusableElements = Array.from(
+            modalContainerRef.current.querySelectorAll(FOCUSABLE_SELECTORS),
+          ).filter((el) => !el.disabled && el.offsetParent !== null);
+
+          if (focusableElements.length === 0) return;
+
+          const firstElement = focusableElements[0];
+          const lastElement = focusableElements[focusableElements.length - 1];
+
+          if (e.shiftKey) {
+            // Shift + Tab (taaksepäin)
+            if (document.activeElement === firstElement) {
+              e.preventDefault();
+              lastElement.focus();
+            }
+          } else {
+            // Pelkkä Tab (eteenpäin)
+            if (document.activeElement === lastElement) {
+              e.preventDefault();
+              firstElement.focus();
+            }
+          }
         }
       };
 
@@ -39,6 +78,7 @@ export const Modal = ({
         window.removeEventListener("keydown", handleKeyDown);
         document.body.style.overflow = "unset";
 
+        // Palautetaan fokus sinne missä se oli ennen modaalia
         setTimeout(() => previousFocusRef.current?.focus(), 50);
       };
     }
@@ -57,6 +97,7 @@ export const Modal = ({
     >
       <div
         className={`modal-container ${modalSizeClass}`}
+        ref={modalContainerRef}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-header">

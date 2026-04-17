@@ -28,3 +28,10 @@
 .phase3{
     margin-top: 20px;
 }
+
+@media (min-width: 800px) {
+  .LukinaGamePictures {
+    width: 30%;
+    height: auto;
+  }
+}
