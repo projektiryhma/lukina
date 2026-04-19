@@ -16,17 +16,19 @@ export function StartPage() {
 
   return (
     <>
-      <p className="StartHeader">Harjoittele ja kehity</p>
+      <p className="StartHeader">Tervetuloa!</p>
       <p className="StartText">
-        LUKINA:n avulla voit harjoitella oikeinkirjoitusta ja lukemista.
+        LUKINA:n avulla voit harjoitella oikeinkirjoitusvirheiden havaitsemista
+        ja niiden korjaamista. Oikeinkirjoituksen virheet liittyvät tässä
+        harjoituksessa äänteiden kestoeroihin ja diftongeihin.
       </p>
-      <p className="h2">Opi pelaamalla</p>
+      <p className="h2">Aloita pelaaminen</p>
 
       <button
         onClick={() => HandleNavigate("/InfoPageGameOne")}
         className="StartButton"
       >
-        Aloita pelaaminen &gt;
+        Siirry peliin &gt;
       </button>
 
       <p className="GameInfoText">Pelin ohjeet</p>
