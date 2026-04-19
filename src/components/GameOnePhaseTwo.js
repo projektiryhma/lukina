@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Modal from "./UniversalModal";
 import "./GameOnePhaseTwo.css";
 
-export function GameOnePhaseTwo({ data, onPhaseComplete, onChangeText }) {
+export function GameOnePhaseTwo({ data, onPhaseComplete }) {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentInput, setCurrentInput] = useState("");
@@ -198,11 +198,6 @@ export function GameOnePhaseTwo({ data, onPhaseComplete, onChangeText }) {
         <button className="help-button" onClick={handleHintClick}>
           Näytä vihje
         </button>
-        {onChangeText && (
-          <button className="help-button" onClick={onChangeText}>
-            Vaihda tekstiä
-          </button>
-        )}
       </div>
     </div>
   );
