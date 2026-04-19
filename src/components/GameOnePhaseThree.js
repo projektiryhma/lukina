@@ -11,7 +11,7 @@ export function GameOnePhaseThree({ data }) {
       <h1 className="p3h1">Vaihe 3 - Lue korjattu teksti</h1>
       <p className="p3infotext">
         Lue vielä korjattu teksti. Voit lukea tekstin joko hiljaa mielessäsi tai
-        ääneen. Voit myös pyytää, että joku muu lukisi tekstin sinulle.
+        ääneen. Voit myös pyytää, että joku muu lukisi tekstin sinulle ääneen.
       </p>
 
       <div className="p3datatext">
