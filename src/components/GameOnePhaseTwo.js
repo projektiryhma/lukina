@@ -135,14 +135,14 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
       <Modal
         isOpen={modalOpen}
         onClose={handleModalClose}
-        title={isAnswerCorrect ? "Oikea vastaus!" : "Väärä vastaus"}
+        title={isAnswerCorrect ? "Sana on oikein" : "Sana on väärin"}
         button="Jatka"
       >
         <div>
           {isAnswerCorrect ? (
-            <p>Sana oikein. Jatka seuraavaan sanaan.</p>
+            <p>Jatka seuraavaan sanaan. </p>
           ) : (
-            <p>Sana on väärin. Voit tarvittaessa pyytää vihjeen.</p>
+            <p>Yritä uudelleen. Voit tarvittaessa pyytää vihjeen.</p>
           )}
         </div>
       </Modal>
