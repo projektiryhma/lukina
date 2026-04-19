@@ -61,7 +61,7 @@ export function StartPage() {
         title={
           modalContent === "instructions"
             ? "Pelin ohjeet"
-            : "Tietoa sovelluksesta"
+            : "Tietoa LUKINA-sovelluksesta"
         }
         button="Sulje"
         size="large"
