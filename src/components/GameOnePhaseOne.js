@@ -83,7 +83,7 @@ export function GameOnePhaseOne({ data, allFound }) {
         title: "Vastauksessasi on virheitä",
         button: "Sulje",
         content: `Löysit kaikki ${amountOfErrors} virheellistä sanaa, mutta valitsit myös oikein kirjoitettuja sanoja. 
-        Poista valittujen joukosta oikein kirjoitetut sanat painamalla niitä uudelleen.`,
+        Poista valittujen sanojen joukosta oikein kirjoitetut sanat painamalla niitä uudelleen.`,
         size: "small",
       });
       setIsModalOpen(true);
