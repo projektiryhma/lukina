@@ -17,3 +17,27 @@ describe("Press button to move to game page", () => {
     cy.get(".InfoHeader").should("contain", "Etsi ja korjaa");
   });
 });
+describe("Open game info and instructions", () => {
+  it("open game instructions", () => {
+    cy.get(".InfoButton").should("contain", "Lue ohjeet");
+
+    cy.get(".InfoButton").click();
+
+    cy.get(".modal-header").should("contain", "Pelin ohjeet");
+
+    cy.get(".modal-close-btn").click();
+
+    cy.get(".modal-header").should("not.exist");
+  });
+  it("open app info", () => {
+    cy.get(".AppInfoButton").should("contain", "Tietoa sovelluksesta");
+
+    cy.get(".AppInfoButton").click();
+
+    cy.get(".modal-header").should("contain", "Tietoa sovelluksesta");
+
+    cy.get(".modal-close-btn").click();
+
+    cy.get(".modal-header").should("not.exist");
+  });
+});

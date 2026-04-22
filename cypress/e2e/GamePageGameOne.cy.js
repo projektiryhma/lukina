@@ -1,26 +1,24 @@
 /* eslint-disable no-undef */
+beforeEach(() => {
+  cy.intercept("GET", "**/data/data.json", { fixture: "testdata.json" }).as(
+    "fetchData",
+  );
+  cy.visit("/#/InfoPageGameOne");
+  cy.wait("@fetchData").wait(1000);
+  cy.get(".DifButton").first().click();
+});
+
 describe("Press button check correct answers", () => {
-  beforeEach(() => {
-    cy.intercept("GET", "**/data/data.json", { fixture: "testdata.json" }).as(
-      "fetchData",
-    );
-
-    cy.visit("/#/InfoPageGameOne");
-
-    cy.wait("@fetchData").wait(1000);
-
-    cy.get(".DifButton").first().click();
-  });
   it("not all correct answers selected", () => {
     cy.get(".word-container").should("contain", "Easy");
-    cy.get(".word-container").should("contain", "error");
+    cy.get(".word-container").should("contain", "err");
 
     cy.get(".interactive-word")
       .contains("Easy")
       .click()
       .should("have.class", "is-selected", "true");
     cy.get(".interactive-word")
-      .contains("error")
+      .contains("err")
       .click()
       .should("have.class", "is-selected", "true");
 
@@ -41,17 +39,17 @@ describe("Press button check correct answers", () => {
       .contains("Easy")
       .should("not.have.class", "is-selected");
     cy.get(".interactive-word")
-      .contains("error")
+      .contains("err")
       .should("have.class", "is-selected", "true");
   });
 
   it("all correct answers selected", () => {
     cy.get(".interactive-word")
-      .contains("test")
+      .contains("tste")
       .click()
       .should("have.class", "is-selected", "true");
     cy.get(".interactive-word")
-      .contains("error")
+      .contains("err")
       .click()
       .should("have.class", "is-selected", "true");
 
@@ -68,14 +66,15 @@ describe("Press button check correct answers", () => {
 
     cy.get(".modal-container").should("not.exist");
   });
-
+});
+describe("Test word interactivity", () => {
   it("opening hint doesnt modify current selection", () => {
     cy.get(".interactive-word")
-      .contains("test")
+      .contains("tste")
       .click()
       .should("have.class", "is-selected", "true");
     cy.get(".interactive-word")
-      .contains("error")
+      .contains("err")
       .click()
       .should("have.class", "is-selected", "true");
 
@@ -93,10 +92,10 @@ describe("Press button check correct answers", () => {
     cy.get(".modal-container").should("not.exist");
 
     cy.get(".interactive-word")
-      .contains("test")
+      .contains("tste")
       .should("have.class", "is-selected", "true");
     cy.get(".interactive-word")
-      .contains("error")
+      .contains("err")
       .should("have.class", "is-selected", "true");
   });
 
@@ -111,13 +110,31 @@ describe("Press button check correct answers", () => {
   });
   it("selecting word and deselecting it", () => {
     cy.get(".interactive-word")
-      .contains("test")
+      .contains("tste")
       .click()
       .should("have.class", "is-selected", "true");
 
     cy.get(".interactive-word")
-      .contains("test")
+      .contains("tste")
       .click()
+      .should("not.have.class", "is-selected");
+  });
+});
+// testing with actual text switch would be better
+// but at this point only having one test item is easier with the other tests
+describe("Switch text", () => {
+  it("Clicking switch text button rerenders page", () => {
+    cy.get(".interactive-word").contains("tste").click();
+    cy.get(".interactive-word").contains("err").click();
+
+    cy.get(".RestartButton").click();
+
+    cy.get(".interactive-word")
+      .contains("tste")
+      .should("not.have.class", "is-selected");
+
+    cy.get(".interactive-word")
+      .contains("err")
       .should("not.have.class", "is-selected");
   });
 });
