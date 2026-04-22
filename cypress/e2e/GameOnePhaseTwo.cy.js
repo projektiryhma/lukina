@@ -101,6 +101,11 @@ describe("Press button check correct answers", () => {
     );
     cy.get(".modal-close-btn").click();
   });
+  it("write no answer and press check", () => {
+    cy.get(".progress").should("contain", "Korjattava sana 1/2");
+    cy.get(".check-button").click();
+    cy.contains("Kirjoita sana oikein.").should("be.visible");
+  });
 });
 describe("test hint and switching word buttons", () => {
   it("open hint and check that current word is the same", () => {
