@@ -23,7 +23,7 @@ h1 {
 .BackToButton {
   position: absolute;
   left: 20px;
-  top: 70px;
+  top: 84px;
   border-style: hidden;
   background-color: white;
   text-shadow: 0.2px 0 0 black;
@@ -69,7 +69,7 @@ h1 {
   margin-bottom: 40px;
 }
 
-.word-boxes > p:first-child {
+.word-boxes>p:first-child {
   display: none;
 }
 

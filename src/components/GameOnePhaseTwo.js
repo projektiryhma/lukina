@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
 import Modal from "./UniversalModal";
 import "./GameOnePhaseTwo.css";
 
-export function GameOnePhaseTwo({ data, onPhaseComplete }) {
-  const navigate = useNavigate();
+export function GameOnePhaseTwo({ data, onPhaseComplete, onGoBack }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentInput, setCurrentInput] = useState("");
   const [userInputs, setUserInputs] = useState([]);
@@ -113,8 +111,8 @@ export function GameOnePhaseTwo({ data, onPhaseComplete }) {
 
   return (
     <div className="phase-two">
-      <button onClick={() => navigate("/")} className="BackToButton">
-        &lt; Etusivulle
+      <button onClick={onGoBack} className="BackToButton">
+        &lt; Edellinen
       </button>
       <Modal
         isOpen={hintModalOpen}
@@ -212,4 +210,5 @@ GameOnePhaseTwo.propTypes = {
   }).isRequired,
   onPhaseComplete: PropTypes.func,
   onChangeText: PropTypes.func,
+  onGoBack: PropTypes.func,
 };
