@@ -3,9 +3,9 @@
   "0": [
     {
       "Virheetön teksti": "Easy test item with error",
-      "Virheellinen teksti, virheet punaisella": "Easy test item with error",
+      "Virheellinen teksti, virheet punaisella": "Easy tste item with err",
       "Virheiden lukumäärä tekstissä": 2,
-      "Virheelliset sanat": "test, error",
+      "Virheelliset sanat": "tste, err",
       "Oikeat sanat": "test, error"
     }
   ],
