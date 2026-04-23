@@ -62,15 +62,15 @@ export function GameOnePhaseOne({ data, allFound }) {
   };
 
   const handleCheckClick = () => {
-    const rightChoices = selectedIndices.filter((index) => {
+    const correctChoices = selectedIndices.filter((index) => {
       const word = words[index];
       return incorrectWordsList.includes(word);
     });
 
-    setSelectedIndices(rightChoices);
-    const foundCount = rightChoices.length;
+    const wrongChoicesCount = selectedIndices.length - correctChoices.length;
+    const foundCount = correctChoices.length;
 
-    if (foundCount === amountOfErrors) {
+    if (foundCount === amountOfErrors && wrongChoicesCount === 0) {
       setModalConfig({
         title: "Vastauksesi on oikein",
         button: "Jatka",
@@ -78,7 +78,18 @@ export function GameOnePhaseOne({ data, allFound }) {
         size: "small",
       });
       setIsModalOpen(true);
+    } else if (foundCount === amountOfErrors && wrongChoicesCount > 0) {
+      setModalConfig({
+        title: "Vastauksessasi on virheitä",
+        button: "Sulje",
+        content: `Löysit kaikki ${amountOfErrors} virheellistä sanaa, mutta valitsit myös oikein kirjoitettuja sanoja. 
+        Poista valittujen sanojen joukosta oikein kirjoitetut sanat painamalla niitä uudelleen.`,
+        size: "small",
+      });
+      setIsModalOpen(true);
     } else {
+      setSelectedIndices(correctChoices);
+
       setModalConfig({
         title: "Vastauksessasi on virheitä",
         button: "Selvä",
