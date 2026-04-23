@@ -133,12 +133,22 @@ export function GameOnePhaseTwo({ data, onPhaseComplete, onGoBack }) {
       <Modal
         isOpen={modalOpen}
         onClose={handleModalClose}
-        title={isAnswerCorrect ? "Sana on oikein" : "Sana on väärin"}
+        title={
+          isAnswerCorrect
+            ? currentIndex + 1 >= faultyWords.length
+              ? "Olet korjannut kaikki sanat"
+              : "Sana on oikein"
+            : "Sana on väärin"
+        }
         button="Jatka"
       >
         <div>
           {isAnswerCorrect ? (
-            <p>Jatka seuraavaan sanaan. </p>
+            currentIndex + 1 >= faultyWords.length ? (
+              <p>Jatka lukemaan korjattu teksti.</p>
+            ) : (
+              <p>Jatka seuraavaan sanaan.</p>
+            )
           ) : (
             <p>Yritä uudelleen. Voit tarvittaessa pyytää vihjeen.</p>
           )}
