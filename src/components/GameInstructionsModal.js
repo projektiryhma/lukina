@@ -23,7 +23,7 @@ export const GameInstructionsModal = () => {
         Lue vielä korjattu teksti tai pyydä toista henkilöä lukemaan teksti
         sinulle ääneen.
       </p>
-      <h3>Pelin tarkemman ohjeet</h3>
+      <h2>Pelin tarkemman ohjeet</h2>
       <p className="gameinstructionstext">
         Pelin avulla voit harjoitella äänteiden kestoeroihin ja diftongeihin
         liittyvien oikeinkirjoitusvirheiden tunnistamista ja korjaamista.
@@ -94,10 +94,6 @@ export const GameInstructionsModal = () => {
       </p>
       <p className="instruction-sub">
         c. paina TARKISTA, jolloin sovellus antaa palautteen
-      </p>
-      <p className="instruction-sub">
-        d. tarvittaessa voit myös jättää oikein kirjoitetun sanan näkyviin ja
-        kopioida sanan suoraan tekstikenttään.
       </p>
       <h3 className="phase3">VAIHE 3 – LUE KORJATTU TEKSTI</h3>
       <img src={LukinaGamePhaseThree} alt="" className="LukinaGamePictures" />

@@ -12,17 +12,18 @@ h1 {
 }
 
 .phase-two-description {
-  text-align: center;
-  margin-bottom: 40px;
-  font-size: 1rem;
-  color: rgba(40, 40, 40, 0.8);
+  margin-top: 25px;
+  margin-bottom: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1000px;
   line-height: 1.5;
 }
 
 .BackToButton {
   position: absolute;
   left: 20px;
-  top: 70px;
+  top: 84px;
   border-style: hidden;
   background-color: white;
   text-shadow: 0.2px 0 0 black;
@@ -68,7 +69,7 @@ h1 {
   margin-bottom: 40px;
 }
 
-.word-boxes > p:first-child {
+.word-boxes>p:first-child {
   display: none;
 }
 
@@ -171,7 +172,6 @@ button:last-child {
 .help-section {
   margin-top: 40px;
   padding-top: 20px;
-  border-top: 1px solid rgba(103, 80, 164, 0.2);
   text-align: center;
 }
 
@@ -184,7 +184,6 @@ button:last-child {
 .help-text {
   margin: 0 0 20px 0;
   font-size: 0.95rem;
-  color: rgba(40, 40, 40, 0.8);
   line-height: 1.5;
 }
 

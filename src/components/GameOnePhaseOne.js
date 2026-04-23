@@ -139,7 +139,7 @@ export function GameOnePhaseOne({ data, allFound }) {
       <p className="phaseonehelptext">
         Voit pyytää vihjeen, joka näyttää, kuinka monta väärin kirjoitettua
         sanaa tekstissä on. Voit myös pyytää jotakuta lukemaan tekstin sinulle
-        ääneen tai vaihtataa tehtävän tekstin toiseen.
+        ääneen tai vaihtaa tehtävän tekstin toiseen.
       </p>
 
       <button onClick={handleShowHint} className="CheckButton">
