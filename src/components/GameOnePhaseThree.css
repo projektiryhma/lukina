@@ -1,14 +1,14 @@
-.p3div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  margin-top: 20px;
+.p3div{
+    display: flex;
+    flex-direction: column; 
+    align-items: center;    
+    gap: 15px;              
+    margin-top: 20px;
 }
 
-.p3h1 {
-  margin-top: 60px;
-  font-size: 2.5rem;
+.p3h1{
+    margin-top: 60px;
+    font-size: 2.5rem;
 }
 
 .p3infotext{
@@ -31,7 +31,7 @@
 
 
 @media (max-width: 600px) {
-  .p3h1 {
+  .p3h1{
     font-size: 1.5 rem;
 }
 }

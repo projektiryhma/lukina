@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 import Modal from "./UniversalModal";
 import "./GameOnePhaseTwo.css";
 
-export function GameOnePhaseTwo({ data, onPhaseComplete, onGoBack }) {
+export function GameOnePhaseTwo({ data, onPhaseComplete, onChangeText }) {
+  const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentInput, setCurrentInput] = useState("");
   const [userInputs, setUserInputs] = useState([]);
@@ -111,8 +113,8 @@ export function GameOnePhaseTwo({ data, onPhaseComplete, onGoBack }) {
 
   return (
     <div className="phase-two">
-      <button onClick={onGoBack} className="BackToButton">
-        &lt; Edellinen
+      <button onClick={() => navigate("/")} className="BackToButton">
+        &lt; Etusivulle
       </button>
       <Modal
         isOpen={hintModalOpen}
@@ -150,7 +152,7 @@ export function GameOnePhaseTwo({ data, onPhaseComplete, onGoBack }) {
               <p>Jatka seuraavaan sanaan.</p>
             )
           ) : (
-            <p>Yritä uudelleen. Voit tarvittaessa pyytää vihjeen.</p>
+            <p>Sana on väärin. Voit tarvittaessa pyytää vihjeen.</p>
           )}
         </div>
       </Modal>
@@ -206,6 +208,11 @@ export function GameOnePhaseTwo({ data, onPhaseComplete, onGoBack }) {
         <button className="help-button" onClick={handleHintClick}>
           Näytä vihje
         </button>
+        {onChangeText && (
+          <button className="help-button" onClick={onChangeText}>
+            Vaihda tekstiä
+          </button>
+        )}
       </div>
     </div>
   );
@@ -220,5 +227,4 @@ GameOnePhaseTwo.propTypes = {
   }).isRequired,
   onPhaseComplete: PropTypes.func,
   onChangeText: PropTypes.func,
-  onGoBack: PropTypes.func,
 };
