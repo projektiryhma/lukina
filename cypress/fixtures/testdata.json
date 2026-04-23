@@ -2,11 +2,11 @@
   "version": "1.0.0",
   "0": [
     {
-      "Virheetön teksti": "Easy test item",
+      "Virheetön teksti": "Easy test item with error",
       "Virheellinen teksti, virheet punaisella": "Easy test item with error",
       "Virheiden lukumäärä tekstissä": 2,
       "Virheelliset sanat": "test, error",
-      "Oikeat sanat": "test"
+      "Oikeat sanat": "test, error"
     }
   ],
   "1": [

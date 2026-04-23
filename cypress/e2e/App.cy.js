@@ -15,7 +15,7 @@ describe("Test data loading integration", () => {
       expect(result.stores).to.have.length.greaterThan(0);
     });
 
-    checkStore("0", "Easy test item");
+    checkStore("0", "Easy test item with error");
     checkStore("1", "Medium test item");
     checkStore("2", "Hard test item");
   });
