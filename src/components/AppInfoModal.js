@@ -52,9 +52,6 @@ export function AppInfoModal() {
         5. jos sana on väärin, käyttäjä yrittää uudelleen ja tarvittaessa kopioi
         sanan tekstikenttään
       </p>
-
-      <br />
-
       <p>
         Varsinaisen sovellukseen rakennetun vihjeen lisäksi käyttäjää
         kannustetaan myös pyytämään jotakuta lukemaan teksti ääneen. Ääneen
@@ -62,9 +59,6 @@ export function AppInfoModal() {
         tarkistamisen välineenä [2, 13, 14], ja tekstin kuuntelu voikin auttaa
         havaitsemaan oikeinkirjoituksen virheitä [13, 14].
       </p>
-
-      <br />
-
       <p>Lähteet:</p>
       <p className="info-sub">
         1. Mazur, A., & Chenu, F. (2023). The revision process during

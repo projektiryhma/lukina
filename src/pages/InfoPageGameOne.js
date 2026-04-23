@@ -21,7 +21,12 @@ export function InfoPageGameOne() {
         Tehtävän avulla harjoittelet virheellisesti kirjoitettujen sanojen
         etsimistä ja niiden korjaamista.
       </p>
-      <p className="DifficultyText">Valitse tekstin pituus ja aloita tehtävä</p>
+
+      <p className="InfoText2">Voit valita tehtävän vaikeustason.</p>
+
+      <p className="DifficultyText">
+        Valitse tehtävän vaikeustaso ja aloita tehtävä
+      </p>
 
       <p className="DifficultyButtonText">Lyhyt: 1-2 virkkeen tekstit</p>
       <button onClick={() => handleButtonClick("0")} className="DifButton">

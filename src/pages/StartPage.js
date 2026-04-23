@@ -16,19 +16,17 @@ export function StartPage() {
 
   return (
     <>
-      <p className="StartHeader">Tervetuloa!</p>
+      <p className="StartHeader">Harjoittele ja kehity</p>
       <p className="StartText">
-        LUKINA:n avulla voit harjoitella oikeinkirjoitusvirheiden havaitsemista
-        ja niiden korjaamista. Oikeinkirjoituksen virheet liittyvät tässä
-        harjoituksessa äänteiden kestoeroihin ja diftongeihin.
+        LUKINA:n avulla voit harjoitella oikeinkirjoitusta ja lukemista.
       </p>
-      <p className="h2">Aloita pelaaminen</p>
+      <p className="h2">Opi pelaamalla</p>
 
       <button
         onClick={() => HandleNavigate("/InfoPageGameOne")}
         className="StartButton"
       >
-        Siirry peliin &gt;
+        Aloita pelaaminen &gt;
       </button>
 
       <p className="GameInfoText">Pelin ohjeet</p>
@@ -61,7 +59,7 @@ export function StartPage() {
         title={
           modalContent === "instructions"
             ? "Pelin ohjeet"
-            : "Tietoa LUKINA-sovelluksesta"
+            : "Tietoa sovelluksesta"
         }
         button="Sulje"
         size="large"
