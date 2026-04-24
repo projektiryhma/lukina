@@ -28,6 +28,7 @@
     margin-top: 20px;
 }
 
+
 @media (max-width: 600px) {
   .LukinaGamePictures {
     max-width: 100%;
@@ -35,3 +36,4 @@
     margin-right: auto;
   }
 }
+
