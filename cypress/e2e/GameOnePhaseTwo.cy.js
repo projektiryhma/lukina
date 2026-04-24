@@ -29,10 +29,7 @@ describe("Press button check correct answers", () => {
     cy.get(".word-input").type("test");
     cy.get(".check-button").click();
     cy.get(".modal-container").should("be.visible");
-    cy.get(".modal-container").should(
-      "contain",
-      "Sana oikein. Jatka seuraavaan sanaan.",
-    );
+    cy.get(".modal-container").should("contain", "Jatka seuraavaan sanaan.");
     cy.get(".modal-close-btn").click();
 
     cy.get(".progress").should("contain", "Korjattava sana 2/2");
@@ -41,7 +38,7 @@ describe("Press button check correct answers", () => {
     cy.get(".modal-container").should("be.visible");
     cy.get(".modal-container").should(
       "contain",
-      "Sana oikein. Jatka seuraavaan sanaan.",
+      "Jatka lukemaan korjattu teksti.",
     );
     cy.get(".modal-close-btn").click();
   });
@@ -52,7 +49,7 @@ describe("Press button check correct answers", () => {
     cy.get(".modal-container").should("be.visible");
     cy.get(".modal-container").should(
       "contain",
-      "Sana on väärin. Voit tarvittaessa pyytää vihjeen.",
+      "Yritä uudelleen. Voit tarvittaessa pyytää vihjeen.",
     );
     cy.get(".modal-close-btn").click();
     cy.get(".progress").should("contain", "Korjattava sana 1/2");
@@ -64,7 +61,7 @@ describe("Press button check correct answers", () => {
     cy.get(".modal-container").should("be.visible");
     cy.get(".modal-container").should(
       "contain",
-      "Sana on väärin. Voit tarvittaessa pyytää vihjeen.",
+      "Yritä uudelleen. Voit tarvittaessa pyytää vihjeen.",
     );
     cy.get(".modal-close-btn").click();
     cy.get(".progress").should("contain", "Korjattava sana 1/2");
@@ -72,10 +69,7 @@ describe("Press button check correct answers", () => {
     cy.get(".word-input").clear().type("test");
     cy.get(".check-button").click();
     cy.get(".modal-container").should("be.visible");
-    cy.get(".modal-container").should(
-      "contain",
-      "Sana oikein. Jatka seuraavaan sanaan.",
-    );
+    cy.get(".modal-container").should("contain", "Jatka seuraavaan sanaan.");
     cy.get(".modal-close-btn").click();
   });
   it("write right answer with capital letters", () => {
@@ -83,10 +77,7 @@ describe("Press button check correct answers", () => {
     cy.get(".word-input").type("TeSt");
     cy.get(".check-button").click();
     cy.get(".modal-container").should("be.visible");
-    cy.get(".modal-container").should(
-      "contain",
-      "Sana oikein. Jatka seuraavaan sanaan.",
-    );
+    cy.get(".modal-container").should("contain", "Jatka seuraavaan sanaan.");
     cy.get(".modal-close-btn").click();
   });
   it("write right answer with extra spaces", () => {
@@ -94,10 +85,7 @@ describe("Press button check correct answers", () => {
     cy.get(".word-input").type("  test  ");
     cy.get(".check-button").click();
     cy.get(".modal-container").should("be.visible");
-    cy.get(".modal-container").should(
-      "contain",
-      "Sana oikein. Jatka seuraavaan sanaan.",
-    );
+    cy.get(".modal-container").should("contain", "Jatka seuraavaan sanaan.");
     cy.get(".modal-close-btn").click();
   });
 });
