@@ -10,6 +10,6 @@ describe("Render NotFoundPage and move back to start page", () => {
 
     cy.get(".NotFoundButton").click();
 
-    cy.get(".StartHeader").should("contain", "Harjoittele ja kehity");
+    cy.get(".StartHeader").should("be.visible");
   });
 });

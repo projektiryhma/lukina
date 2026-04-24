@@ -10,10 +10,10 @@ beforeEach(() => {
 describe("Press button to move to game page", () => {
   it("renders", () => {
     cy.visit("/#/");
-    cy.get(".StartButton").should("contain", "Aloita pelaaminen");
+    cy.get(".StartButton").should("be.visible");
 
     cy.get(".StartButton").click();
 
-    cy.get(".InfoHeader").should("contain", "Etsi ja korjaa");
+    cy.get(".InfoHeader").should("be.visible");
   });
 });

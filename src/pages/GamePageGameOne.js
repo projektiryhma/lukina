@@ -50,6 +50,12 @@ export function GamePageGameOne() {
     setIsPhaseTwoComplete(true);
   };
 
+  const handleGoBackToPhaseOne = () => {
+    setIsPhaseOne(true);
+    setIsPhaseTwoComplete(false);
+    setIsPhaseThreeComplete(false);
+  };
+
   return (
     <div className="game-page">
       {loadError ? <p>Tehtavaa ei voitu ladata.</p> : null}
@@ -72,6 +78,7 @@ export function GamePageGameOne() {
             data={game}
             onPhaseComplete={handlePhaseTwoComplete}
             onChangeText={handleRestart}
+            onGoBack={handleGoBackToPhaseOne}
           />
         </>
       ) : !isPhaseThreeComplete ? (
