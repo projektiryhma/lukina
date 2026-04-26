@@ -14,14 +14,14 @@ describe("Press button to move to game page", () => {
     cy.get(".DifButton").first().click();
 
     cy.get(".word-container").should("contain", "Easy");
-    cy.get(".word-container").should("contain", "error");
+    cy.get(".word-container").should("contain", "err");
 
     cy.get(".interactive-word")
       .contains("Easy")
       .click()
       .should("have.class", "is-selected", "true");
     cy.get(".interactive-word")
-      .contains("error")
+      .contains("err")
       .click()
       .should("have.class", "is-selected", "true");
   });
