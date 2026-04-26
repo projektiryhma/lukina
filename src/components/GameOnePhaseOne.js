@@ -40,7 +40,7 @@ export function GameOnePhaseOne({ data, allFound }) {
     setSelectedIndices([]);
   }, [data]);
 
-  if (!data) return <p>Ei dataa saatavilla</p>;
+  if (!data) return <p>Ladataa...</p>;
 
   const originalText = data["Virheellinen teksti, virheet punaisella"];
   const amountOfErrors = data["Virheiden lukumäärä tekstissä"];
