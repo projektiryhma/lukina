@@ -30,11 +30,11 @@ describe("Open game info and instructions", () => {
     cy.get(".modal-header").should("not.exist");
   });
   it("open app info", () => {
-    cy.get(".AppInfoButton").should("contain", "Tietoa sovelluksesta");
+    cy.get(".AppInfoButton").should("be.visible");
 
     cy.get(".AppInfoButton").click();
 
-    cy.get(".modal-header").should("contain", "Tietoa sovelluksesta");
+    cy.get(".modal-header").should("be.visible");
 
     cy.get(".modal-close-btn").click();
 

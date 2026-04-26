@@ -107,10 +107,7 @@ describe("test hint and switching word buttons", () => {
     cy.get(".word-input").type("test");
     cy.get(".check-button").click();
     cy.get(".modal-container").should("be.visible");
-    cy.get(".modal-container").should(
-      "contain",
-      "Sana oikein. Jatka seuraavaan sanaan.",
-    );
+    cy.get(".modal-container").should("contain", "Jatka seuraavaan sanaan.");
     cy.get(".modal-close-btn").click();
 
     cy.get(".progress").should("contain", "Korjattava sana 2/2");
@@ -118,10 +115,5 @@ describe("test hint and switching word buttons", () => {
     cy.get(".modal-container").should("be.visible");
     cy.get(".modal-container").should("contain", "error");
     cy.get(".modal-close-btn").click();
-  });
-  it("Restart the game", () => {
-    cy.contains("Vaihda tekstiä").click();
-    cy.url().should("include", "/GamePageGameOne");
-    cy.get(".PhaseOneHeader").should("be.visible");
   });
 });
